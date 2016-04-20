@@ -1,0 +1,16 @@
+<package>
+  <description brief="Beginner Tutorials">
+     beginner_tutorials
+  </description>
+  <depend package="roscpp"/>
+  <depend package="tf"/>
+  <depend package="sensor_msgs"/>
+  <depend package="opencv2"/>
+  <depend package="image_transport"/>
+  <depend package="cv_bridge"/>
+  <depend package="nav_msgs"/>
+
+
+</package>
+
+

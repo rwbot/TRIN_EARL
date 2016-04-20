@@ -1,0 +1,8 @@
+prefix=/home/trin_igvc/catkin_ws/src/hector_slam/devel
+
+Name: hector_map_tools
+Description: Description of hector_map_tools
+Version: 0.3.4
+Cflags: -I/home/trin_igvc/catkin_ws/src/hector_slam/src/hector_slam/hector_map_tools/include
+Libs: -L/home/trin_igvc/catkin_ws/src/hector_slam/devel/lib 
+Requires: nav_msgs

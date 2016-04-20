@@ -1,0 +1,8 @@
+prefix=/home/trin_igvc/catkin_ws/src/hector_slam/devel
+
+Name: hector_geotiff_plugins
+Description: Description of hector_geotiff_plugins
+Version: 0.3.4
+Cflags: 
+Libs: -L/home/trin_igvc/catkin_ws/src/hector_slam/devel/lib 
+Requires: 

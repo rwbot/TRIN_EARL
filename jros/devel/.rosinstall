@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/jin/catkin_ws/src/earl/devel/setup.sh

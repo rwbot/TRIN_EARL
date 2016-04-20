@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "earl")
+set(earl_MAINTAINER "jin <jin@todo.todo>")
+set(earl_DEPRECATED "")
+set(earl_VERSION "0.0.0")
+set(earl_BUILD_DEPENDS "message_generation" "rospy" "roscpp")
+set(earl_RUN_DEPENDS "message_runtime" "rospy" "roscpp")
+set(earl_BUILDTOOL_DEPENDS "catkin")

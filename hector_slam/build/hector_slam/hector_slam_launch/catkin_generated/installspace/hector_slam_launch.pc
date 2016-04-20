@@ -1,0 +1,8 @@
+prefix=/home/trin_igvc/catkin_ws/src/hector_slam/install
+
+Name: hector_slam_launch
+Description: Description of hector_slam_launch
+Version: 0.3.4
+Cflags: 
+Libs: -L/home/trin_igvc/catkin_ws/src/hector_slam/install/lib 
+Requires: 
