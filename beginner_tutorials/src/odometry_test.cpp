@@ -43,11 +43,11 @@ int main(int argc, char** argv){
   while(ros::ok()){
     current_time = ros::Time::now();
 
-
+    // Changing scanmatcher_frame to odom after geoTransform
     try { 
-      listener.waitForTransform(geoTransform.header.frame_id,"/scanmatcher_frame", ros::Time(0), ros::Duration(1.0));
+      listener.waitForTransform(geoTransform.header.frame_id,"/odom", ros::Time(0), ros::Duration(1.0));
       listener.lookupTransform(geoTransform.header.frame_id,
-                   "/scanmatcher_frame",       
+                   "/odom",       
                    ros::Time(0), 
                    tfTransform);
     }
