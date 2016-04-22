@@ -32,7 +32,7 @@ int main(int argc, char** argv){
   double th = 0.0;
 
   double vx = 0;//0.1;
-  double vy = 1;
+  double vy = 0;
   double vth = 0;//0.1;
 
   ros::Time current_time, last_time;
