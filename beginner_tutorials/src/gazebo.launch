@@ -1,22 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-<!-- XML derived from the Learning ROS by Martinez -->
-<!-- Launch with model:="'rospack find PKG_NAME'/robot/xacro/loc" -->
-	<param_name="/use_sim_time" value="true" />
-	
-	<include file="$(find gazebo_worlds) /launch/empty_world.launch" /> 
-	
-	<arg name="model" />
-	
-	<param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
-	
-	<node name-"joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"></node>
-	
-	<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher" 
-		<param name="publish_frequency" type="double" value="50.0" />
-	</node>
-
-	<node name="spawn_robot" pkg="gazebo" type="spawn_model" args="-urdf -param robot_description -z 0.1 -model robot_model" respawn="false" output="screen" />
-
+	<!-- XML derived from the Learning ROS by Martinez -->
+	<!-- Launch with model:="'rospack find PKG_NAME'/robot/xacro/loc" -->
+	<param name="/use_sim_time" value="true" />
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find beginner_tutorials)/urdf/robot.xacro'" />	
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find beginner_tutorials)/world/basic.world"/>
+	</include>
+	<node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot" output="screen"/>
+	<include file="$(find beginner_tutorials)/launch/robot_control.launch" />
 </launch>
 
