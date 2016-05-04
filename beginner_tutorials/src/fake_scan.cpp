@@ -18,7 +18,7 @@
 using namespace std;
 using namespace cv;
 
-
+bool j1Recieved, j2Recieved = false;
 int points;
 Point pt1, pt2;
 int sf =2;
@@ -98,10 +98,11 @@ bool check(int x, int y){
 }
 
 void arrayCallbackJ1(const std_msgs::Int16MultiArray::ConstPtr& array){
-  //cout<<"ENTER"<<endl;
+  cout<<"ENTER1"<<endl;
+  j1Recieved = true;
   int size = (array->data[0])*4;
   int real_x,real_y,r_val,angle;
-  //cout<<"Size: "<<size<<endl;
+  cout<<"Size: "<<size<<endl;
   //int pointCount = 1;
 
   int left_x, left_y, right_x, right_y, x_val, y_val, y_offset, y_incrementor;	
@@ -117,6 +118,7 @@ void arrayCallbackJ1(const std_msgs::Int16MultiArray::ConstPtr& array){
       right_x = array->data[i+0];
       right_y = array->data[i+1];
     }
+
 
     y_offset = 0;
     int z;                        
@@ -883,7 +885,6 @@ void arrayCallbackJ1(const std_msgs::Int16MultiArray::ConstPtr& array){
           break; 
 
        default:
-          cout<<"INVALID REGION"<<endl;     
           break;
 
       }
@@ -913,14 +914,16 @@ void arrayCallbackJ1(const std_msgs::Int16MultiArray::ConstPtr& array){
 }
 
 void arrayCallbackJ2(const std_msgs::Int16MultiArray::ConstPtr& array){
-  //cout<<"ENTER"<<endl;
+  cout<<"ENTER2"<<endl;
+  j2Recieved = true;
   int size = (array->data[0])*4;
   int real_x,real_y,r_val,angle;
-  //cout<<"Size: "<<size<<endl;
+  cout<<"Size: "<<size<<endl;
   //int pointCount = 1;
 
   int left_x, left_y, right_x, right_y, x_val, y_val, y_offset, y_incrementor;  
   for(int i = 1; i< size; i+4){
+    //cout<<array->data[i]<<endl;
     if(array->data[i] < array->data[i+2]){
       left_x = array->data[i+0]+157;
       left_y = array->data[i+1];
@@ -1745,23 +1748,15 @@ int main(int argc, char** argv){
 
   int count = 0;
   ros::Rate r(2.0);
+  int scan_number =0;
   
-  ranges[0] = 1;
   while(n.ok()){
+    cout<<"in the loop"<<endl;
+    cout<<"J1: "<<j1Recieved<<endl;
+    cout<<"J2: "<<j2Recieved<<endl<<endl;
+    if((j1Recieved==true)&&(j2Recieved==true)){
     //generate some fake data for our laser scan
-    for(unsigned int i = 1; i < num_readings/2; ++i){
-     
-      ranges[i] = ranges[0]/cos((i*PI)/180);
-      intensities[i] = 0;
-    }
-
-
-
-    for(unsigned int i = num_readings/2; i < num_readings; ++i){
-     
-      ranges[i] = -(ranges[0]/cos((i*PI)/180));
-      intensities[i] = 0;
-    }
+          cout<<"Scan: "<<scan_number<<endl;
     ros::Time scan_time = ros::Time::now();
 
     //populate the LaserScan message
@@ -1775,21 +1770,39 @@ int main(int argc, char** argv){
     scan.range_min = 0.0;
     scan.range_max = 100.0;
 
+
+
+    for(unsigned int i = 1; i < 180; ++i){
+              cout<<"linarray[0]: "<<lineArray[0]<<endl;
+                      cout<<"end: "<<end<<endl;
+
+
+      if((lineArray[i]==0)&&(i<end))
+        lineArray[i] = lineArray[i-1];
+      scan.ranges[i] = lineArray[i];
+      scan.intensities[i] = 1;
+      cout<<"Angle: "<<i<<" | Range: "<<scan.ranges[i]<<endl;
+    }
+    cout<<endl<<endl;
+
     scan.ranges.resize(num_readings);
     scan.intensities.resize(num_readings);
-    for(unsigned int i = 0; i < num_readings; ++i){
-      scan.ranges[i] = ranges[i];
-      scan.intensities[i] = intensities[i];
-    }
-
-    scan_pub.publish(scan);
-    ++count;
+     scan_pub.publish(scan);
     ros::spinOnce();
-    
-  
-    //cv::destroyWindow("J2_sub");
-    ros::Rate loop_rate(1000);
-
-    loop_rate.sleep();
+      empty = true;
+   //waitKey(); 
+   for(unsigned int i = 0; i < num_readings; ++i){
+      lineArray[i] = 0;
+    }
+    empty = true;
   }
+
+    cout<<"sleep"<<endl;
+    ros::Rate loop_rate(1);
+    ros::spinOnce();
+    loop_rate.sleep();
+
+  }
+      ros::shutdown;
+
 }

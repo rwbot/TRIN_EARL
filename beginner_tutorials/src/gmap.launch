@@ -1,45 +1,58 @@
 <launch>
 
-<node pkg="image_transport_package" type="scan_test" name="laser_scan" output="screen">
-  <param name="frame_id" value="laser_frame"/>
-  <param name="calibrate_time" type="bool" value="true"/>  
-  <param name="intensity" type="bool" value="false"/>
-  <param name="min_ang" value="0"/>   
-  <param name="max_ang" value="3.14"/>    
-  <param name="cluster" value="1"/>
-</node>
-
-<node pkg="beginner_tutorials" type="odometry_test" name="odom_test" output="screen">
-</node>
-
-<node pkg="beginner_tutorials" type="fake_scan" name="fake_scan" output="screen">
-</node>
-
-<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-  <param name="map_frame" value="map" />
-  <param name="base_frame" value="base_link" />
-  <param name="odom_frame" value="odom" />
-  <!-- Map size / start point -->
-  <param name="map_resolution" value="0.05"/>
-  <param name="map_size" value="2048"/>
-  <param name="map_start_x" value="0.5"/>
-  <param name="map_start_y" value="0.5" />
-  <param name="laser_z_min_value" value="-2.5" />
-  <param name="laser_z_max_value" value="7.5" />
-
-  <!-- Map update parameters -->
-  <param name="update_factor_free" value="0.4"/>
-  <param name="update_factor_occupied" value="0.7" />    
-  <param name="map_update_distance_thresh" value="0.2"/>
-  <param name="map_update_angle_thresh" value="0.06" />
-
-  <remap from="/scanmatcher_frame" to="/odom" />
-  <param name="scan_topic" value="scan" />
-  <param name="use_tf_scan_transformation" value="false"/>
+  <node pkg="rviz" type="rviz" name="rviz" output="screen" />
   
-</node>
+  <node pkg="image_transport_package" type="scan_test" name="laser_scan" output="screen">
+    <param name="frame_id" value="laser_frame"/>
+    <param name="calibrate_time" type="bool" value="true"/>  
+    <param name="intensity" type="bool" value="false"/>
+    <param name="min_ang" value="0"/>   
+    <param name="max_ang" value="3.14"/>    
+    <param name="cluster" value="1"/>
+  </node>
 
-<!-- the relationship should be map odom base_link laser_frame -->
-<!-- node pkg="tf" type="static_transform_publisher" name="base_to_broadcaster"  args="0 0 0 0 0 0 /odom /base_link 50" / -->  
-<node pkg="tf" type="static_transform_publisher" name="laser_to_base_broadcaster"  args="0 0 0 0 0 0 /base_link /laser_frame 100" />  
+  <node pkg="beginner_tutorials" type="odometry_test" name="odom_test" output="screen">
+  </node>
+
+  <node pkg="beginner_tutorials" type="fake_scan" name="fake_scan" output="screen">
+  </node>
+
+  <arg name="map_file" default="/home/trin_igvc/catkin_ws/src/beginner_tutorials/maps/maze.yaml"/>
+  <arg name="world_file" default="/home/trin_igvc/catkin_ws/src/beginner_tutorials/maps/maze.world"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find beginner_tutorials)/maps/maze.yaml">
+    <param name="frame_id" value="/map"/>
+  </node>
+
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <param name="map_frame" value="map" />
+    <param name="base_frame" value="base_link" />
+    <param name="odom_frame" value="odom" />
+    <!-- Map size / start point -->
+    <param name="map_resolution" value="0.05"/>
+    <param name="map_size" value="2048"/>
+    <param name="map_start_x" value="0.5"/>
+    <param name="map_start_y" value="0.5" />
+    <param name="laser_z_min_value" value="-2.5" />
+    <param name="laser_z_max_value" value="7.5" />
+
+    <!-- Map update parameters -->
+    <param name="update_factor_free" value="0.4"/>
+    <param name="update_factor_occupied" value="0.7" />    
+    <param name="map_update_distance_thresh" value="0.2"/>
+    <param name="map_update_angle_thresh" value="0.06" />
+
+    <remap from="/scanmatcher_frame" to="/odom" />
+    <param name="scan_topic" value="scan" />
+    <param name="use_tf_scan_transformation" value="false"/>
+
+  </node>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" > 
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node>
+
+  <!-- the relationship should be map odom base_link laser_frame -->
+  <!-- node pkg="tf" type="static_transform_publisher" name="base_to_broadcaster"  args="0 0 0 0 0 0 /odom /base_link 50" / -->  
+  <node pkg="tf" type="static_transform_publisher" name="laser_to_base_broadcaster"  args="0 0 0 0 0 0 /base_link /laser_frame 100" />  
 </launch>

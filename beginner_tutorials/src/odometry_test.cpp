@@ -31,7 +31,7 @@ int main(int argc, char** argv){
   double y = 0.0;
   double th = 0.0;
 
-  double vx = 0;//0.1;
+  double vx = 0.1;//0.1;
   double vy = 0;
   double vth = 0;//0.1;
 

@@ -1,0 +1,56 @@
+List of ROS commands & Things to Do 
+
+-------------------
+Shortcuts 
+-------------------
+
+Ctrl + K  - Indents files automatically
+
+-------------------
+Teleoperation
+-------------------
+
+roslaunch turtlebot_teleop keyboard_teleop.launch --screen
+
+rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/mybot/cmd_vel
+rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/mybot/cmd_vel
+
+
+------------------------
+Running the robot
+------------------------
+
+Start
+------------------
+cd ~/catkin_ws
+source devel/setup.bash
+
+Run these two 
+---------------
+roslaunch rosserial_server man_drive.launch
+sudo xboxdrv --silent 
+password: Trin_EARL
+
+
+----------------
+ROS Commands
+----------------
+
+rostopic echo /topic_name
+rostopic pub my_topic std_msgs/String "hello there"
+
+------------------
+Plugin initialization 
+--------------------
+
+Example 1. Path-planner (http://wiki.ros.org/navigation/Tutorials/Writing%20A%20Global%20Path%20Planner%20As%20Plugin%20in%20ROS)
+-----------------
+1. Write class header that follows the navigation stack planner file (e.g. nav_core::BaseGlobalPlanner)
+2. Implement the class for the previous header
+3. Add to CMake and compile into libary
+4. Initialize as plugin
+ -1. Write XML file
+ -2. Register as plug-in in package.xml
+5. Input into the launch file as one of params of move_base node
+
+rospack plugins --attrib=plugin nav_core       (lists all plugins)

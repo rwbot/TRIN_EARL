@@ -82,7 +82,12 @@ void publish_scan(ros::Publisher *pub,
     if (!inverted) { // assumes scan window at the top
         for (size_t i = 0; i < node_count; i++) {
             float read_value = (float) nodes[i].distance_q2/4.0f/1000;
-            if (read_value == 0.0)
+
+            /*I MESS WITH THE DATA HERE!!!!!
+              IF THINGS GO HAYWIRE CHANGE ME BACK ASAP!!!!!
+              I SCREWED UP THE LASER SCAN !!!!!!!!!!!*/
+
+            if (read_value == 0.0 || ((i>=80)&&(i<=280)))//trying to limit ranges
                 scan_msg.ranges[i] = std::numeric_limits<float>::infinity();
             else
                 scan_msg.ranges[i] = read_value;
