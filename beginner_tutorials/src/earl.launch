@@ -22,7 +22,6 @@
     <param name="angle_max"           value="-3.14159/4"/>
   </node>
 
-
   <node pkg="rosserial_server" type="ros_odometry" name="odom" output="screen">
   </node>
 
@@ -59,16 +58,17 @@
     </rosparam>
 
     <remap from="/scanmatcher_frame" to="/odom" />
-    <param name="scan_topic" value="/scan"/>
+    <param name="scan_topic" value="/cam_scan"/>
     <param name="odom_topic" value="/odom"/>
     <param name="use_tf_scan_transformation" value="false"/>
+    <remap from="/cam_scan" to="/scan" />
   </node>
 
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="base_frame_id"   default="base_frame"/>
   <arg name="global_frame_id" default="map"/>
   <arg name="odom_topic" default="odom" />
-  <arg name="laser_topic" default="scan" />
+  <arg name="laser_topic" default="cam_scan" />
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />

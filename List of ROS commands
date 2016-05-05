@@ -54,3 +54,18 @@ Example 1. Path-planner (http://wiki.ros.org/navigation/Tutorials/Writing%20A%20
 5. Input into the launch file as one of params of move_base node
 
 rospack plugins --attrib=plugin nav_core       (lists all plugins)
+
+---------------------
+Connecting to the Cameras
+----------------------
+
+ssh -X ubuntu@Jetson1
+ssh -X ubuntu@Jetson2
+
+source devel/setup.bash
+
+roslaunch image_transport_package steam.launch
+
+
+
+

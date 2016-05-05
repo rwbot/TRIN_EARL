@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   joy
   tf
   nav_msgs
+  OpenCV
 )
 
 ## System dependencies are found with CMake's conventions
@@ -212,6 +213,7 @@ add_dependencies(fake_scan beginner_tutorials_generate_messages_cpp)
 add_executable(odometry_test src/odometry_test.cpp)
 target_link_libraries(odometry_test ${catkin_LIBRARIES})
 add_dependencies(odometry_test beginner_tutorials_generate_messages_cpp)
+
 
 # Global path-planning
 #add_library(global_planner_lib src/global_planner.cpp)

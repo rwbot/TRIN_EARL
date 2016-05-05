@@ -87,7 +87,7 @@ void publish_scan(ros::Publisher *pub,
               IF THINGS GO HAYWIRE CHANGE ME BACK ASAP!!!!!
               I SCREWED UP THE LASER SCAN !!!!!!!!!!!*/
 
-            if (read_value == 0.0 || ((i>=80)&&(i<=280)))//trying to limit ranges
+            if (read_value == 0.0 || ((i>=75)&&(i<=285)))//trying to limit ranges
                 scan_msg.ranges[i] = std::numeric_limits<float>::infinity();
             else
                 scan_msg.ranges[i] = read_value;

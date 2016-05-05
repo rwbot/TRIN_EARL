@@ -100,6 +100,9 @@ vector<Mat> imgs;
       jetson2.copyTo(roi2);
       jetson1.copyTo(roi1);
 
+        resize(final_mat, final_mat, Size(), 2, 2);
+
+
       //line(final_mat, Point(0,119), Point(639,119), Scalar(0,0,255), 2, 8, 0); //center line accross
       //line(final_mat, Point(320,0), Point(320,239), Scalar(0,0,255), 2, 8, 0); //center line down
 
@@ -128,10 +131,9 @@ vector<Mat> imgs;
 
 
 
-  resize(final_mat, final_mat, Size(), .5, .5);
 
 
-      resize(final_mat, final_mat, Size(), 6, 6);
+      resize(final_mat, final_mat, Size(), 3, 3);
 
       imshow("FINAL", final_mat);
 
