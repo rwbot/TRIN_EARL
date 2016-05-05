@@ -1809,10 +1809,10 @@ int main(int argc, char** argv){
 
 	ros::NodeHandle n;
 	ros::NodeHandle nh_array;
-	ros::Subscriber lidar_data = n.subscribe("scan", 1, lidar_cb);
+	ros::Subscriber lidar_data = n.subscribe("lidar_scan", 1, lidar_cb);
 	ros::Subscriber sub_arrayJ1 = nh_array.subscribe("PointsJ1", 1, arrayCallbackJ1);
 	ros::Subscriber sub_arrayJ2 = nh_array.subscribe("PointsJ2", 1, arrayCallbackJ2);
-	ros::Publisher scan_pub = n.advertise<sensor_msgs::LaserScan>("cam_scan", 1000);
+	ros::Publisher scan_pub = n.advertise<sensor_msgs::LaserScan>("scan", 1000);
 
 
 	unsigned int num_readings = 180;
@@ -1879,7 +1879,15 @@ int main(int argc, char** argv){
 			}
 			cout<<endl<<endl;
 
-			
+			/*r(int i = 0; i <90; i++){
+				scan.ranges[i+269] = scan.ranges[i];
+				scan.ranges[i] = 0;
+			}
+
+			for(int i = 90; i <180; i++){
+				scan.ranges[i-89] = scan.ranges[i];
+				scan.ranges[i] = 0;
+			}*/
 
 			scan_pub.publish(scan);
 			empty = true;
