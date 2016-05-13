@@ -140,9 +140,6 @@ add_dependencies(man_drive_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXP
 ## Specify libraries to link a library or executable target against
 target_link_libraries(man_drive_node ${catkin_LIBRARIES})
 
-
-
-
 #############
 ## Install ##
 #############
