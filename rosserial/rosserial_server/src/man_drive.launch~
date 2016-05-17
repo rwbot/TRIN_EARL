@@ -1,0 +1,4 @@
+<launch>
+  <node name="man_drive2" pkg="rosserial_server" type="man_drive2" output="screen"/>
+  <node name="joystick" pkg="joy" type="joy_node" output="screen"/>
+</launch>
