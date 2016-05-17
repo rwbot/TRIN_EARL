@@ -162,11 +162,20 @@ target_link_libraries(man_drive_node ${catkin_LIBRARIES})
 # )
 
 ## Mark cpp header files for installation
- install(DIRECTORY include/serial_session.h
-   DESTINATION jiroefmieomf
-   FILES_MATCHING PATTERN "*.h"
-   PATTERN ".svn" EXCLUDE
- )
+# install(DIRECTORY include/serial_session.h
+#   DESTINATION jiroefmieomf
+#   FILES_MATCHING PATTERN "*.h"
+#   PATTERN ".svn" EXCLUDE
+# )
+
+### Above is the original header file ###
+
+install(DIRECTORY include
+  DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
+
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
