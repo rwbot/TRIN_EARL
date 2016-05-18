@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>earl</name>
+  <name>jros</name>
   <version>0.0.0</version>
-  <description>The earl package</description>
+  <description>The jros package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->

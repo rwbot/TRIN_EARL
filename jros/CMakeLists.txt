@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(earl)
+project(jros)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -51,9 +51,9 @@ add_message_files(
 )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-   FILES
-)
+#add_service_files(
+#   FILES
+#)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -66,7 +66,7 @@ add_service_files(
 generate_messages(
    DEPENDENCIES
    std_msgs  # Or other packages containing msgs 
-   earl
+   jros
 )
 
 ################################################
@@ -99,7 +99,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  LIBRARIES earl
+  LIBRARIES jros
   DEPENDS system_lib
   CATKIN_DEPENDS message_runtime
 )
@@ -110,8 +110,6 @@ catkin_package(
 
 #### EXTERNAL LIBRARY ADDENDS ######################
 
-INCLUDE_DIRECTORIES(/home/jin/Downloads/JAUS++-5.141203-src/src)
-INCLUDE_DIRECTORIES(/usr/local/include/google)
 LINK_DIRECTORIES(/usr/local/include)
 LINK_DIRECTORIES(/usr/local/lib/active)
 LINK_DIRECTORIES(/usr/lib/x86_64-linux-gnu)
@@ -126,11 +124,11 @@ LINK_DIRECTORIES(/usr/lib/x86_64-linux-gnu)
 # FOR EACH EXECUTABLE! ##
 
 #target_link_libraries(jaus 
- # CxUtils JAUSCore JAUSEnvironment JAUSExtras JAUSMobility jpeg-6b lzma920 bzip2-1.0.6 tinyxml-2.6.2 boost_system protobuf ${catkin_LIBRARIES}
+#  CxUtils JAUSCore JAUSEnvironment JAUSExtras JAUSMobility jpeg-6b lzma920 bzip2-1.0.6 tinyxml-2.6.2 #boost_system ${catkin_LIBRARIES}
 #)
 
 #target_link_libraries(bridge 
- # protobuf ${catkin_LIBRARIES}
+#  ${catkin_LIBRARIES}
 #)
 
 #target_link_libraries(subscriber
@@ -146,7 +144,7 @@ LINK_DIRECTORIES(/usr/lib/x86_64-linux-gnu)
 # include_directories(include)
 
 ## Declare a C++ library
-# add_library(earl
+# add_library(jros
 #   src/${PROJECT_NAME}/earl.cpp
 # )
 

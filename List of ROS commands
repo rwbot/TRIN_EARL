@@ -1,8 +1,8 @@
 List of ROS commands & Things to Do 
 
--------------------
+------------------------------------
 Shortcuts 
--------------------
+-----------------------------------
 
 Ctrl + K  - Indents files automatically
 
@@ -15,21 +15,43 @@ roslaunch turtlebot_teleop keyboard_teleop.launch --screen
 rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/mybot/cmd_vel
 rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/mybot/cmd_vel
 
-
 ------------------------
 Running the robot
 ------------------------
 
 Start
 ------------------
+Open terminal 
 cd ~/catkin_ws
 source devel/setup.bash
 
-Run these two 
----------------
+
+Run if file change 
+------------------
+catkin_make --pkg rosserial_server 
+
+
+Man_drive location: ~/catkin_ws/src/rosserial/rosserial_server/src/man_drive_update.cpp
+
+Run commands 
+------------
 roslaunch rosserial_server man_drive.launch
 sudo xboxdrv --silent 
+
 password: Trin_EARL
+
+
+----------------
+Connecting to Android
+---------------
+
+ export ROS_MASTER_URI=http://192.168.1.204:11311/ (or whatever the IP)
+ roscore
+ -Then, connect to the above IP on the Android phone
+
+Testing for connection
+ rosnode list
+     rosnode ping /android_sensors_driver
 
 
 ----------------
@@ -66,6 +88,13 @@ source devel/setup.bash
 
 roslaunch image_transport_package steam.launch
 
+------------------------
+Launching Phidgets
+----------------------
 
 
+----------------------
+Connecting to Kinect
+------------------------
 
+roslaunch freenect_launch freenect.launch rgb_frame_id:=camera_rgb_optical_frame depth_frame_id:=camera_depth_optical_frame
