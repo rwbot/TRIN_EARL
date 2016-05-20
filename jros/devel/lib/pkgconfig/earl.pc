@@ -1,8 +1,0 @@
-prefix=/home/jin/catkin_ws/src/earl/devel
-
-Name: earl
-Description: Description of earl
-Version: 0.0.0
-Cflags: -I/home/jin/catkin_ws/src/earl/devel/include
-Libs: -L/home/jin/catkin_ws/src/earl/devel/lib -learl
-Requires: message_runtime
