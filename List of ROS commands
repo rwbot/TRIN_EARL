@@ -98,3 +98,21 @@ Connecting to Kinect
 ------------------------
 
 roslaunch freenect_launch freenect.launch rgb_frame_id:=camera_rgb_optical_frame depth_frame_id:=camera_depth_optical_frame
+
+------------------------
+RViz shortcuts
+----------------------
+m - move 
+s - select
+g - 2d Nav goals
+
+
+----------------------
+Changes to fix after pulling from Github
+----------------------
+
+----------
+Launch file 
+----------
+ns  => stands for namespace to launch the node in
+

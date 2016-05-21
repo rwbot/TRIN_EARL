@@ -1,0 +1,19 @@
+<launch>
+
+	<!-- Arguments -->
+	<node pkg="rviz" type="rviz" name="rviz" output="screen"/>
+	<arg name="bagfile" default="test.bag"/> <!-- Find it on http://srv.uib.es/public/viso2_ros/sample_bagfiles/  -->
+	<arg name="camera" default="/stereo_forward"/>
+	<param name="/use_sim_time" value="true"/>
+
+	<!-- Run the stereo image proc -->
+	<node pkg="mono_image_proc" type="mono_image_proc" name="stereo_image_proc" />
+
+	<!-- Viso2 -->
+	<node pkg="viso2_ros" type="mono_odometer" name="stereo_odometer">
+		<remap from="stereo" to="$(arg camera)"/>
+		<remap from="image" to="image_rect"/>
+		<param name="base_link_frame_id" value="$(arg camera)"/>
+	</node>
+
+</launch>
