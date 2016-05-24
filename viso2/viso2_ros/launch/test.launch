@@ -2,18 +2,44 @@
 
 	<!-- Arguments -->
 	<node pkg="rviz" type="rviz" name="rviz" output="screen"/>
-	<arg name="bagfile" default="test.bag"/> <!-- Find it on http://srv.uib.es/public/viso2_ros/sample_bagfiles/  -->
-	<arg name="camera" default="/stereo_forward"/>
+
+	<arg name="camera" default="/usb_cam" />
+
+	<group ns="$(arg camera)" >
+		<node pkg="image_proc" type="image_proc" name="image_proc" />
+	</group>
+
 	<param name="/use_sim_time" value="true"/>
 
-	<!-- Run the stereo image proc -->
-	<node pkg="mono_image_proc" type="mono_image_proc" name="stereo_image_proc" />
-
 	<!-- Viso2 -->
-	<node pkg="viso2_ros" type="mono_odometer" name="stereo_odometer">
-		<remap from="stereo" to="$(arg camera)"/>
-		<remap from="image" to="image_rect"/>
-		<param name="base_link_frame_id" value="$(arg camera)"/>
+	<node pkg="viso2_ros" type="mono_odometer" name="mono_odometer" output="screen">
+		<!-- Matcher params -->
+		<remap from="image" to="$(arg camera)/image_rect" />
+
+		<param name="nms_n" value="3" />
+		<param name="nms_tau" value="50" />
+		<param name="match_binsize" value="50" />
+		<param name="match_radius" value="200" />
+		<param name="match_disp_tolerance" value="2" />
+		<param name="outlier_disp_tolerance" value="5" />
+		<param name="outlier_flow_tolerance" value="5" />
+		<param name="multi_stage" value="1" />
+		<param name="half_resolution" value="1" />
+		<param name="refinement" value="1" />
+
+		<!-- Bucketing params -->
+		<param name="max_features" value="2" />
+		<param name="bucket_width" value="50" />
+		<param name="bucket_height" value="50" />
+
+		<!-- More params -->
+		<param name="camera_height" value="1.0" />
+		<param name="camera_pitch" value="0.0" />
+		<param name="ransac_iters" value="2000" />
+		<param name="inlier_threshold" value="1e-5" />
+		<param name="motion_threshold" value="100" />
 	</node>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0 0 0 0 0 0 /base_link /usb_cam 50" /> 
 
 </launch>

@@ -77,6 +77,14 @@ Example 1. Path-planner (http://wiki.ros.org/navigation/Tutorials/Writing%20A%20
 
 rospack plugins --attrib=plugin nav_core       (lists all plugins)
 
+-----------------------------
+Transforms
+----------------------------
+rosrun tf tf_echo turtle1 turtle2
+rosrun tf view_frames
+rosrun tf tf_monitor turtle1 turtle2
+rosrun rqt_graph rqt_graph
+
 ---------------------
 Connecting to the Cameras
 ----------------------
@@ -92,7 +100,7 @@ roslaunch image_transport_package steam.launch
 Launching Phidgets
 ----------------------
 
-
+roslaunch phidgets_imu imu.launch
 ----------------------
 Connecting to Kinect
 ------------------------
@@ -116,3 +124,22 @@ Launch file
 ----------
 ns  => stands for namespace to launch the node in
 
+=============
+Prereqs of project
+============
+Install = sudo apt-get install ros-jade-navigation
+
+(and many others ... catkin_make and see what are the errors)
+
+
+===========
+Other command line commands
+===========
+lsusb - lists usb connections 
+(can be used to check if Kinect is properly powered and connected, etc.)
+
+===========
+Camera calibration
+===========
+
+Refer: http://wiki.ros.org/camera_calibration
