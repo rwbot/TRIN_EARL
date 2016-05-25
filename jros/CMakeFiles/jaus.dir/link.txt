@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/jaus.dir/src/JAUSChallenge2010.cpp.o  -o devel/lib/earl/jaus  -L/usr/local/include  -L/usr/local/lib/active -rdynamic -lCxUtils -lJAUSCore -lJAUSEnvironment -lJAUSExtras -lJAUSMobility -ljpeg-6b -llzma920 -lbzip2-1.0.6 -ltinyxml-2.6.2 -lboost_system -lprotobuf -Wl,-rpath,/usr/local/include:/usr/local/lib/active 
