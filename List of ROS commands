@@ -143,3 +143,16 @@ Camera calibration
 ===========
 
 Refer: http://wiki.ros.org/camera_calibration
+The camera calibration file is stored in /.ros/camera_info <=required for rectification
+
+==========
+Webcam launch
+===========
+roslaunch usb_cam usb_cam-test.launch
+
+
+TODOS
+==========
+https://www.youtube.com/watch?v=LzyMQVSJvzY
+=Forbot?? point distance?? 
+=Seam time

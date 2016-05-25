@@ -16,6 +16,7 @@
 		<!-- Matcher params -->
 		<remap from="image" to="$(arg camera)/image_rect" />
 
+		<param name="sensor_frame_id" value="/usb_cam" />
 		<param name="nms_n" value="3" />
 		<param name="nms_tau" value="50" />
 		<param name="match_binsize" value="50" />
