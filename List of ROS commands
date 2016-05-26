@@ -9,6 +9,11 @@ List of ROS commands & Things to Do
 -Install orocos-bfl (sudo apt-get install ros-jade-navigation) 
 -Install dependencies for openslam-gmapping (sudo apt-get install ros-jade-openslam-gmapping)
 
+----
+Optional
+---
+-sudo apt-get install ros-jade-imu-tools
+
 ------------------------------------
 Shortcuts 
 -----------------------------------
