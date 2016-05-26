@@ -177,6 +177,10 @@ int main(int argc, char* argv[])
 
 
     // Create connection to JAUS Validation Tool (JVT)
+    JAUS::Address::Set discoveredSubsystems;
+    discoveryService->GetSubsystems(discoveredSubsystems);
+
+    JAUS::JUDP::ListenForSubsystems(discoveredSubsystems);
     transportService->AddNetworkConnection(JAUS::Address(90, 1, 1),
                                            "239.255.0.1",
                                            3794);

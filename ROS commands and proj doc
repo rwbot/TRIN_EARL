@@ -1,19 +1,10 @@
 List of ROS commands & Things to Do 
 
-=============================
-*** Pre-reqs for compiling *** 
-==============================
--Install Eigen library 
-	1. Install tar.bz2 from website and follow INSTALL instruction)
-	2. If Cmake error, find FindEigen3.cmake file and put in it appropriate place, then rename it back to FindEigen.cmake
--Install orocos-bfl (sudo apt-get install ros-jade-navigation) 
--Install dependencies for openslam-gmapping (sudo apt-get install ros-jade-openslam-gmapping)
-
 ------------------------------------
 Shortcuts 
 -----------------------------------
 
-Ctrl + K  - Indents files automatically (if setup so)
+Ctrl + K  - Indents files automatically
 
 -------------------
 Teleoperation
@@ -49,6 +40,20 @@ sudo xboxdrv --silent
 
 password: Trin_EARL
 
+
+----------------
+Connecting to Android
+---------------
+
+ export ROS_MASTER_URI=http://192.168.1.204:11311/ (or whatever the IP)
+ roscore
+ -Then, connect to the above IP on the Android phone
+
+Testing for connection
+ rosnode list
+     rosnode ping /android_sensors_driver
+
+
 ----------------
 ROS Commands
 ----------------
@@ -61,6 +66,16 @@ Plugin initialization
 --------------------
 
 Example 1. Path-planner (http://wiki.ros.org/navigation/Tutorials/Writing%20A%20Global%20Path%20Planner%20As%20Plugin%20in%20ROS)
+-----------------
+1. Write class header that follows the navigation stack planner file (e.g. nav_core::BaseGlobalPlanner)
+2. Implement the class for the previous header
+3. Add to CMake and compile into libary
+4. Initialize as plugin
+ -1. Write XML file
+ -2. Register as plug-in in package.xml
+5. Input into the launch file as one of params of move_base node
+
+rospack plugins --attrib=plugin nav_core       (lists all plugins)
 
 -----------------------------
 Transforms
@@ -86,6 +101,19 @@ Launching Phidgets
 ----------------------
 
 roslaunch phidgets_imu imu.launch
+----------------------
+Connecting to Kinect
+------------------------
+
+roslaunch freenect_launch freenect.launch rgb_frame_id:=camera_rgb_optical_frame depth_frame_id:=camera_depth_optical_frame
+
+------------------------
+RViz shortcuts
+----------------------
+m - move 
+s - select
+g - 2d Nav goals
+
 
 ----------------------
 Changes to fix after pulling from Github
@@ -95,6 +123,14 @@ Changes to fix after pulling from Github
 Launch file 
 ----------
 ns  => stands for namespace to launch the node in
+
+=============
+Prereqs of project
+============
+Install = sudo apt-get install ros-jade-navigation
+
+(and many others ... catkin_make and see what are the errors)
+
 
 ===========
 Other command line commands
@@ -114,8 +150,17 @@ Webcam launch
 ===========
 roslaunch usb_cam usb_cam-test.launch
 
+
 TODOS
 ==========
 https://www.youtube.com/watch?v=LzyMQVSJvzY
 =Forbot?? point distance?? 
 =Seam time
+
+=============================
+Pre-reqs for compiling
+==============================
+-Install Eigen library 
+	1. Install tar.bz2 from website and follow INSTALL instruction)
+	2. If Cmake error, find FindEigen3.cmake file and put in it appropriate place, then rename it back to FindEigen.cmake
+-Install orocos-bfl (sudo apt-get install ros-jade-navigation) 

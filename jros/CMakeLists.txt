@@ -125,7 +125,7 @@ include_directories(/home/jin/Downloads/JAUS++-5.141203-src/src)
 ## ADD C++ Sources here ####
 
 #add_executable(jaus src/JAUSChallenge2010.cpp)
-add_executable(bridge src/bridge.cpp)
+#add_executable(bridge src/bridge.cpp)
 #add_executable(subscriber src/subscriber.cpp)
 
 ## THEN FORM TARGET LINK WITH LIBARIRES HERE ########
@@ -135,9 +135,9 @@ add_executable(bridge src/bridge.cpp)
 #  CxUtils JAUSCore JAUSEnvironment JAUSExtras JAUSMobility jpeg-6b lzma920 bzip2-1.0.6 tinyxml-2.6.2 #boost_system ${catkin_LIBRARIES}
 #)
 
-target_link_libraries(bridge 
-  ${catkin_LIBRARIES} CxUtils JAUSCore JAUSEnvironment JAUSExtras JAUSMobility jpeg-6b lzma920 bzip2-1.0.6 tinyxml-2.6.2 boost_system
-)
+#target_link_libraries(bridge 
+#  ${catkin_LIBRARIES} CxUtils JAUSCore JAUSEnvironment JAUSExtras JAUSMobility jpeg-6b lzma920 bzip2-1.0.6 tinyxml-2.6.2 boost_system
+#)
 
 #target_link_libraries(subscriber
 #  ${catkin_LIBRARIES}
