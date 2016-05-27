@@ -8,11 +8,24 @@ List of ROS commands & Things to Do
 	2. If Cmake error, find FindEigen3.cmake file and put in it appropriate place, then rename it back to FindEigen.cmake
 -Install orocos-bfl (sudo apt-get install ros-jade-navigation) 
 -Install dependencies for openslam-gmapping (sudo apt-get install ros-jade-openslam-gmapping)
-
+-Install popt.h (sudo apt-get install libpopt-dev)
+-Install xbox drivers
+ 1.sudo apt-add-repository -y ppa:rael-gc/ubuntu-xboxdrv
+ 2. sudo apt-get update
+ 3. sudo apt-get install ubuntu-xboxdrv
+ 4. sudo apt-get install --install-recommends jstest* joystick xboxdrv
+-Two-webcam setup
+ 1. sudo apt-get install v4l-utils
+ 2. sudo rmmod uvcvideo
+ 3. sudo modprobe uvcvideo quirks=128
 ----
 Optional
 ---
 -sudo apt-get install ros-jade-imu-tools
+-in .bashrc, put:
+	source /opt/ros/jade/setup.bash
+	source /catkin_ws/install/setup.bash
+-Run /catkin_ws/devel/setup.bash for good measure
 
 ------------------------------------
 Shortcuts 
@@ -112,12 +125,19 @@ Camera calibration
 ===========
 
 Refer: http://wiki.ros.org/camera_calibration
+
 The camera calibration file is stored in /.ros/camera_info <=required for rectification
+
+rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.108 image:=/my_camera/image camera:=/my_camera
+
+Size (8x6) refers to the corners where four corners meet
+Square refers to the size of the squares in meters
 
 ==========
 Webcam launch
 ===========
 roslaunch usb_cam usb_cam-test.launch
+
 
 TODOS
 ==========
