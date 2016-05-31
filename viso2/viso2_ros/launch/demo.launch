@@ -1,19 +1,84 @@
 <launch>
 
-	<!-- Arguments -->
-  <node pkg="rviz" type="rviz" name="rviz" />
-	<arg name="bagfile" default="test.bag"/> <!-- Find it on http://srv.uib.es/public/viso2_ros/sample_bagfiles/  -->
-  <arg name="camera" default="/usb_cam"/>
-  <param name="/use_sim_time" value="true"/>
+  <group ns="stereo" >
+    <node name="right" pkg="usb_cam" type="usb_cam_node" output="screen" >
+      <param name="video_device" value="/dev/video0" />
+      <param name="image_width" value="640" />
+      <param name="image_height" value="480" />
+      <param name="pixel_format" value="mjpeg" />
+      <param name="camera_frame_id" value="right" />
+      <param name="io_method" value="mmap"/>
+      <param name="camera_name" value="right" />
+    </node>
 
-  <!-- Run the stereo image proc -->
-  <!--node ns="$(arg camera)" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" /-->
+    <node name="left" pkg="usb_cam" type="usb_cam_node" output="screen" >
+      <param name="video_device" value="/dev/video1" />
+      <param name="image_width" value="640" />
+      <param name="image_height" value="480" />
+      <param name="pixel_format" value="mjpeg" />
+      <param name="camera_frame_id" value="left" />
+      <param name="io_method" value="mmap"/>
+      <param name="camera_name" value="left" />
+    </node>  
 
-  <!-- Viso2 -->
-  <node pkg="viso2_ros" type="stereo_odometer" name="stereo_odometer">
-    <remap from="stereo" to="$(arg camera)"/>
-    <remap from="image" to="image_rect"/>
-    <param name="base_link_frame_id" value="$(arg camera)"/>
-  </node>
+    <arg name="manager" default="/my_manager" /> <!-- Must be globally qualified -->
+    <arg name="respawn" default="false" />
+    <arg name="left" default="left" />
+    <arg name="right" default="right" />
+    <!-- TODO Arguments for sync policy, etc? -->
 
-</launch>
+    <arg     if="$(arg respawn)" name="bond" value="" />
+    <arg unless="$(arg respawn)" name="bond" value="--no-bond" />
+
+    <!-- Basic processing for left camera -->
+    <include file="$(find image_proc)/launch/image_proc.launch"
+     ns="$(arg left)">
+     <arg name="manager" value="$(arg manager)" />
+     <arg name="respawn" value="$(arg respawn)" />
+   </include>
+
+   <!-- Basic processing for right camera -->
+   <include file="$(find image_proc)/launch/image_proc.launch"
+     ns="$(arg right)">
+     <arg name="manager" value="$(arg manager)" />
+     <arg name="respawn" value="$(arg respawn)" />
+   </include>
+
+   <!-- Disparity image -->
+   <node pkg="nodelet" type="nodelet" name="disparity"
+    args="load stereo_image_proc/disparity $(arg manager) $(arg bond)"
+    respawn="$(arg respawn)" />
+
+    <!-- PointCloud2 -->
+    <node pkg="nodelet" type="nodelet" name="point_cloud2"
+      args="load stereo_image_proc/point_cloud2 $(arg manager) $(arg bond)"
+      respawn="$(arg respawn)" />
+
+      <!-- Run the stereo image proc -->
+      <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
+        <param name="approximate_sync" value="true" />
+        <param name="queue_size" value="1000" />
+        <!-- remap from="/stereo/left/image" to="/stereo/left/image_rect_color" / -->
+        <!-- remap from="/stereo/right/image" to="/stereo/right/image_rect_color" / -->
+        <param name="speckle_size" value="250" />
+        <param name="correlation_window_size" value="25" />
+        <param name="match_disp_tolerance" value="25" />
+      </node>
+
+    </group>
+
+    <!-- Viso2 -->
+    <node pkg="viso2_ros" type="stereo_odometer" name="stereo_odometer">
+      <remap from="image" to="image_rect_color" />
+      <param name="odom_frame_id" value="/odom" />
+      <param name="sensor_frame_id" value="/stereo" />
+      <param name="publish_tf" value="true" />
+      <param name="approximate_sync" value="true" />
+      <param name="queue_size" value="1000" />
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="odom_to_base_tf"  args="0 1 0 0 0 0 /odom /base_link 50" respawn="true" />
+    <node pkg="tf" type="static_transform_publisher" name="base_to_stereo_tf"  args="0 1 0 0 0 0 /base_link /stereo 50" respawn="true" />
+    <node pkg="tf" type="static_transform_publisher" name="stereo_to_right_tf"  args="0 0 0 0 0 0 /stereo /right 50" respawn="true" />
+    <node pkg="tf" type="static_transform_publisher" name="stereo_to_left_tf"  args="0 0 0 0 0 0 /stereo /left 50" respawn="true" />
+  </launch>

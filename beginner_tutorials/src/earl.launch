@@ -1,6 +1,6 @@
 <launch>
 
-    <param name="/use_sim_time" value="true"/>
+     <!--param name="/use_sim_time" value="true"/ -->
 
   <!--node pkg="image_transport_package" type="scan_test" name="laser_scan" output="screen">
     <param name="frame_id" value="laser_frame"/>
@@ -24,7 +24,7 @@
 <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" respawn="true">
     <rosparam>
         map_frame: map
-        odom_frame: odom
+        odom_frame: odom_combined
         map_update_interval: 1.0
         maxUrange: 30.0
         maxRange: 60.0
@@ -53,43 +53,45 @@
         base_frame: base_link
     </rosparam>
 
-    <remap from="/scanmatcher_frame" to="/odom" />
+    <remap from="/scanmatcher_frame" to="/odom_combined" />
     <param name="scan_topic" value="/scan"/>
-    <param name="odom_topic" value="/odom"/>
+    <param name="odom_topic" value="/odom_combined"/>
     <param name="use_tf_scan_transformation" value="true"/>
-    <!--remap from="/scan" to="/cam_scan" /-->
+    <!-- remap from="/scan" to="/cam_scan" / -->
 </node>
 
-<include file="$(find usb_cam)/launch/usb_cam-test.launch" respawn="true" />
+<!-- include file="$(find usb_cam)/launch/usb_cam-test.launch" respawn="true" / -->
 
-<include file="$(find viso2_ros)/launch/test.launch" respawn="true" />
+<include file="$(find viso2_ros)/launch/demo.launch" />
 
 <!-- Viso2 -->
 
-<include file="$(find phidgets_imu)/launch/imu.launch" respawn="true" />
+<!-- include file="$(find phidgets_imu)/launch/imu.launch" respawn="true" / -->
 
 <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" respawn="true">
-    <param name="output_frame" value="odom"/>
+    <param name="output_frame" value="odom_combined"/>
     <param name="base_footprint_frame" value="base_link" />
     <param name="freq" value="30.0"/>
     <param name="sensor_timeout" value="1.0"/>
     
     <param name="odom_used" value="false"/>
 
-    <remap from="/imu/data" to="imu_data"/>
+    <remap from="imu_data" to="/imu/data"/>
     <param name="imu_used" value="true" />
     
-    <remap from="vo" to="/mono_odometer/odometry" />
+    <remap from="vo" to="/stereo_odometer/odometry" />
     <param name="vo_used" value="true"/>
     <param name="debug" value="false"/>
     <param name="self_diagnose" value="false"/>
 </node>
+    
+  <!-- node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find map_server)/test/testmap.yaml" / -->
 
-  <!--arg name="odom_frame_id"   default="odom"/>
-  <arg name="base_frame_id"   default="base_frame"/>
+  <arg name="odom_frame_id"   default="odom_combined"/>ros use sim time
+  <arg name="base_frame_id"   default="base_link"/>
   <arg name="global_frame_id" default="map"/>
-  <arg name="odom_topic" default="odom" />
-  <arg name="laser_topic" default="cam_scan" />
+  <arg name="odom_topic" default="odom_combined" />
+  <arg name="laser_topic" default="scan" />
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
@@ -106,9 +108,9 @@
     <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
     <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
     <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
-</node-->
+</node>
 
-<node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom /base_link 50" respawn="true" /> 
+<node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom_combined /base_link 50" respawn="true" /> 
 <!--node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0.1 0 0.75 0 0 0 /base_link /camera 50" / -->
 <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -90 0 0 /base_link /laser_frame 50" respawn="true" />
 

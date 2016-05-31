@@ -15,13 +15,30 @@ List of ROS commands & Things to Do
  3. sudo apt-get install ubuntu-xboxdrv
  4. sudo apt-get install --install-recommends jstest* joystick xboxdrv
 -Two-webcam setup
+* (I don't know how I got it to work, but here are some things I tried...)
  1. sudo apt-get install v4l-utils
  2. sudo rmmod uvcvideo
  3. sudo modprobe uvcvideo quirks=128
+ 4. rosdep install(?) usb_cam
+ 5. sudo apt-get install ros-jade-usb-cam
+ 6. Add serial numbers to the rules, etc
+ --
+ sudo apt-get install ros-indigo-rosserial-arduino
+ sudo apt-get install ros-indigo-rosserial
+--
+Install libuvc here : https://int80k.com/libuvc/doc/
+---
+Warnings
+--
+-Don't install ubuntu-xboxdrv (install just xboxdrv)
 ----
 Optional
 ---
 -sudo apt-get install ros-jade-imu-tools
+ *. source devel/setup.bash
+ 1. git clone (git directory)
+ 2. rosdep imu_tools 
+
 -in .bashrc, put:
 	source /opt/ros/jade/setup.bash
 	source /catkin_ws/install/setup.bash
@@ -74,12 +91,6 @@ ROS Commands
 rostopic echo /topic_name
 rostopic pub my_topic std_msgs/String "hello there"
 
-------------------
-Plugin initialization 
---------------------
-
-Example 1. Path-planner (http://wiki.ros.org/navigation/Tutorials/Writing%20A%20Global%20Path%20Planner%20As%20Plugin%20in%20ROS)
-
 -----------------------------
 Transforms
 ----------------------------
@@ -127,17 +138,18 @@ Camera calibration
 Refer: http://wiki.ros.org/camera_calibration
 
 The camera calibration file is stored in /.ros/camera_info <=required for rectification
+ 
 
-rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.108 image:=/my_camera/image camera:=/my_camera
+ rosrun camera_calibration cameracalibrat.py --size 7x6 --square 0.0121 right:=/stereo/right/image_raw left:=/stereo/left/image_raw right_camera:=/stereo/right left_camera:=/stereo/left --approximate=0.1
+
 
 Size (8x6) refers to the corners where four corners meet
 Square refers to the size of the squares in meters
 
-==========
-Webcam launch
 ===========
-roslaunch usb_cam usb_cam-test.launch
-
+Image view
+===========
+rosrun image_view stereo_view stereo:=steo image:=image_rect _queue_size:=1000 _approximate_sync:=True
 
 TODOS
 ==========
