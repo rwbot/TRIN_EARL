@@ -17,7 +17,7 @@
     <param name="period" value="4"/>
 
     # compass correction params (see http://www.phidgets.com/docs/1044_User_Guide)
-    <!-- <param name="cc_mag_field" value="0.52859"/>
+    	<param name="cc_mag_field" value="0.52859"/>
          <param name="cc_offset0" value="0.03921"/>
          <param name="cc_offset1" value="0.19441"/>
          <param name="cc_offset2" value="-0.03493"/>
@@ -29,17 +29,23 @@
          <param name="cc_t2" value="0.00160 "/>
          <param name="cc_t3" value="-0.05038"/>
          <param name="cc_t4" value="-0.03942"/>
-         <param name="cc_t5" value="-0.05673"/> -->
+         <param name="cc_t5" value="-0.05673"/>
   </node>
 
   #### IMU Orientation Filter ###############################################
-
+ 
   <node pkg="nodelet" type="nodelet" name="ImuFilterNodelet" 
     args="load imu_filter_madgwick/ImuFilterNodelet imu_manager" 
     output="screen">
 
-    <param name="use_mag" value="true"/>
+    <param name="use_magnetic_field_msg" value="false"/>
 
   </node>
+
+  <include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch" />
+  
+  <!-- include file="$(find robot_localization)/launch/ekf_template.launch" / -->
+
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom_combined /base_link 50" respawn="true" /> 
 
 </launch>

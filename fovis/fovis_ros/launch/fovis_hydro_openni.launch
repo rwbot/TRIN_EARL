@@ -1,0 +1,13 @@
+<launch>
+  <!-- This should be the same as used with openni_launch -->
+  <arg name="camera" default="stereo" />
+
+  <node pkg="fovis_ros" type="fovis_stereo_odometer" name="stereo_odometer" >
+    <remap from="/camera/left/image" to="$(arg camera)/left/image_rect" />
+    <remap from="/camera/left/camera_info" to="$(arg camera)/left/camera_info" />
+    <remap from="/camera/right/image" to="$(arg camera)/right/image_rect" />
+    <remap from="/camera/right/camera_info" to="$(arg camera)/right/camera_info" />
+    <param name="approximate_sync" type="bool" value="True" />
+  </node>
+  
+</launch>

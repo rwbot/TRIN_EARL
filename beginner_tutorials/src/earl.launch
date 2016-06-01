@@ -1,6 +1,6 @@
 <launch>
 
-     <!--param name="/use_sim_time" value="true"/ -->
+   <!--param name="/use_sim_time" value="true"/ -->
 
   <!--node pkg="image_transport_package" type="scan_test" name="laser_scan" output="screen">
     <param name="frame_id" value="laser_frame"/>
@@ -62,11 +62,20 @@
 
 <!-- include file="$(find usb_cam)/launch/usb_cam-test.launch" respawn="true" / -->
 
-<include file="$(find viso2_ros)/launch/demo.launch" />
+<!-- include file="$(find viso2_ros)/launch/demo.launch" / -->
 
 <!-- Viso2 -->
 
-<!-- include file="$(find phidgets_imu)/launch/imu.launch" respawn="true" / -->
+<include file="$(find phidgets_imu)/launch/imu.launch" respawn="true" />
+
+<node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" />
+
+<node pkg="gps_common" type="utm_odometry_node" name="gps_conv">
+    <remap from="odom" to="vo" />
+    <remap from="fix" to="/gps/fix" />
+    <param name="rot_covariance" value="99999" />
+    <param name="frame_id" value="base_link" />
+</node>
 
 <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" respawn="true">
     <param name="output_frame" value="odom_combined"/>
@@ -79,21 +88,22 @@
     <remap from="imu_data" to="/imu/data"/>
     <param name="imu_used" value="true" />
     
-    <remap from="vo" to="/stereo_odometer/odometry" />
     <param name="vo_used" value="true"/>
     <param name="debug" value="false"/>
     <param name="self_diagnose" value="false"/>
 </node>
-    
-  <!-- node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find map_server)/test/testmap.yaml" / -->
 
-  <arg name="odom_frame_id"   default="odom_combined"/>ros use sim time
-  <arg name="base_frame_id"   default="base_link"/>
-  <arg name="global_frame_id" default="map"/>
-  <arg name="odom_topic" default="odom_combined" />
-  <arg name="laser_topic" default="scan" />
+<include file="$(find robot_localization)/launch/ekf_template.launch" />
 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+<!-- node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find map_server)/test/testmap.yaml" / -->
+
+<arg name="odom_frame_id"   default="odom_combined"/>ros use sim time
+<arg name="base_frame_id"   default="base_link"/>
+<arg name="global_frame_id" default="map"/>
+<arg name="odom_topic" default="odom_combined" />
+<arg name="laser_topic" default="scan" />
+
+<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
     <rosparam file="$(find beginner_tutorials)/param/local_costmap_params.yaml" command="load" />   

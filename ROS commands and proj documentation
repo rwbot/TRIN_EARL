@@ -6,6 +6,8 @@ List of ROS commands & Things to Do
 -Install Eigen library 
 	1. Install tar.bz2 from website and follow INSTALL instruction)
 	2. If Cmake error, find FindEigen3.cmake file and put in it appropriate place, then rename it back to FindEigen.cmake
+	* (Look inside the cmake folder somewhere within the compiled library folder and paste 
+	   the cmake files into the catkin folder of the package)
 -Install orocos-bfl (sudo apt-get install ros-jade-navigation) 
 -Install dependencies for openslam-gmapping (sudo apt-get install ros-jade-openslam-gmapping)
 -Install popt.h (sudo apt-get install libpopt-dev)
@@ -25,8 +27,14 @@ List of ROS commands & Things to Do
  --
  sudo apt-get install ros-indigo-rosserial-arduino
  sudo apt-get install ros-indigo-rosserial
+-- 
+Fovis_ros consists of fovis_ros and libfovis ROS package
+
 --
+
+
 Install libuvc here : https://int80k.com/libuvc/doc/
+Install libgps = sudo apt-get install libgps-dev
 ---
 Warnings
 --
@@ -44,6 +52,7 @@ Optional
 	source /catkin_ws/install/setup.bash
 -Run /catkin_ws/devel/setup.bash for good measure
 
+
 ------------------------------------
 Shortcuts 
 -----------------------------------
@@ -58,6 +67,11 @@ roslaunch turtlebot_teleop keyboard_teleop.launch --screen
 
 rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/mybot/cmd_vel
 rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/mybot/cmd_vel
+
+-----------------------------
+GPS
+-----------------------------
+rosrun nmea_navsat_driver nmea_serial_driver _port=/dev/ttyUSB0 
 
 ------------------------
 Running the robot
@@ -131,6 +145,11 @@ Other command line commands
 lsusb - lists usb connections 
 (can be used to check if Kinect is properly powered and connected, etc.)
 
+==========
+GPS
+=========
+rosrun nmea_navsat_driver nmea_serial_driver _port=/dev/ttyUSB0 
+
 ===========
 Camera calibration
 ===========
@@ -146,10 +165,12 @@ The camera calibration file is stored in /.ros/camera_info <=required for rectif
 Size (8x6) refers to the corners where four corners meet
 Square refers to the size of the squares in meters
 
+** Test image calibration routinely using the checkerboard and looking at the disparity image 
+
 ===========
 Image view
 ===========
-rosrun image_view stereo_view stereo:=steo image:=image_rect _queue_size:=1000 _approximate_sync:=True
+rosrun image_view stereo_view stereo:=stereo image:=image_rect _queue_size:=1000 _approximate_sync:=True
 
 TODOS
 ==========
