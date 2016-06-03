@@ -26,7 +26,7 @@
            are operating in a planar environment and want to ignore the effect of small variations in the
            ground plane that might otherwise be detected by, for example, an IMU. Defaults to false if
            unspecified. -->
-           <param name="two_d_mode" value="false"/>
+           <param name="two_d_mode" value="true"/>
 
       <!-- REP-105 (http://www.ros.org/reps/rep-0105.html) specifies three principal coordinate frames: map,
            odom, and base_link. base_link is the coordinate frame that is affixed to the robot. The robot's
@@ -64,7 +64,7 @@
            TwistStamped, Imu). To add a new one, simply append the next number in the sequence to its base name,
            e.g., odom0, odom1, twist0, twist1, imu0, imu1, imu2, etc. The value should be the topic name. These
            parameters obviously have no default values, and must be specified. -->
-           <param name="odom0" value="robot_pose_ekf/odom_combined"/>
+           <param name="odom0" value="odometry/gps"/>
            <!-- param name="odom1" value="example/another_odom"/ -->
            <!-- param name="pose0" value="example/pose"/ -->
            <!-- param name="twist0" value="example/twist"/ -->
@@ -123,10 +123,10 @@
            integration of velocities leads to slowly increasing error in the absolute (pose) variable. For position variables,
            this is acceptable. For orientation variables, it can lead to trouble. Users should make sure that all orientation
            variables have at least one source of absolute measurement. -->
-           <param name="odom0_differential" value="false">
-            <!-- param name="odom1_differential" value="false"/ -->
-            <!-- param name="pose0_differential" value="true"/ -->
-            <param name="imu0_differential" value="false"/>
+           <param name="odom0_differential" value="false"/>
+           <!-- param name="odom1_differential" value="false"/ -->
+           <!-- param name="pose0_differential" value="true"/ -->
+           <param name="imu0_differential" value="false"/>
 
       <!-- When the node starts, if this parameter is true, then the first measurement is treated as a "zero point" for all
            future measurements. While you can achieve the same effect with the differential paremeter, the key difference is
@@ -217,7 +217,10 @@
 
 
             <!--  Placeholder for output topic remapping -->
-        <!-- remap from="odometry/filtered" to="odom" / -->
-  </node>
+          </node>
 
-</launch>
+          <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node">
+            <remap from="gps/fix" to="fix" />
+          </node>
+
+        </launch>

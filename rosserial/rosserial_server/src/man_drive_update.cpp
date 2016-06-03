@@ -27,49 +27,49 @@ void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg){
   if(msg->buttons[8] == 1){
     command = 0;
     ros::shutdown();
-}
+  }
 
 
   /*Right Trigger Must be pressed for any drive command to be sen --done for safety*/
-if(msg->axes[4] == -1.0){
-    /*A-Button --switch to autonomous mode*/
-    if(msg->buttons[0] == 1){
-      command = _SWITCH;
-    /*Forward with directions*/
-      // Changing forward min by 0 +50 *100
-  }else if(msg->axes[3] >= 0.1){
-      leftWheel = ((msg->axes[3])*255)+0;//+30;
-      rightWheel = ((msg->axes[3])*255)+0;//+30;
-      if((msg->axes[0] >=0.3)&&(msg->axes[0] <=0.9)){ //go left
-        difference = ((msg->axes[0])*leftWheel)/8;
-        rightWheel = rightWheel + difference;
-        leftWheel = leftWheel - difference; 
-      }else if((msg->axes[0] <=-0.3)&&(msg->axes[0] >=-0.9)){ //go right
-        difference = (-(msg->axes[0])*leftWheel)/8;
-        rightWheel = rightWheel - difference;
-        leftWheel = leftWheel + difference; 
-    }
-    /*SPIN LEFT Right Trigger Down -> Left Analog Stick All The way left*/
-}else if(msg->axes[0] >= 0.1){
-      leftWheel = -((msg->axes[0])*60)-70;//+30;
-      rightWheel = ((msg->axes[0])*60)+70;//+30;    
-  }else if(msg->axes[0] <= -0.1){
-      speed = (abs((msg->axes[0])*60))+70;
-      leftWheel = speed;//+30;
-      rightWheel = -speed;//+30;
-  }else if(msg->axes[3] <= -0.1){
-      leftWheel = ((msg->axes[3])*60)-70;//+30;
-      rightWheel = ((msg->axes[3])*60)-70;//+30;
-  /*DO NOTHING: Right Trigger Down But No Drive Command Entered --Robot Stay*/
-  }else{
-   leftWheel = 0;
-   rightWheel=0;
-}
-  /*DO NOTHING: Right Trigger Not Pressed --Robot Stay*/
-}else{
-  leftWheel = 0;
-  rightWheel = 0;
-}
+	if(msg->axes[4] == -1.0){
+		  /*A-Button --switch to autonomous mode*/
+		  if(msg->buttons[0] == 1){
+		    command = _SWITCH;
+		  /*Forward with directions*/
+		    // Changing forward min by 0 +50 *100
+		}else if(msg->axes[3] >= 0.1){
+		    leftWheel = ((msg->axes[3])*170)+80;//+30;
+		    rightWheel = ((msg->axes[3])*170)+80;//+30;
+		    if((msg->axes[0] >=0.3)&&(msg->axes[0] <=0.9)){ //go left
+		      difference = ((msg->axes[0])*leftWheel)/8;
+		      rightWheel = rightWheel + difference;
+		      leftWheel = leftWheel - difference; 
+		    }else if((msg->axes[0] <=-0.3)&&(msg->axes[0] >=-0.9)){ //go right
+		      difference = (-(msg->axes[0])*leftWheel)/8;
+		      rightWheel = rightWheel - difference;
+		      leftWheel = leftWheel + difference; 
+		  }
+		  /*SPIN LEFT Right Trigger Down -> Left Analog Stick All The way left*/
+	}else if(msg->axes[0] >= 0.1){
+		    leftWheel = -((msg->axes[0])*60)-70;//+30;
+		    rightWheel = ((msg->axes[0])*60)+70;//+30;    
+		}else if(msg->axes[0] <= -0.1){
+		    speed = (abs((msg->axes[0])*60))+70;
+		    leftWheel = speed;//+30;
+		    rightWheel = -speed;//+30;
+		}else if(msg->axes[3] <= -0.1){
+		    leftWheel = ((msg->axes[3])*60)-70;//+30;
+		    rightWheel = ((msg->axes[3])*60)-70;//+30;
+		/*DO NOTHING: Right Trigger Down But No Drive Command Entered --Robot Stay*/
+		}else{
+		 leftWheel = 0;
+		 rightWheel=0;
+	}
+		/*DO NOTHING: Right Trigger Not Pressed --Robot Stay*/
+	} else{
+		leftWheel = 0;
+		rightWheel = 0;
+	}
 }
 
 int main(int argc, char **argv){
@@ -102,18 +102,18 @@ int main(int argc, char **argv){
     if(leftWheel==0 && rightWheel==0){
       ratio.data = -1.0;
       sigRatio.publish(ratio);
-  }else if(rightWheel!=0){
+    } else if(rightWheel!=0){
       ratio.data = abs((leftWheel*1.0)/(rightWheel*1.0));
       sigRatio.publish(ratio);
-  }
+    }
     if(leftWheel!=0) //output command to a terminal window if there is anything to show
       ROS_INFO("PUBLISH Left: %d | Right: %d", left.data, right.data);
-  if(command == _SWITCH)
+    if(command == _SWITCH)
       cout<<endl<<"+++++++++++++++SWITCH TO AUTONOMOUS MODE+++++++++++++++"<<endl<<endl;
     chatter_left.publish(left); //publish our message
     chatter_right.publish(right);
     ros::spinOnce(); //and when that loop is over we'll do it all over again!
     loop_rate.sleep();
-}
-return 0;
+  }
+  return 0;
 }

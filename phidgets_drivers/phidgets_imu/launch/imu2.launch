@@ -1,0 +1,10 @@
+<launch>
+	<node pkg="phidgets_imu" type="phidgets_imu_node" name="IMU_node1" output="screen">
+	    <param name="frame_id" value="base_link"/>
+	</node>
+	<node pkg="imu_filter_madgwick" type="imu_filter_node" name="IMU_node2" output="screen">
+	    <param name="use_mag" value="false"/>
+	    <param name="publish_tf" value="false"/>
+	    <param name="fixed_frame" value="odom"/> 
+	</node>
+</launch>

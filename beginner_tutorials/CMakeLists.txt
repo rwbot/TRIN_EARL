@@ -214,6 +214,9 @@ add_executable(odometry_test src/odometry_test.cpp)
 target_link_libraries(odometry_test ${catkin_LIBRARIES})
 add_dependencies(odometry_test beginner_tutorials_generate_messages_cpp)
 
+add_executable(blink_rate src/blink_rate.cpp)
+target_link_libraries(blink_rate ${catkin_LIBRARIES})
+add_dependencies(blink_rate beginner_tutorials_generate_messages_cpp)
 
 # Global path-planning
 #add_library(global_planner_lib src/global_planner.cpp)
