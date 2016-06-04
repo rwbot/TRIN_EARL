@@ -53,14 +53,14 @@ namespace RobotLocalization
     has_transform_gps_(false),
     has_transform_imu_(false),
     transform_good_(false),
-    gps_frame_id_(""),
+    gps_frame_id_("gps"), // Changed
     gps_updated_(false),
     odom_updated_(false),
     publish_gps_(false),
     use_odometry_yaw_(false),
     use_manual_datum_(false),
     zero_altitude_(false),
-    world_frame_id_("odom"),
+    world_frame_id_("map"), // changed
     base_link_frame_id_("base_link"),
     utm_zone_(""),
     tf_listener_(tf_buffer_)
@@ -87,7 +87,7 @@ namespace RobotLocalization
     nh_priv.param("yaw_offset", yaw_offset_, 0.0);
     nh_priv.param("broadcast_utm_transform", broadcast_utm_transform_, false);
     nh_priv.param("zero_altitude", zero_altitude_, false);
-    nh_priv.param("publish_filtered_gps", publish_gps_, false);
+    nh_priv.param("publish_filtered_gps", publish_gps_, true); // Changed
     nh_priv.param("use_odometry_yaw", use_odometry_yaw_, false);
     nh_priv.param("wait_for_datum", use_manual_datum_, false);
     nh_priv.param("frequency", frequency, 10.0);
@@ -161,7 +161,7 @@ namespace RobotLocalization
     }
 
     ros::Subscriber odom_sub = nh.subscribe("odometry/filtered", 1, &NavSatTransform::odomCallback, this);
-    ros::Subscriber gps_sub = nh.subscribe("gps/fix", 1, &NavSatTransform::gpsFixCallback, this);
+    ros::Subscriber gps_sub = nh.subscribe("fix", 1, &NavSatTransform::gpsFixCallback, this);
     ros::Subscriber imu_sub;
 
     if (!use_odometry_yaw_ && !use_manual_datum_)

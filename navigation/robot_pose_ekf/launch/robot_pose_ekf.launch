@@ -1,9 +1,13 @@
 <launch>
 
-    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver"/>
+    <include file="$(find phidgets_imu)/launch/imu.launch" />
+
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
+        <param name="port" value="/dev/ttyUSB1" />
+    </node>
 
     <node pkg="gps_common" type="utm_odometry_node" name="gps_conv">
-        <remap from="odom" to="vo" />
+        <remap from="/gps/fix" to="/fix" />
         <param name="rot_covariance" value="99999" />
         <param name="frame_id" value="base_link" />
     </node>
@@ -19,9 +23,10 @@
         <remap from="imu_data" to="/imu/data"/>
         <param name="imu_used" value="true" />
 
+        <remap from="vo" to="odom"/>
         <param name="vo_used" value="true"/>
         <param name="debug" value="false"/>
         <param name="self_diagnose" value="false"/>
     </node>
-    
+
 </launch>

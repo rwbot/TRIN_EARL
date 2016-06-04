@@ -1,5 +1,6 @@
 #include <ros.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/Bool.h>
 
 //const int switchPinL = 12;
 //const int left = 5;
@@ -11,6 +12,10 @@
 
 //Port5 is left
 //port 3 is right
+
+int led = 13;
+boolean blink = false;
+int count = 0;
 
 ros::NodeHandle  nh;
 
@@ -42,9 +47,13 @@ void rightCB(const std_msgs::Int16& msg){
   }
 }
 
+void blinkCB(const std_msgs::Bool& msg) {
+  blink = msg.data;
+}
+
 ros::Subscriber<std_msgs::Int16> subL("Left", &leftCB );
 ros::Subscriber<std_msgs::Int16> subR("Right", &rightCB );
-
+ros::Subscriber<std_msgs::Bool> subB("blink", &blinkCB );
 
 void setup()
 { 
@@ -52,6 +61,7 @@ void setup()
   nh.initNode();
   nh.subscribe(subL);
   nh.subscribe(subR);
+  nh.subscribe(subB);
   pinMode(5, OUTPUT);
   pinMode(3, OUTPUT);
   pinMode(12, OUTPUT);
@@ -60,6 +70,17 @@ void setup()
 
 void loop()
 {  
+  if (blink && count >= 1000) {
+    count = 0;
+    if (digitalRead(13) == HIGH) {
+      digitalWrite(led, HIGH);
+    }
+    else {
+      digitalWrite(led, LOW);
+    }
+  }
+  count += 10;
+  
   nh.spinOnce();
   delay(10);
 }

@@ -192,8 +192,8 @@ void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i
 
   // set linear acceleration
 
-  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G + 0.18;
-  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G + 0.36;
+  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G + 0.55;
+  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G + 0.52;
   imu_msg->linear_acceleration.z = - data[i]->acceleration[2] * G;
 
   // Manual calibration - setting linear acceleration to 0 if below certain threshold
