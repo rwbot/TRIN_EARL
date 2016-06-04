@@ -36,6 +36,25 @@ ImuRosI::ImuRosI(ros::NodeHandle nh, ros::NodeHandle nh_private):
       && nh_private_.getParam ("cc_t4", cc_T4_)
       && nh_private_.getParam ("cc_t5", cc_T5_);
 
+  // float add_lin_accel_x = 0;
+  // float add_lin_accel_y = 0; 
+  // float add_lin_accel_z = 0;
+  // float lin_accel_x_range = 0;
+  // float lin_accel_y_range = 0;
+  // float lin_accel_z_range = 0;
+  // float ang_vel_x_range = 0;
+  // float ang_vel_y_range = 0;
+  // float ang_vel_z_range = 0;
+
+  // nh_private_.getParam("add_lin_accel_x", add_lin_accel_x);
+  // nh_private_.getParam("add_lin_accel_y", add_lin_accel_y);
+  // nh_private_.getParam("add_lin_accel_z", add_lin_accel_z);
+  // nh_private_.getParam("lin_accel_x_range", lin_accel_x_range);
+  // nh_private_.getParam("lin_accel_y_range", lin_accel_y_range);
+  // nh_private_.getParam("ang_vel_x_range", ang_vel_x_range);
+  // nh_private_.getParam("ang_vel_y_range", ang_vel_y_range);
+  // nh_private_.getParam("ang_vel_z_range", ang_vel_z_range);
+
   // **** advertise topics
 
   imu_publisher_ = nh_.advertise<ImuMsg>(
@@ -172,14 +191,23 @@ void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i
   imu_msg->header.stamp = time_now;
 
   // set linear acceleration
-  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G;
-  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G;
+
+  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G + 0.18;
+  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G + 0.36;
   imu_msg->linear_acceleration.z = - data[i]->acceleration[2] * G;
 
+  // Manual calibration - setting linear acceleration to 0 if below certain threshold
+  if (imu_msg->linear_acceleration.x < 0.02 && imu_msg->linear_acceleration.x > (-0.02)) imu_msg->linear_acceleration.x = 0;
+  if (imu_msg->linear_acceleration.y < 0.02 && imu_msg->linear_acceleration.y > (-0.02)) imu_msg->linear_acceleration.y = 0;
+  
   // set angular velocities
   imu_msg->angular_velocity.x = data[i]->angularRate[0] * (M_PI / 180.0);
   imu_msg->angular_velocity.y = data[i]->angularRate[1] * (M_PI / 180.0);
   imu_msg->angular_velocity.z = data[i]->angularRate[2] * (M_PI / 180.0);
+
+  if (imu_msg->angular_velocity.x < 0.005 && imu_msg->angular_velocity.x > -0.005) imu_msg->angular_velocity.x = 0;
+  if (imu_msg->angular_velocity.y < 0.005 && imu_msg->angular_velocity.y > -0.005) imu_msg->angular_velocity.y = 0;
+  if (imu_msg->angular_velocity.z < 0.005 && imu_msg->angular_velocity.z > -0.005) imu_msg->angular_velocity.z = 0;
 
   imu_publisher_.publish(imu_msg);
 

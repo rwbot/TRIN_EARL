@@ -12,11 +12,18 @@
 using namespace ros;
 using namespace std;
 
+/* Data points measured - motor signal sent vs actual speed of robot
+100 - 1 km/h - 0.62 mph - 0.30 mps 
+110 - 1.7 km/h - 1.06 mph - 0.47 mps
+120 - 2.3 km/h - 1.43 mph - 0.64 mps
+130 - 2.9 km/h - 1.80 pmh - 0.80 mps
+*/
+
 // constants
 float speed_min = 0.5; // 0.5 m/s is equivalent to ~1 mph
-float speed_max = 1.79; // 1.79 m/s is equivalent to ~ 4 mph
-int voltage_min = 80; // voltage at which the robot moves at ~1 mph
-int voltage_max = 200; // voltage at which the robot moves at ~4 mph
+float speed_max = 0.8; // 1.79 m/s is equivalent to ~ 4 mph
+int voltage_min = 110; 
+int voltage_max = 130; 
 
 // store speed in m/s 
 float leftWheel;

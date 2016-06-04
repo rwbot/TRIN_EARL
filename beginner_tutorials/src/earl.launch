@@ -1,8 +1,8 @@
 <launch>
 
- <!--param name="/use_sim_time" value="true"/ -->
+   <!--param name="/use_sim_time" value="true"/ -->
 
- <node pkg="rviz" type="rviz" name="rviz" />
+   <node pkg="rviz" type="rviz" name="rviz" />
 
  <!-- node pkg="image_transport_package" type="scan_test" name="laser_scan" output="screen">
     <param name="frame_id" value="laser_frame"/>
@@ -23,7 +23,11 @@
     <param name="angle_max"           value="-3.14159/4"/>
 </node>
 
-<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" respawn="true">
+<!-- Changed params:
+     minimumScore 0 
+ -->
+
+ <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" respawn="true">
     <rosparam>
         map_frame: map
         odom_frame: odometry/filtered
@@ -32,34 +36,37 @@
         maxRange: 60.0
         sigma: 0.05
         kernelSize: 1
-        lstep: 0.05
-        astep: 0.05
+        lstep: 0.01
+        astep: 0.02
         iterations: 5
         lsigma: 0.075
         ogain: 3.0
         lskip: 0
-        linearUpdate: 0.2
-        angularUpdate: 0.2
+        minimumScore: 50
+        linearUpdate: 2
+        angularUpdate: 1
         temporalUpdate: -1.0
         resampleThreshold: 0.5
         particles: 150
-        xmin: -1.0
-        ymin: -1.0
-        xmax: 1.0
-        ymax: 1.0
-        delta: 0.025
+        xmin: -100.0
+        ymin: -100.0
+        xmax: 100.0
+        ymax: 100.0
+        delta: 0.05
         llsamplerange: 0.01
         llsamplestep: 0.01
-        lasamplerange: 0.005
-        lasamplestep: 0.005
+        lasamplerange: 0.05
+        lasamplestep: 0.05
         base_frame: base_link
     </rosparam>
 
     <!-- remap from="/scanmatcher_frame" to="/odometry/filtered" / -->
     <!-- param name="scan" value="lidar_scan" / -->
-    <remap from="/scan" to="/lidar_scan"/>
-    <!-- param name="odom_topic" value="/odometry/filtered"/ -->
+    
+    <remap from="/scan" to="/lidar_scan"/>n
+    
     <param name="use_tf_scan_transformation" value="true"/>
+    
     <!-- remap from="/scan" to="/cam_scan" / -->
 </node>
 
@@ -69,7 +76,7 @@
 
 <!-- Viso2 -->
 
-<include file="$(find phidgets_imu)/launch/imu2.launch" />
+<include file="$(find phidgets_imu)/launch/imu.launch" />
 
 <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
     <param name="port" value="/dev/ttyUSB1" />
@@ -103,14 +110,20 @@
     <param name="debug" value="false"/>
     <param name="self_diagnose" value="false"/>
 </node>
+-->
 
---> 
+<!-- node pkg="hector_slam" type="hector_mapping" name="hector_mapping">
+    <param name="pub_map_odom_transform" value="true"/>
+    <param name="map_frame" value="map" />
+    <param name="base_frame" value="base_link" />
+    <param name="odom_frame" value="odometry/filtered" />
+</node --> 
 
 <include file="$(find robot_localization)/launch/ekf_template.launch" />
 
 <!-- node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find map_server)/test/testmap.yaml" / -->
 
-<arg name="odom_frame_id"   default="odom"/>
+<arg name="odom_frame_id"   default="odometry/filtered"/>
 <arg name="base_frame_id"   default="base_link"/>
 <arg name="global_frame_id" default="map"/>
 <arg name="odom_topic" default="odometry/filtered" />
@@ -133,9 +146,9 @@
     <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
 </node>
 
-<node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom /base_link 50" respawn="true" /> 
+<node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odometry/filtered /base_link 10" respawn="true" /> 
 <!--node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0.1 0 0.75 0 0 0 /base_link /camera 50" / -->
-<node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -90 0 0 /base_link /laser_frame 50" respawn="true" />
+<!-- node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -90 0 0 /base_link /laser_frame 10" respawn="true" / -->
+<node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -135 0 0 /base_link /laser_frame 10" respawn="true" />
 
 </launch>
- 

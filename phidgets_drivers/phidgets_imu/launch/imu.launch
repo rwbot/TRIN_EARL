@@ -3,49 +3,51 @@
 <launch>
 
   #### Nodelet manager ######################################################
- 
+
   <node pkg="nodelet" type="nodelet" name="imu_manager" 
     args="manager" output="screen" />
 
-  #### IMU Driver ###########################################################
+    #### IMU Driver ###########################################################
 
-  <node pkg="nodelet" type="nodelet" name="PhidgetsImuNodelet" 
-    args="load phidgets_imu/PhidgetsImuNodelet imu_manager" 
-    output="screen">
+    ## Calibrate IMU after each run!!
 
-    # supported data rates: 4 8 16 24 32 40 ... 1000 (in ms)
-    <param name="period" value="4"/>
+    <node pkg="nodelet" type="nodelet" name="PhidgetsImuNodelet" 
+      args="load phidgets_imu/PhidgetsImuNodelet imu_manager" 
+      output="screen">
 
-    # compass correction params (see http://www.phidgets.com/docs/1044_User_Guide)
+      # supported data rates: 4 8 16 24 32 40 ... 1000 (in ms)
+      <param name="period" value="4"/>
+
+      # compass correction params (see http://www.phidgets.com/docs/1044_User_Guide)
       <param name="cc_mag_field" value="0.52859"/>
-         <param name="cc_offset0" value="0.03921"/>
-         <param name="cc_offset1" value="0.19441"/>
-         <param name="cc_offset2" value="-0.03493"/>
-         <param name="cc_gain0" value="1.81704"/>
-         <param name="cc_gain1" value="1.81028"/>
-         <param name="cc_gain2" value="2.04819"/>
-         <param name="cc_t0" value="0.00142"/>
-         <param name="cc_t1" value="-0.03591"/>
-         <param name="cc_t2" value="0.00160 "/>
-         <param name="cc_t3" value="-0.05038"/>
-         <param name="cc_t4" value="-0.03942"/>
-         <param name="cc_t5" value="-0.05673"/>
-  </node>
+      <param name="cc_offset0" value="0.03921"/>
+      <param name="cc_offset1" value="0.19441"/>
+      <param name="cc_offset2" value="-0.03493"/>
+      <param name="cc_gain0" value="1.81704"/>
+      <param name="cc_gain1" value="1.81028"/>
+      <param name="cc_gain2" value="2.04819"/>
+      <param name="cc_t0" value="0.00142"/>
+      <param name="cc_t1" value="-0.03591"/>
+      <param name="cc_t2" value="0.00160 "/>
+      <param name="cc_t3" value="-0.05038"/>
+      <param name="cc_t4" value="-0.03942"/>
+      <param name="cc_t5" value="-0.05673"/>
+    </node>
 
-  #### IMU Orientation Filter ###############################################
- 
-  <node pkg="nodelet" type="nodelet" name="ImuFilterNodelet" 
-    args="load imu_filter_madgwick/ImuFilterNodelet imu_manager" 
-    output="screen">
+    #### IMU Orientation Filter ###############################################
 
-    <param name="use_magnetic_field_msg" value="false"/>
+    <node pkg="nodelet" type="nodelet" name="ImuFilterNodelet" 
+      args="load imu_filter_madgwick/ImuFilterNodelet imu_manager" 
+      output="screen">
 
-  </node>
+      <param name="use_magnetic_field_msg" value="false"/>
 
-  <!-- include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch" / -->
-  
-  <!-- include file="$(find robot_localization)/launch/ekf_template.launch" / -->
+    </node>
 
-  <!-- node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom_combined /base_link 50" respawn="true" / --> 
+    <!-- include file="$(find robot_pose_ekf)/launch/robot_pose_ekf.launch" / -->
 
-</launch>
+    <!-- include file="$(find robot_localization)/launch/ekf_template.launch" / -->
+
+    <!-- node pkg="tf" type="static_transform_publisher" name="odom_to_baselink_tf" args="0 0 0 0 0 0 /odom_combined /base_link 50" respawn="true" / --> 
+
+  </launch>

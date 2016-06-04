@@ -5,6 +5,6 @@
 	<node pkg="imu_filter_madgwick" type="imu_filter_node" name="IMU_node2" output="screen">
 	    <param name="use_mag" value="false"/>
 	    <param name="publish_tf" value="false"/>
-	    <param name="fixed_frame" value="odom"/> 
+	    <param name="fixed_frame" value="odometry/filtered"/> 
 	</node>
 </launch>
