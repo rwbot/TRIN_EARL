@@ -3,6 +3,7 @@
 #include <boost/thread.hpp>
 #include "std_msgs/String.h"
 #include "std_msgs/Int16.h"
+#include "std_msgs/Bool.h"
 #include "std_msgs/Float32.h"
 #include <sstream>
 #include <termios.h>
@@ -20,8 +21,8 @@ using namespace std;
 */
 
 // constants
-float speed_min = 0.5; // 0.5 m/s is equivalent to ~1 mph
-float speed_max = 0.8; // 1.79 m/s is equivalent to ~ 4 mph
+float speed_min = 0.5; // in mps
+float speed_max = 0.8; 
 int voltage_min = 110; 
 int voltage_max = 130; 
 
@@ -31,13 +32,16 @@ float rightWheel;
 
 /* Linear mapping from speed to voltage signal to be sent to motors */
 int speed_to_voltage(float speed) {
-  // if speed more than maximum speed
+  // if speed out of range
   if(speed > speed_max) {
     speed = speed_max;
   }
+  if(speed < speed_min) {
+    speed = speed_min;
+  }
 
   // calculate and return voltage
-  return int(voltage_min + ((speed/(speed_max - speed_min)) * (voltage_max - voltage_min)));
+  return int(voltage_min + (((speed - speed_min)/(speed_max - speed_min)) * (voltage_max - voltage_min)));
 }
 
 /* Callback to store left speed data to global variable */
@@ -50,12 +54,12 @@ void rightCB(const std_msgs::Float32& msg) {
   rightWheel = msg.data; 
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
   ros::init(argc, argv, "auto_drive"); // initialize node
   
   std::string port; // variable for arduino port -- usually /dev/ttyACM0: to see list of available ports use terminal command ls /dev/tty*
   ros::param::param<std::string>("~port", port, "/dev/ttyACM0"); // setting arduino port
-
+ea
   int baud; // variable for baud rate --we must set the baud rate so the arduino and the host do not lose sync
   ros::param::param<int>("~baud", baud, 9600); // setting baud rate
 
@@ -65,8 +69,9 @@ int main(int argc, char **argv){
 
   // setup publishers
   NodeHandle out; // node handler  
-  Publisher chatter_left = out.advertise<std_msgs::Int16>("Left", 1);  // publish our drive commands
-  Publisher chatter_right = out.advertise<std_msgs::Int16>("Right", 1);  // publish our drive commands
+  Publisher chatter_left = out.advertise<std_msgs::Int16>("Left", 1);  // publish left drive commands
+  Publisher chatter_right = out.advertise<std_msgs::Int16>("Right", 1);  // publish right drive commands
+  Publisher chatter_blink = out.advertise<std_msgs::Bool>("Blink", 1);
 
   // subscribe to speed (in m/s) topic from twist_to_motors differetial drive node
   ros::Subscriber<std_msgs::Float32> subL("lwheel_vtarget", &leftCB );
@@ -88,6 +93,7 @@ int main(int argc, char **argv){
     // publish messages
     chatter_left.publish(left);
     chatter_right.publish(right);
+    chatter_blink.publish(true); //always make light blink
 
     ros::spinOnce(); //and when that loop is over we'll do it all over again!
     loop_rate.sleep();

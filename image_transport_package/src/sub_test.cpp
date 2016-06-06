@@ -87,6 +87,7 @@ vector<Mat> imgs;
   while(ros::ok){
 
     if(captured1 && captured2 ){
+      cout<<"SUCCESS"<<endl;
 
       //cv::imshow("viewJ1", jetson1);
       //cv::imshow("viewJ2", jetson2);

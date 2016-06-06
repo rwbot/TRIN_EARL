@@ -191,9 +191,10 @@ void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i
   imu_msg->header.stamp = time_now;
 
   // set linear acceleration
-
-  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G + 0.55;
-  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G + 0.52;
+  
+  // Switching x and z axis 
+  imu_msg->linear_acceleration.x = - data[i]->acceleration[0] * G;
+  imu_msg->linear_acceleration.y = - data[i]->acceleration[1] * G + 0.54;
   imu_msg->linear_acceleration.z = - data[i]->acceleration[2] * G;
 
   // Manual calibration - setting linear acceleration to 0 if below certain threshold
@@ -201,6 +202,8 @@ void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i
   if (imu_msg->linear_acceleration.y < 0.02 && imu_msg->linear_acceleration.y > (-0.02)) imu_msg->linear_acceleration.y = 0;
   
   // set angular velocities
+
+  // Changing angular velocity for x and z
   imu_msg->angular_velocity.x = data[i]->angularRate[0] * (M_PI / 180.0);
   imu_msg->angular_velocity.y = data[i]->angularRate[1] * (M_PI / 180.0);
   imu_msg->angular_velocity.z = data[i]->angularRate[2] * (M_PI / 180.0);

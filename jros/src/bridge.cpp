@@ -38,6 +38,7 @@ JAUS::Byte gComponentID     = 1;      // ID of the our component.
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
+
 double latitude;
 double longitude; 
 double altitude;
@@ -65,22 +66,12 @@ double velocityX;
 //     }
 // }
 
-void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) 
-{
-    latitude = msg->pose.pose.position.x;
-    longitude = msg->pose.pose.position.y;
-    altitude = msg->pose.pose.position.z;
-    positionRMS = 0.1;
-    roll = 0;
-    pitch = (-1) * atan2(msg->twist.twist.linear.z, sqrt(pow(msg->twist.twist.linear.x,2) +  
-                                                         pow(msg->twist.twist.linear.y, 2)));
-    yaw = atan2(msg->twist.twist.linear.y, msg->twist.twist.linear.x) - (PI / 2);
-    velocityX = msg->twist.twist.linear.x;
-}
 
 int main(int argc, char* argv[])
 {
     JAUS::Component component;
+
+
     
     ros::init(argc, argv, "bridge");
 

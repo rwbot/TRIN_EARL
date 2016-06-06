@@ -50,16 +50,16 @@ namespace RobotLocalization
     yaw_offset_(0.0),
     broadcast_utm_transform_(false),
     has_transform_odom_(false),
-    has_transform_gps_(false),
+    has_transform_gps_(true), // changed
     has_transform_imu_(false),
     transform_good_(false),
     gps_frame_id_("gps"), // Changed
-    gps_updated_(false),
+    gps_updated_(true), // changed
     odom_updated_(false),
-    publish_gps_(false),
+    publish_gps_(false), //changed
     use_odometry_yaw_(false),
     use_manual_datum_(false),
-    zero_altitude_(false),
+    zero_altitude_(true), //changed
     world_frame_id_("map"), // changed
     base_link_frame_id_("base_link"),
     utm_zone_(""),
