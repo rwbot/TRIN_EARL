@@ -27,14 +27,11 @@ http://wiki.ros.org/CppStyleGuide
  5. sudo apt-get install ros-jade-usb-cam
  6. Add serial numbers to the rules, etc
  
-  --
  sudo apt-get install ros-indigo-rosserial-arduino
  sudo apt-get install ros-indigo-rosserial
--- 
+
+
 Fovis_ros consists of fovis_ros and libfovis ROS package
-
---
-
 
 Install libuvc here : https://int80k.com/libuvc/doc/
 Install libgps = sudo apt-get install libgps-dev
@@ -42,7 +39,8 @@ Install libgps = sudo apt-get install libgps-dev
 Warnings
 --
 -Don't install ubuntu-xboxdrv (install just xboxdrv)
-----
+
+-----
 Optional
 ---
 -sudo apt-get install ros-jade-imu-tools
