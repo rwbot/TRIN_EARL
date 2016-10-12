@@ -75,7 +75,7 @@ void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg){
 int main(int argc, char **argv){
   ros::init(argc, argv, "man_drive"); //Initialize our node
   std::string port; //variable for our arduino port --usually /dev/ttyACM0: to see list of available ports use terminal command ls /dev/tty*
-  ros::param::param<std::string>("~port", port, "/dev/ttyACM1"); //setting our port
+  ros::param::param<std::string>("~port", port, "/dev/ttyACM0"); //setting our port
   int baud; //variable for our baud rate --we must set the baud rate so the arduino and the host do not lose sync
   ros::param::param<int>("~baud", baud, 9600); //setting our baud
   boost::asio::io_service io_service; //necessary junk

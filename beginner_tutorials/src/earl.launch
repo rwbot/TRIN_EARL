@@ -30,7 +30,11 @@
      minimumScore 0 
    -->
 
-   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+   <node pkg="hector_slam" type="hector_mapping" name="hector_mapping"/>
+   <node pkg="hector_slam" type="hector_map_server" name="hector_map_server" />
+   <node pkg="hector_slam" type="hector_trajectory_server" name="hector_trajectory_server" />
+
+   <!-- node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
 
     <rosparam>
       map_frame: map
@@ -63,17 +67,16 @@
       lasamplestep: 0.05
       tf_delay: 0.01
       base_frame: base_link
-    </rosparam>
+    </rosparam -->
 
-    <!-- remap from="/scanmatcher_frame" to="/odometry/filtered" / -->
     
     <!-- remap from="scan" to="lidar_scan" / -->
 
 
-    <param name="use_tf_scan_transformation" value="true"/>
+    <param name="use_tf_scan_transformation" value="false"/>
 
     <!-- remap from="/scan" to="/cam_scan" / -->
-  </node>
+  <!-- /node -->
 
   <!-- include file="$(find usb_cam)/launch/usb_cam-test.launch" respawn="true" / -->
 
@@ -102,7 +105,7 @@
 </node>
 
 <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" respawn="true">
-    <param name="output_frame" value="odom_combined"/>
+    <param name="output_frame" value="odom"/>
     <param name="base_footprint_frame" value="base_link" />
     <param name="freq" value="30.0"/>
     <param name="sensor_timeout" value="1.0"/>
@@ -117,7 +120,6 @@
     <param name="debug" value="false"/>
     <param name="self_diagnose" value="false"/>
 </node>
-
 -->
 
 <node pkg="rosbag" type="record" name="rosbag_record" args="-o /odometry/filtered /base_link /lidar_scan /laser_frame /fix /imu/data /scan /odom" />
@@ -128,9 +130,7 @@
 <include file="$(find robot_localization)/launch/ekf_template.launch" />
 <include file="$(find robot_localization)/launch/ekf_template2.launch" />
 
-<!-- node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find map_server)/test/testmap.yaml" / -->
-
-<arg name="odom_frame_id"   default="/odom"/>
+<arg name="odom_frame_id"   default="odom"/>
 <arg name="base_frame_id"   default="base_link"/>
 <arg name="global_frame_id" default="map"/>
 <arg name="odom_topic" default="odom" />
@@ -154,12 +154,13 @@
   <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/> <!-- -->
 </node>
 
-<node pkg="differential-drive" type="twist_to_motors" name="twist_to_motors" />
+<node pkg="differential-drive" type="twist_to_motors.py" name="twist_to_motors" />
 
 <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" />
 
 <!--node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0.1 0 0.75 0 0 0 /base_link /camera 50" / -->
 <!-- node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -90 0 0 /base_link /laser_frame 10" respawn="true" / -->
+<node pkg="tf" type="static_transform_publisher" name="base_to_imu_tf" args="0 0 0 0 0 0 /base_link /imu 50" />
 <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 67.5 0 0 /base_link /laser_frame 50" />
 <!-- node pkg="tf" type="static_transform_publisher" name="base_to_gps_tf"  args="0 1 0 0 0 0 /base_link /gps 50" / -->
 
