@@ -202,17 +202,17 @@ add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
 add_dependencies(listener beginner_tutorials_generate_messages_cpp)
 
-add_executable(c_listener src/c_listener.cpp)
-target_link_libraries(c_listener ${catkin_LIBRARIES})
-add_dependencies(c_listener beginner_tutorials_generate_messages_cpp)
+add_executable(print_controller_input src/print_controller_input.cpp)
+target_link_libraries(print_controller_input ${catkin_LIBRARIES})
+add_dependencies(print_controller_input beginner_tutorials_generate_messages_cpp)
 
 add_executable(fake_scan src/fake_scan.cpp)
 target_link_libraries(fake_scan ${catkin_LIBRARIES})
 add_dependencies(fake_scan beginner_tutorials_generate_messages_cpp)
 
-add_executable(odometry_test src/odometry_test.cpp)
-target_link_libraries(odometry_test ${catkin_LIBRARIES})
-add_dependencies(odometry_test beginner_tutorials_generate_messages_cpp)
+add_executable(odometry src/odometry.cpp)
+target_link_libraries(odometry ${catkin_LIBRARIES})
+add_dependencies(odometry beginner_tutorials_generate_messages_cpp)
 
 # Global path-planning
 #add_library(global_planner_lib src/global_planner.cpp)
