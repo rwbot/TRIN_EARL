@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(beginner_tutorials)
+project(igvc)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -105,7 +105,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES beginner_tutorials
+#  LIBRARIES igvc
    CATKIN_DEPENDS roscpp rospy std_msgs joy 
 #  DEPENDS system_lib
    CATKIN_DEPENDS message_runtime
@@ -123,14 +123,14 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(beginner_tutorials
-#   src/${PROJECT_NAME}/beginner_tutorials.cpp
+# add_library(igvc
+#   src/${PROJECT_NAME}/igvc.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(beginner_tutorials ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(igvc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 # add_executable(beginner_tutorials_node src/beginner_tutorials_node.cpp)
@@ -159,7 +159,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS beginner_tutorials beginner_tutorials_node
+# install(TARGETS igvc beginner_tutorials_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -198,9 +198,9 @@ add_executable(talker src/input_talker.cpp)
 target_link_libraries(talker ${catkin_LIBRARIES})
 add_dependencies(talker beginner_tutorials_generate_messages_cpp)
 
-add_executable(listener src/listener.cpp)
-target_link_libraries(listener ${catkin_LIBRARIES})
-add_dependencies(listener beginner_tutorials_generate_messages_cpp)
+# add_executable(listener src/listener.cpp)
+# target_link_libraries(listener ${catkin_LIBRARIES})
+# add_dependencies(listener beginner_tutorials_generate_messages_cpp)
 
 add_executable(print_controller_input src/print_controller_input.cpp)
 target_link_libraries(print_controller_input ${catkin_LIBRARIES})
