@@ -5,7 +5,7 @@
   <node pkg="rviz" type="rviz" name="rviz" />
 
 
-<node pkg="beginner_tutorials" type="fake_scan" name="laser_scan">
+<node pkg="igvc" type="fake_scan" name="laser_scan">
     <param name="frame_id" value="laser_frame"/>
     <param name="calibrate_time" type="bool" value="true"/>  
     <param name="intensity" type="bool" value="false"/>
@@ -92,7 +92,7 @@
     <param name="port" value="/dev/ttyUSB1" />
   </node>
 
-<!-- node pkg="beginner_tutorials" type="blink_rate" name="blink_rate">
+<!-- node pkg="igvc" type="blink_rate" name="blink_rate">
     <param name="blink" value="true" />
   </node -->
 
@@ -136,15 +136,17 @@
 <arg name="odom_topic" default="odom" />
 <arg name="laser_topic" default="scan" />
 
+<node pkg="topic_tools" type="mux" respawn="true" name="mux" args="cmd_vel man_cmdvel mux:=mux_cmdvel" />
+
 <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-  <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-  <rosparam file="$(find beginner_tutorials)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
-  <rosparam file="$(find beginner_tutorials)/param/local_costmap_params.yaml" command="load" />   
-  <rosparam file="$(find beginner_tutorials)/param/global_costmap_params.yaml" command="load" />
-  <rosparam file="$(find beginner_tutorials)/param/dwa_local_planner_params.yaml" command="load" />
-  <rosparam file="$(find beginner_tutorials)/param/move_base_params.yaml" command="load" />
-  <rosparam file="$(find beginner_tutorials)/param/global_planner_params.yaml" command="load" />
-  <rosparam file="$(find beginner_tutorials)/param/navfn_global_planner_params.yaml" command="load" />
+  <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+  <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+  <rosparam file="$(find igvc)/param/local_costmap_params.yaml" command="load" />   
+  <rosparam file="$(find igvc)/param/global_costmap_params.yaml" command="load" />
+  <rosparam file="$(find igvc)/param/dwa_local_planner_params.yaml" command="load" />
+  <rosparam file="$(find igvc)/param/move_base_params.yaml" command="load" />
+  <rosparam file="$(find igvc)/param/global_planner_params.yaml" command="load" />
+  <rosparam file="$(find igvc)/param/navfn_global_planner_params.yaml" command="load" />
 
   <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
   <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
@@ -154,7 +156,7 @@
   <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/> <!-- -->
 </node>
 
-<node pkg="differential-drive" type="twist_to_motors.py" name="twist_to_motors" />
+<node pkg="igvc" type="twist_to_motors.py" name="twist_to_motors" />
 
 <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" />
 

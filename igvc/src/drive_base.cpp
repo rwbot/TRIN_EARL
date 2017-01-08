@@ -44,6 +44,7 @@ public:
 
 		ros::Rate rate(10.0);
 		bool done = false;
+
 		while (!done && nh_.ok())
 		{
 				 //send the drive command
@@ -90,6 +91,7 @@ public:
 
      	//we will be sending commands of type "twist"
 		geometry_msgs::Twist base_cmd;
+
      	//the command will be to turn at 0.75 rad/s
 		base_cmd.linear.x = base_cmd.linear.y = 0.0;
 		base_cmd.angular.z = 0.75;
@@ -129,6 +131,7 @@ public:
 
 			if (angle_turned > radians) done = true;
 		}
+		
 		if (done) return true;
 		return false;
 	}
