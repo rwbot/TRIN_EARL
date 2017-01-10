@@ -5,13 +5,17 @@ project(gps_common CXX)
 ## Catkin ##
 ############
 
-find_package(catkin REQUIRED
-  message_generation
+set(DEPS
   message_filters
-  roscpp
-  std_msgs
   nav_msgs
+  roscpp
   sensor_msgs
+  std_msgs
+)
+
+find_package(catkin REQUIRED COMPONENTS
+  message_generation
+  ${DEPS}
 )
 
 #######################################
@@ -20,11 +24,15 @@ find_package(catkin REQUIRED
 
 add_message_files(
   FILES
-    GPSStatus.msg
-    GPSFix.msg
+  GPSStatus.msg
+  GPSFix.msg
 )
 
-generate_messages(DEPENDENCIES std_msgs)
+generate_messages(DEPENDENCIES 
+  nav_msgs
+  sensor_msgs
+  std_msgs
+)
 
 ###################################################
 ## Declare things to be passed to other projects ##
@@ -32,7 +40,9 @@ generate_messages(DEPENDENCIES std_msgs)
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS 
+    message_runtime
+    ${DEPS}
 )
 
 ###########
@@ -43,7 +53,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${catkin_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME}/utm_odometry_node src/utm_odometry_node.cpp)
 set_target_properties(${PROJECT_NAME}/utm_odometry_node PROPERTIES OUTPUT_NAME "utm_odometry_node")
 target_link_libraries(${PROJECT_NAME}/utm_odometry_node ${catkin_LIBRARIES})
-add_dependencies(${PROJECT_NAME}/utm_odometry_node ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}/utm_odometry_node
+  ${PROJECT_NAME}_generate_messages_cpp 
+  ${catkin_EXPORTED_TARGETS} 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+)
 
 #############
 ## Install ##

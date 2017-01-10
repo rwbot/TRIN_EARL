@@ -20,7 +20,7 @@ def multiplexer():
            select_mux = rospy.ServiceProxy('mux/select', MuxSelect)
             if autonomous:
                 select_mux('cmd_vel')
-                #TODO: Change blink value 
+                # TODO: Change blink value 
                 blink = 
             else: 
                 select_mux('joystick_cmdvel')
