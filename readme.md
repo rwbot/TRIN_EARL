@@ -125,15 +125,27 @@ rosrun tf view_frames
 rosrun tf tf_monitor turtle1 turtle2
 rosrun rqt_graph rqt_graph
 
-Connecting to the Cameras
+Setting up the Jetsons and Connecting to Camera
 ----------------------
+#For serial - try this if ssh is not setup due to system failure
+1. Refer https://demotomohiro.github.io/hardware/jetson_tk1/setup/serial.html
+2. sudo screen /dev/ttyUSB0 115200
+3. The USB-serial cable that we have need a 'gender changer' or adapter
 
+#If connected via network
 1. ssh -X ubuntu@Jetson1
 2. ssh -X ubuntu@Jetson2
 
 3. Run *source devel/setup.bash* on each
 
 4. roslaunch image_transport_package steam.launch
+
+Emergency Lights
+-----------------
+The lights will be attached to the arduino, 
+with its cables attached to port 13 (signal), power 3.3v, and ground.
+Its functions are handled in the multiplexer.py
+
 
 Launching Phidgets
 ----------------------

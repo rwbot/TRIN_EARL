@@ -55,29 +55,31 @@ ros::NodeHandle n;
 // Refer to pg. 160 for specs
 // 0 is the left, 1 is right 
 
-void readPort(string & data) {
-	port.read_some(boost::asio::buffer(data, data.length()));
+inline void readPort(char * data, size_t size) {
+	port.read_some(boost::asio::buffer(data, size));
 }
 
-void sendMessage(string msg) {
+inline void sendMessage(string msg) {
 	port.write_some(boost::asio::buffer(msg.c_str(), msg.length()));
 }
 
 double getSpeed(int wheel_side) {
 	sendMessage(QUE_SPEED); // QUE_SPEED is cstring 
-	
-	string message_buffer = "nn";
+
+	char * buffer_data = new char[3];
 
 	int effort = 0;
 
 	try {
-		readPort(message_buffer);
-		effort = boost::lexical_cast<int>(message_buffer);
+		readPort(buffer_data, 2);
+		effort = boost::lexical_cast<int>(std::string(buffer_data));
 	} catch(boost::bad_lexical_cast&) {
 		ROS_ERROR("Bad hex handling!");
 	}
 
 	float speed = wheel_circum * max_rpm * (effort * 1.0 / max_effort);
+
+	delete[] buffer_data;
 
 	return speed;
 }
@@ -174,7 +176,7 @@ int main(int argc, char** argv)
 	
 	// Odom and Transforms are handled at diff_ty.py
 	ros::Publisher left_whl_pub = n.advertise<std_msgs::Float32>("lwheel", 1000);
-	ros::Publisher right_whl_pub = n.advertise<std_msg::Float32>("rwheel", 1000);
+	ros::Publisher right_whl_pub = n.advertise<std_msgs::Float32>("rwheel", 1000);
 	
 	ros::Subscriber cmd_vel_sub = n.subscribe("mux_cmdvel", 1000, velCallback);
 
