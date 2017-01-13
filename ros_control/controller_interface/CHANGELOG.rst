@@ -2,6 +2,9 @@
 Changelog for package controller_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.11.3 (2016-12-07)
+-------------------
+
 0.11.2 (2016-11-28)
 -------------------
 * Remove boost from depends declaration to fix cmake warning

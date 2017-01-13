@@ -2,6 +2,11 @@
 Changelog for package joint_limits_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.11.3 (2016-12-07)
+-------------------
+* Add urdf compatibility header
+* Contributors: Bence Magyar
+
 0.11.2 (2016-11-28)
 -------------------
 * Add Enrique and Bence to maintainer list

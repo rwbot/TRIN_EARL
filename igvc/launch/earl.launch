@@ -71,9 +71,6 @@
 
   <!-- remap from="scan" to="lidar_scan" / -->
 
-
-  <param name="use_tf_scan_transformation" value="false"/>
-
   <!-- remap from="/scan" to="/cam_scan" / -->
   <!-- /node -->
 
@@ -161,7 +158,7 @@
 
 <!--node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0.1 0 0.75 0 0 0 /base_link /camera 50" / -->
 <!-- node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 -90 0 0 /base_link /laser_frame 10" respawn="true" / -->
-
+<node pkg="igvc" type="motor_controller" name="motor_controller" />
 <node pkg="tf" type="static_transform_publisher" name="base_to_imu_tf" args="0 0 0 0 0 0 /base_link /imu 50" />
 <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 67.5 0 0 /base_link /laser_frame 50" />
 <!-- node pkg="tf" type="static_transform_publisher" name="base_to_gps_tf"  args="0 1 0 0 0 0 /base_link /gps 50" / -->
