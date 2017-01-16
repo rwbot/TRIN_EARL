@@ -1,4 +1,5 @@
 Current developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu)
+Previous developers: Mike Castellana, Basileal Imana, Barok Imana
 
 Note that this file is formatted as Github flavored markdown.
 
@@ -43,11 +44,13 @@ USB/Port access
 ---------------
 1. Modify the /etc/local file. 
 2. Currently, the user have been given default rw access to the several ports.
+3. Use lsusb to list all USB devices (to test the connections)
 
 
 Two-webcam setup
 -------------------
 (I dont know how exactly I got it to work, but here are some things I tried...)
+
 1. sudo apt-get install v4l-utils
 2. sudo rmmod uvcvideo
 3. sudo modprobe uvcvideo quirks=128
@@ -138,7 +141,8 @@ Setting up the Jetsons and Connecting to Camera
 ######For serial - try this if ssh is not setup due to system failure
 1. Refer https://demotomohiro.github.io/hardware/jetson_tk1/setup/serial.html
 2. sudo screen /dev/ttyUSB0 115200
-3. The USB-serial cable that we have need a 'gender changer' or adapter
+3. You can also try with the more-featured minicom program if you need more features (replace screen with minicom)
+4. The USB-serial cable that we have need a 'gender changer' or adapter
 
 ######If connected via network
 1. ssh -X ubuntu@Jetson1
