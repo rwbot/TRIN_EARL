@@ -71,8 +71,6 @@ int main(int argc, char* argv[])
 {
     JAUS::Component component;
 
-
-    
     ros::init(argc, argv, "bridge");
 
     ros::NodeHandle n;
@@ -207,6 +205,8 @@ int main(int argc, char* argv[])
         // globalPose.SetPitch(pitch);
         // globalPose.SetYaw(yaw);
 
+        // TODO: Subscribe to GPS / Odom data for the global pose
+
         globalPose.SetLatitude(32.703356);
         globalPose.SetLongitude(-117.253919);
         globalPose.SetAltitude(300);
@@ -225,6 +225,8 @@ int main(int argc, char* argv[])
 
         // velocityState.SetVelocityX(velocityX);
         // velocityState.SetYawRate();
+
+        // TODO: Publish to the motor controller
 
         velocityState.SetVelocityX(0.0);
         velocityState.SetYawRate(0.0);

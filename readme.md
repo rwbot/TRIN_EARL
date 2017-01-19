@@ -39,6 +39,7 @@ Guidelines for compiling using catkin
 3. Usually, cmake errors are accompanied by compile error message above the terminal ... reference that to solve the issue
 4. You can build just one package using catkin_make --pkg {pkg_name} 
 5. Another option is --from-pkg <package> - it builds package first then others
+6. When having issues with commands like roscd and rosrun, make sure to have run source ~/catkin_ws/devel/setup.bash
 
 USB/Port access
 ---------------
@@ -122,6 +123,10 @@ roslaunch rosserial_server man_drive.launch
 sudo xboxdrv --silent 
 -== sudo rmmod xpad
 password: Contact jinpyojeon@trincoll.edu / Jin
+
+Arduino
+-----------
+The Arduino code is in the catkin_ws as well.
 
 ROS Commands
 ----------------
@@ -208,6 +213,13 @@ Things tested (to be) with Gazebo Sim
 #### What is not tested
 * Actual, physical sensors
 * Motor controller functions
+
+Working in Gazebo 
+--------------------
+
+* Go to here for the shortcuts: http://gazebosim.org/hotkeys
+* Sending commands (through topic): Use rosrun rqt_gui rqt_gui 
+	- See http://gazebosim.org/tutorials?tut=ros_control&cat=connect_ros
 
 TODOS
 -----------------
