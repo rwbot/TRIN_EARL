@@ -15,6 +15,7 @@
 
 #include "ros/ros.h"
 #include <nav_msgs/Odometry.h>
+#include <sensor_msgs/NavSatFix.h>
 
 const double PI = 3.141592653589793238463;
 
@@ -38,34 +39,44 @@ JAUS::Byte gComponentID     = 1;      // ID of the our component.
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
+// Set an initial global pose.
+JAUS::GlobalPose globalPose;
 
-double latitude;
-double longitude; 
-double altitude;
-double positionRMS;
-double roll;
-double pitch;
-double yaw;
-double velocityX;
+// Save the data to the service.
 
-// class JAUSCallback: public JAUS::Discovery::Callback
-// {
-// public:
-//     JAUSCallback() 
-//     {
-//     }
-//     ~JAUSCallback()
-//     {
-//     }
-//     virtual void ProcessMessage(const JAUS::Message* message) 
-//     {
-//         if(message->GetMessageCode() == JAUS::REPORT_HEARTBEAT_PULSE)
-//         {
-//             if 
-//         }
-//     }
-// }
+// You can set local pose data using global pose
+// as it is automatically converted to local pose data for you.
+// How convenient!
 
+// Set an initial velocity state.
+JAUS::VelocityState velocityState;
+
+// TODO: Check if the discrepancy with time with odom and GPS will cause problems
+// 	 To my understanding, GPS updates in several hundred milliseconds
+
+// TODO: Implement odomCallback to match the required perspective of JAUS 
+// 	 (odom rotation in the main)
+
+void odomCallback(const nav_msgs::Odometry& msg) {
+	globalPose.SetPositionRMS(0.0);
+        globalPose.SetRoll(msg->angular->x);
+        globalPose.SetPitch(msg->angular->y);
+        globalPose.SetYaw(msg->angular->z);	// TODO: Set appropriate RMS rate
+        globalPose.SetAttitudeRMS(0.0);
+   	globalPose.SetTimeStamp(ros::Time::now()); // TODO: Check if correct time is set
+	
+	velocityState.SetVelocityX(msg->linear->x);
+        velocityState.SetYawRate(msg->angular->z); // Is odom publishing yaw rate or yaw?
+        velocityState.SetVelocityRMS(0.0);
+        velocityState.SetTimeStamp(ros::Timw::now());
+}
+
+void gpsCallback(const sensor_msgs::NavSatFix& msg) {
+	globalPose.SetLatitude(msg->latitude);
+        globalPose.SetLongitude(msg->longitude);
+        globalPose.SetAltitude(msg->altitude);
+        globalPose.SetTimeStamp(ros::Time::now());
+}
 
 int main(int argc, char* argv[])
 {
@@ -75,7 +86,12 @@ int main(int argc, char* argv[])
 
     ros::NodeHandle n;
 
-    ros::Subscriber sub = n.subscribe("odom", 1000, odomCallback);
+    ros::Subscriber odomSub = n.subscribe("odom", 1000, odomCallback);
+    ros::Subscriber gpsSub = n.subscribe("gps/fix", 1000, gpsCallback);
+    ros::Publisher cmdVelPub = n.advertise<geometry_msgs::Twist>("JAUS Waypoint", 1000);
+    
+
+    // TODO: Check if the ROS odom needs to be resetted
 
     ros::Rate loop_rate(10);
     //component.AddService(new JAUS::JTCPClient());
@@ -93,11 +109,11 @@ int main(int argc, char* argv[])
     // components, so you do not need to generate any Query Messages
     // (e.g. Query Identification) yourself, because Discovery does it
     // for you.
-
-    ///   TO DO
+	
+    ////////  TO DO
     // Services to implement
     // 
-    // Liveness ?
+    // Liveness - check if the
     // Waypoint Driver ?
     // Primitive Driver ?
 
@@ -106,7 +122,7 @@ int main(int argc, char* argv[])
     // Management - ROS connection for Emergency message
     // Local pose - resetting to 0 ? Ros related 
     // Require remote control if unable
-
+    //
 
     // In this test program, we are making a simulated robot, which
     // requires the following mobility services.
@@ -116,6 +132,9 @@ int main(int argc, char* argv[])
 
     // JAUS::Waypoint* waypointService = new JAUS::Waypoint();
     // component.AddService(waypointService);
+    //
+    
+    // TODO: Check if the update rate needs to be changed
 
     JAUS::GlobalPoseSensor* globalPoseSensor = new JAUS::GlobalPoseSensor();
     globalPoseSensor->SetSensorUpdateRate(25);      // Updates at 25 Hz (used for periodic events).
@@ -139,7 +158,7 @@ int main(int argc, char* argv[])
     // parameters are JAUS::Subsystem::OCU and JAUS::Subsystem::Vehicle.  Since
     // we are not an OCU, we use Vehicle.  Finally, the string represents the type
     // of robot you have (e.g. Segway RMP, XUV).  This is different than the
-    // name of your vehicle, but you can use that if you want.  Your subsystem number
+    // name of your vehicle, but you can use that if you want.  Your odomSubsystem number
     // is your unique identifier.
     component.DiscoveryService()->SetSubsystemIdentification(JAUS::Subsystem::Vehicle,
      "JROS");
@@ -164,7 +183,6 @@ int main(int argc, char* argv[])
     JAUS::JUDP* transportService = NULL;
     transportService = (JAUS::JUDP*)component.TransportService();
 
-
     // Create connection to JAUS Validation Tool (JVT)
     JAUS::Address::Set discoveredSubsystems;
     discoveryService->GetSubsystems(discoveredSubsystems);
@@ -173,67 +191,29 @@ int main(int argc, char* argv[])
     transportService->AddNetworkConnection(JAUS::Address(90, 1, 1),
                                            "239.255.0.1",
                                            3794);
+
     // Create connection to OCP for the JAUS Interoperability Challenge.
     // transportService->AddConnection("192.168.1.42", JAUS::Address(42, 1, 1));
-    
-
-    // Set an initial global pose.
-    JAUS::GlobalPose globalPose;
-    
-    // Save the data to the service.
-
-    // You can set local pose data using global pose
-    // as it is automatically converted to local pose data for you.
-    // How convenient!
-
-    // Set an initial velocity state.
-    JAUS::VelocityState velocityState;
-
-    JAUS::Time::Stamp printTimeMs = 0;
+      JAUS::Time::Stamp printTimeMs = 0;
 
     // double timeDiff = 0.33; // Used for simulation of robot physics.
+
 
     while(ros::ok() && CxUtils::GetChar() != 27 && 
       component.ManagementService()->GetStatus() != JAUS::Management::Status::Shutdown)
     {
 
-        // globalPose.SetLatitud(latitude);
-        // globalPose.SetLongitude(longitude);
-        // globalPose.SetAltitude(altitude);
-        // globalPose.SetPositionRMS(positionRMS);
-        // globalPose.SetRoll(roll);
-        // globalPose.SetPitch(pitch);
-        // globalPose.SetYaw(yaw);
+	// TODO: Make sure the initialization of positions go smoothly
 
-        // TODO: Subscribe to GPS / Odom data for the global pose
-
-        globalPose.SetLatitude(32.703356);
-        globalPose.SetLongitude(-117.253919);
-        globalPose.SetAltitude(300);
-        globalPose.SetPositionRMS(0.0);
-        globalPose.SetRoll(0.0);
-        globalPose.SetPitch(0.0);
-        globalPose.SetYaw(CxUtils::CxToRadians(45));
-        globalPose.SetAttitudeRMS(0.0);
-        globalPose.SetTimeStamp(JAUS::Time::GetUtcTime());
-
+	// For waypoint driver
+	geometry_msgs::Twist cmd_vel;
+    	
+	// Save the data to the service.
         globalPoseSensor->SetGlobalPose(globalPose);
         localPoseSensor->SetLocalPose(globalPose);
-        // desired thrust and steering 
-        // to reach local waypoints.
-
-
-        // velocityState.SetVelocityX(velocityX);
-        // velocityState.SetYawRate();
-
-        // TODO: Publish to the motor controller
-
-        velocityState.SetVelocityX(0.0);
-        velocityState.SetYawRate(0.0);
-        velocityState.SetVelocityRMS(0.0);
-        velocityState.SetTimeStamp(JAUS::Time::GetUtcTime());
-        // Save the data to the service.
-        velocityStateSensor->SetVelocityState(velocityState);
+    	velocityStateSensor->SetVelocityState(velocityState);
+       
+	// TODO: Make it so that updating JAUS odom updates ROS
 
         // double linearDistance = timeDiff*thrust*0.025;
         // double linearVelocity = linearDistance/timeDiff;
@@ -241,40 +221,25 @@ int main(int argc, char* argv[])
         // double rotationRate = rotation/timeDiff;
         // double yaw = globalPose.GetYaw();
 
-        // JAUS::Point3D localPosChange(linearDistance, 0, 0);        
-        // localPosChange = localPosChange.Rotate(yaw, JAUS::Point3D::Z);
+	// TODO: Check for the need to synchronize JAUS and ROS odom
+
+        JAUS::Point3D localPosChange(linearDistance, 0, 0);        
+        //localPosChange = localPosChange.Rotate(yaw, JAUS::Point3D::Z);
+
+	RotateWithROS(yaw, JAUS::Point3D::Z);
 
         // CxUtils::Wgs worldPositionWgs(globalPose.GetLatitude(),
         //   globalPose.GetLongitude(),
         //   globalPose.GetAltitude());
         // CxUtils::Utm worldPositionUtm(worldPositionWgs);
+	//
 
         // worldPositionUtm.mNorthing += localPosChange.mX;
         // worldPositionUtm.mEasting += localPosChange.mY;
         // yaw = CxUtils::Orientation::AddToAngle(yaw, rotation);
         // Convert to WGS
         // worldPositionWgs << worldPositionUtm;
-
-        // Save newly calculated position and orientation.
-        // globalPose.SetYaw(yaw);
-        // globalPose.SetLatitude(worldPositionWgs.mLatitude);
-        // globalPose.SetLongitude(worldPositionWgs.mLongitude);
-        // globalPose.SetAltitude(worldPositionWgs.mElevation);
-        // globalPose.SetTimeStamp(JAUS::Time(true));
-
-        // velocityState.SetVelocityX(linearVelocity);
-        // velocityState.SetYawRate(rotationRate);
-        // velocityState.SetTimeStamp(JAUS::Time(true));
-
-        // Save global pose information.
-        // globalPoseSensor->SetGlobalPose(globalPose);
-        // The Local Pose Sensor service supports converting
-        // global pose data to local pose data.  It automatically
-        // calculates offsets and relative changes for you.
-        // localPoseSensor->SetLocalPose(globalPose);
-        // Save velocity state information.
-        // velocityStateSensor->SetVelocityState(velocityState);
-
+	
         if(JAUS::Time::GetUtcTimeMs() - printTimeMs > 500)
         {
             // Print status of services.
@@ -297,13 +262,12 @@ int main(int argc, char* argv[])
         // CxUtils::SleepMs((unsigned int)(timeDiff*1000.0));
 
         ros::spinOnce();
-
     }
 
     // Don't delete services, they are
     // deleted by the Component class.
 
-    // Shutdown any components associated with our subsystem.
+    // Shutdown any components associated with our odomSubsystem.
     
     component.Shutdown();
 

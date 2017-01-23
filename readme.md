@@ -90,15 +90,19 @@ Optional
 	* source /catkin_ws/install/setup.bash
 * Run /catkin_ws/devel/setup.bash for good measure
 
+General guidelines
+------------------
+* Choose python than C++ unless the task is VERY computationally expensive. 
+
+
 Shortcuts 
 -----------------------------------
 
-Ctrl + K  - Indents files automatically (if setup so)
+Ctrl + K  - (Subl) Indents files automatically (if setup so)
 
 Teleoperation
 -------------------
 * roslaunch turtlebot_teleop keyboard_teleop.launch --screen
-
 * rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/mybot/cmd_vel
 * rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/mybot/cmd_vel
 
@@ -220,9 +224,13 @@ Working in Gazebo
 * Go to here for the shortcuts: http://gazebosim.org/hotkeys
 * Sending commands (through topic): Use rosrun rqt_gui rqt_gui 
 	- See http://gazebosim.org/tutorials?tut=ros_control&cat=connect_ros
+* The Gazebo plugin directory is ~/gazebo_plugins
+
 
 TODOS
 -----------------
-https://www.youtube.com/watch?v=LzyMQVSJvzY
-=Forbot?? point distance?? 
-=Seam time
+* https://www.youtube.com/watch?v=LzyMQVSJvzY
+	* =Forbot?? point distance?? 
+	* =Seam time
+* Look into dynamic reconfigure for simulation variable setting
+

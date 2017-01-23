@@ -21,9 +21,10 @@ def multiplexer():
             if autonomous:
                 select_mux('cmd_vel')
                 # TODO: Change blink value 
-                blink = 
+                blink = True
             else: 
                 select_mux('joystick_cmdvel')
+                blink = False
         except rospy.ServiceException e:
             print('Service call failed: %s' % e)
 
