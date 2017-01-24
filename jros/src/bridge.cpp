@@ -39,6 +39,9 @@ JAUS::Byte gComponentID     = 1;      // ID of the our component.
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: Integrate this with ROS
+// TODO: Solve the port issue and allow multiple communication through one port
+
 // Set an initial global pose.
 JAUS::GlobalPose globalPose;
 
@@ -88,8 +91,12 @@ int main(int argc, char* argv[])
 
     ros::Subscriber odomSub = n.subscribe("odom", 1000, odomCallback);
     ros::Subscriber gpsSub = n.subscribe("gps/fix", 1000, gpsCallback);
-    ros::Publisher cmdVelPub = n.advertise<geometry_msgs::Twist>("JAUS Waypoint", 1000);
     
+    // TODO: Get another publisher with the planning publishers
+    // Given that there will be a GPS (global command), you need navsat_transform_node pkg
+    // And need to transform GPS coords to local frame and issue that as a command
+    // * It appears that move_base is the plan issuing node
+    ros::Publisher cmdVelPub = n.advertise<geometry_msgs::Twist>("JAUS Waypoint", 1000);
 
     // TODO: Check if the ROS odom needs to be resetted
 
@@ -113,16 +120,15 @@ int main(int argc, char* argv[])
     ////////  TO DO
     // Services to implement
     // 
-    // Liveness - check if the
-    // Waypoint Driver ?
-    // Primitive Driver ?
+    // Liveness - Does this have to involved ROS?
+    // Waypoint Driver - this is GPS coords?
+    // Primitive Driver - This is the cmdVelPub (raw effort)
 
     // Services that require config 
-    // Access control ? 
+    // Access control ?? 
     // Management - ROS connection for Emergency message
     // Local pose - resetting to 0 ? Ros related 
     // Require remote control if unable
-    //
 
     // In this test program, we are making a simulated robot, which
     // requires the following mobility services.
@@ -195,8 +201,6 @@ int main(int argc, char* argv[])
     // Create connection to OCP for the JAUS Interoperability Challenge.
     // transportService->AddConnection("192.168.1.42", JAUS::Address(42, 1, 1));
       JAUS::Time::Stamp printTimeMs = 0;
-
-    // double timeDiff = 0.33; // Used for simulation of robot physics.
 
 
     while(ros::ok() && CxUtils::GetChar() != 27 && 
