@@ -81,6 +81,8 @@ void gpsCallback(const sensor_msgs::NavSatFix& msg) {
         globalPose.SetTimeStamp(ros::Time::now());
 }
 
+v
+
 int main(int argc, char* argv[])
 {
     JAUS::Component component;
@@ -96,7 +98,8 @@ int main(int argc, char* argv[])
     // Given that there will be a GPS (global command), you need navsat_transform_node pkg
     // And need to transform GPS coords to local frame and issue that as a command
     // * It appears that move_base is the plan issuing node
-    ros::Publisher cmdVelPub = n.advertise<geometry_msgs::Twist>("JAUS Waypoint", 1000);
+    //  ros::Publisher cmdVelPub = n.advertise<geometry_msgs::Twist>("JAUS Waypoint", 1000);
+
 
     // TODO: Check if the ROS odom needs to be resetted
 

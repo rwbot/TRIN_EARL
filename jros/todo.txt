@@ -1,0 +1,14 @@
+Problems to be fixed:
+
+By: Basileal Imana
+
+Problems encountered:
+1. When two components are created, only the transport service of the component that is initialized second responds to incoming messages. So if a message is addressed to the first component, the second component will reject it. the transport socket for first component seems to stop working when the socket for second component gets initialized.
+
+2. When the judge sends QueryServices he is sending it to address [65535.255.255] which is supposed to mean a wild card that refers to all components in the system. I don't think JAUS++ has this implemented.
+
+List of changes made to the original JAUS++ code:
+
+1. As a temporary way to work around problem #1, I made the two components member variables (mComp1, mComp2) of the Transport class and created a function to register the components to the Transport services. Since only the second component is receiving the incoming messages, if it receives a message addressed to mComp1, it sends it to be processed by mComp1. (this is done inside JUDP::ExtractMessages method)​
+
+2. I tried to work around problem #2, again in JUDP::ExtractMessages method, by checking if the destination is [65535.255.255] and, if so, modifying the destination to [103.1.1] send it to mComp1, then modify destination to [103.2.2] and sending it to mComp2. This worked fine for mComp2 but not mComp1 because the transport socket for mComp1 seems to stop working when the socket for mComp2 gets initialized.
