@@ -46,7 +46,8 @@ USB/Port access
 1. Modify the /etc/local file. 
 2. Currently, the user have been given default rw access to the several ports.
 3. Use lsusb to list all USB devices (to test the connections)
-
+4. ? Run python -m serial.tools.list_ports to see available ports (may be incomplete)
+5. ? Run python -m serial.tools.miniterm
 
 Two-webcam setup
 -------------------
