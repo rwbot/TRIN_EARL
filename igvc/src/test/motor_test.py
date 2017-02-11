@@ -21,44 +21,30 @@ def get_response():
 def init_serial_mode():
     for i in range(0, 10):
         ser.write('\r')
-    
-    resp = get_response() 
-    if (resp != 'OK'):
-        print (resp)
-        print ("Did not get OK message")
-    
+
 def write_byte(string):
     ser.write((string + '\r').encode())
 
 def main():
-    #if not ser.is_open:
-    #    print ("Port is not accessible")
-    #    eixt()
-    
+   
     ser.setRTS(False)
     # ser.setDTR(False)
 
     print(ser.getCTS())
     print(ser.getDSR())
 
-    #  10 Enter key press (new line) is needed for RS-232 Mode
-    # for i in range(0, 10):
-    #     ser.write("\r")
-    
-   #    ser.close()
-    #    exit()
-
     while True:
+        
         prompt = """
         Test Commands
         -------------
         command = test both wheels
         query = test if data can be retrieved from serial port
         exit = close port and terminate program
-        init = start rs232 mode for motor controller
+        change_mode
         """
         print(prompt)
-        
+    
         input = raw_input(">> ")
 
         if input == 'exit':
@@ -68,25 +54,26 @@ def main():
         elif input == 'command':
             write_byte("!A10")
             print(get_response())
-            time.sleep(1)
-
-            write_byte("!a10")
-            print(get_response())
-            time.sleep(1)
-
-            write_byte("!A00")
+            time.sleep(0.1) 
 
             write_byte("!B10")
             print(get_response())
-            time.sleep(1)
+            time.sleep(0.10)
+            # print(get_response())
 
-            write_byte("!b10")
-            print(get_response())
-            time.sleep(1)
+            # write_byte('?K')
+            # print ('Speed query %s' % get_response()) 
+            # time.sleep(0.10)
+            #write_byte("!A00")
 
-            write_byte("!B00")
-            print(get_response())
-            time.sleep(1)
+            #write_byte("!B10")
+                
+
+            #write_byte("!b10")
+            #print(get_response())
+
+            #write_byte("!B00")
+            #print(get_response())
 
         elif input == 'query':
             write_byte('?K')
@@ -95,7 +82,10 @@ def main():
             write_byte('?E')
             print ("Battery query %s" % get_response())
 
-        elif input == 'init':
-            init_serial_mode()
+        elif input == 'change_mode':
+            write_byte('2C04')
+            get_response()
+
 if __name__ == '__main__':
+    init_serial_mode()
     main()
