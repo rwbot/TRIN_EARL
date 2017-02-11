@@ -15,6 +15,8 @@
 
 #include "ros/ros.h"
 #include <nav_msgs/Odometry.h>
+#include <nav_msgs/GetPlan.h>
+#include <nav_msgs/Plan.h>
 #include <sensor_msgs/NavSatFix.h>
 
 const double PI = 3.141592653589793238463;
@@ -81,7 +83,6 @@ void gpsCallback(const sensor_msgs::NavSatFix& msg) {
         globalPose.SetTimeStamp(ros::Time::now());
 }
 
-v
 
 int main(int argc, char* argv[])
 {

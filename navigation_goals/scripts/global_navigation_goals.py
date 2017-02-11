@@ -1,9 +1,6 @@
 #! /usr/bin/env python
 
-# This file will be used to implement the simple effort drivers 
-
-# A more complex goal (Goal from GPS coordinates) will be handled from
-# another program
+# Sends out navigation goals based on GPS coordinates
 
 import rospy
 from actionlib import SimpleActionClient, GoalStatus
@@ -15,7 +12,7 @@ from nav_msgs.msg import Plan
 # Service with plan info (pose) could be sent from JROS bridge or 
 # a tester program
 
-def set_simple_nav_goal(req):
+def set_global_nav_goal(req):
 
     client = actionlib.SimpleActionClient('act_simple_nav_goals', move_base_msgs.msg.MoveBaseAction)
     client.wait_for_server()
@@ -35,17 +32,17 @@ def set_simple_nav_goal(req):
     client.wait_for_result()
     
     if client.get_state() == GoalStatus.SUCCEEDED:
-        rospy.loginfo('Succesfully executed simple nav goal')
+        rospy.loginfo('Succesfully executed global nav goal')
     else:
-        rospy.loginfo('Failed to execute simple nav goal')
+        rospy.loginfo('Failed to execute global nav goal')
     
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('simple_nav_goals')
-        s = rospy.Service('simple_nav_goals', 
+        rospy.init_node('global_nav_goals')
+        s = rospy.Service('global_nav_goals', 
                           GetPlan, 
-                          set_simple_nav_goal)
+                          set_global_nav_goal)
         rospy.spin()
     except rospy.ROSInterruptException:
         print('Program interrupted before completion', file=sys.stderr)
