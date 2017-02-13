@@ -4,7 +4,6 @@ import time
 import serial
 from collections import namedtuple
 
-# TODO: Implement Motor Controller with class
 # TODO: Verify the calculations made
 # TODO: Fully implement the C++ version
 
@@ -21,15 +20,14 @@ def vel_callback(cmd_vel):
 class Vehicle:
     LEFT = 0
     RIGHT = 1
-    WHEEL_DIA = 0.42                    # in meters
+    WHEEL_DIA = 0.42                    # all measurements are in meters
     WHEEL_CIRCUM = math.pi * WHEEL_DIA
     WHEEL_SEPARTION = 0.69
     MAX_RPM = 3000.0 / 26.0
     MAX_EFFORT = 127
 
-
 ser = serial.Serial(
-    port='/dev/ttyUSB', # TODO: Set as param
+    port='/dev/ttyUSB0', # TODO: Set as param
     baudrate=9600,
     parity=serial.PARITY_EVEN,
     stopbits=serial.STOPBITS_ONE,
@@ -86,9 +84,13 @@ def main():
     cmd_vel_sub = rospy.Subscriber('cmd_vel_sub', cmd_vel, vel_callback)
     left_whl_pub = rospy.Publisher('lwheel', Float32, queue_size=10)
     right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
-
+    
+    current_time = rospy.Time.from_sec(time.time())
     while not rospy.is_shudown():
-        
+        prev_time = current_time
+
+        left_whele
+
         rospy.spin()
 
 

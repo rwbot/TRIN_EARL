@@ -1,0 +1,15 @@
+<launch>
+	<!-- Launch file for simple motor testing with Xbox -->
+	
+	<param name="port" value="/dev/ttyACM0" />
+	<include file="$(find rosserial_server)/src/man_drive.launch" />
+	
+	<node name="motor_test" pkg="igvc" type="motor_test.py" />
+	
+	<!-- Eventually to be tested with motor controller -->
+	
+	<!-- 
+	<node name="motor_controller" pkg="igvc" type="motor_controller.py" />
+	-->
+</launch>
+

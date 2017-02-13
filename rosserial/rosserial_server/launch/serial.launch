@@ -1,7 +1,10 @@
 <launch>
-  <arg name="port" default="/dev/ttyACM0" />
+
+  <arg name="port" default="/dev/ttyACM1" />
+  
   <node pkg="rosserial_server" type="serial_node" name="rosserial_server">
     <param name="port" value="$(arg port)" />
   </node>
-  <node pkg="rosserial_python" type="message_info_service.py" name="message_info_service" />
+  
+  <node pkg="joy" name="joy_node" />
 </launch>
