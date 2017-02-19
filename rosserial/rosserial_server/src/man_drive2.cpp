@@ -24,10 +24,10 @@ int speed;
 // %Tag(CALLBACK)%
 void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
- /* if(msg->axes[4] == -1.0){
+  if(msg->axes[4] == -1.0){
     i = 4;
     ROS_INFO("Right Trigger Pressed [RT]: Axis %d", i);
-      if(msg->axes[0] >= 0.1) &&( msg->axes[0] >= 0.99)){
+      if((msg->axes[0] >= 0.1) &&( msg->axes[0] >= 0.99)){
         i = 0;
         ROS_INFO("Left Analog Stick Right [L-Stick]: Axis %d", i);
         c = 6;
@@ -45,7 +45,7 @@ void chatterCallback(const sensor_msgs::Joy::ConstPtr& msg)
   }else{
     c = 0;
   }
-*/
+
 
 /*Button Commands*/
   /*A-Button*/
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 
 
   ros::init(argc, argv, "man_drive");
-  std::string port;
+  /*std::string port;
   ros::param::param<std::string>("~port", port, "/dev/ttyACM0");
   int baud;
   ros::param::param<int>("~baud", baud, 4800);
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 
   boost::asio::io_service io_service;
   new rosserial_server::SerialSession(io_service, port, baud);
-  boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
+  boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));*/
 
   //init(argc, argv, "c_listener");
   NodeHandle n;//subscriber

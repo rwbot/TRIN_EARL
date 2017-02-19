@@ -158,7 +158,8 @@ include_directories(
 # endif()
 
 ## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+# catkin_add_nosetests(add_executable(motor_controller src/motor_controller.cpp)
+# target_link_libraries(motor_controller ${catkin_LIBRARIES} ${boost_LIBRARIES}))
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -184,6 +185,7 @@ add_dependencies(odometry beginner_tutorials_generate_messages_cpp)
 
 add_executable(motor_controller src/motor_controller.cpp)
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${boost_LIBRARIES})
+
 
 # Global path-planning
 #add_library(global_planner_lib src/global_planner.cpp)
