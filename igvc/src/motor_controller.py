@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import time
+import rospy
 import serial
 from collections import namedtuple
 

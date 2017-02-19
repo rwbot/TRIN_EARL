@@ -19,10 +19,12 @@
 using namespace ros;
 
 // constants taken from Q's labview code
-float speed_deadzone = 0.3125;
 float speed_scale = 0.01220703125;
-float turn_deadzone = 0.3125;
 float turn_scale = 0.06103515625;
+
+// other constants
+float speed_deadzone = 0.25;
+float turn_deadzone = 0.25;
 
 int speed = 0;
 int turn = 0;
@@ -32,13 +34,19 @@ int sgn(float x) {
     return (x > 0.0) ? 1 : ((x < 0.0) ? -1 : 0);
 }
 
-// call back for topics recived from joy node
+/**
+ * Call back for topics recived from joy node
+ * 
+ * calculated speed is in range -55 to 55
+ * calculated speed is in range -11 to 11
+ *
+ */
 void callback(const sensor_msgs::Joy::ConstPtr& msg) {
   float y_axis = msg->axes[1];
   float x_axis_rotation = msg->axes[2];
 
   // calculate speed
-  if (abs(y_axis) < speed_deadzone) {
+  if (std::abs(y_axis) < speed_deadzone) {
     speed = 0;
   }
   else {
@@ -46,7 +54,7 @@ void callback(const sensor_msgs::Joy::ConstPtr& msg) {
   }
 
   // calculate turn
-  if (abs(x_axis_rotation) < turn_deadzone) {
+  if (std::abs(x_axis_rotation) < turn_deadzone) {
     turn = 0;
   }
   else {
