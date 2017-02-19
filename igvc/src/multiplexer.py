@@ -5,31 +5,42 @@
 
 import rospy
 from std_msgs.msg import Bool
+from sensor_msgs.msg import Joy
+
+is_autonomous = True
+
+def control_callback(button):
+    global is_autonomous
+    if (button[7]):
+        is_autonomous = !(is_autonomous)
+
+def blink(cond):
+    rospy.wait_for_service('blink')
+    try:
+       blink = rospy.ServiceProxy('blink', Bool)
+       resp = blink(cond)
+       return resp.Sucess
+    except rospy.ServiceException e:
+        print 'Service call failed %s' % e
 
 def multiplexer():
+    global autonomous 
     rospy.init_node('multiplexer')
-    pub = rospy.Publisher('blink', Bool, queue_size=10)
+    rospy.Subscriber('joy_start', Joy, control_callback)
     rate = rospy.Rate(10)
-    blink = True
+    
     while not rospy.is_shutdown():
-        # TODO: Receive serial prompt and assign it to autonomous
-        # Wait until received signal 
-        # Likely, the button on the robot ..
-
         try:
            select_mux = rospy.ServiceProxy('mux/select', MuxSelect)
-            if autonomous:
+            if is_autonomous:
                 select_mux('cmd_vel')
-                # TODO: Change blink value 
-                blink = True
+                blink(True)
             else: 
                 select_mux('joystick_cmdvel')
-                blink = False
+                blink(False)
         except rospy.ServiceException e:
             print('Service call failed: %s' % e)
 
-        pub.publish(blink)
-        
         rate.sleep()
 
 if __name__ == '__main__':

@@ -45,20 +45,28 @@ def main():
         """
         print(prompt)
     
-        input = raw_input(">> ")
+        input = raw_input('>> ')
 
         if input == 'exit':
             ser.close()
             exit()
         
+        elif input == 'change_mode':
+            write_byte('^01 5') # Mixed mode, closed loop
+            print(get_response())
+
+            write_byte('^FF') # Restart controller to apply params
+            print(get_response())
+
+            # For modes refer to page 148
+            
         elif input == 'command':
             write_byte("!A10")
             print(get_response())
-            time.sleep(0.1) 
 
-            write_byte("!B10")
-            print(get_response())
-            time.sleep(0.10)
+            # write_byte("!B10")
+            # print(get_response())
+            # time.sleep(0.10)
             # print(get_response())
 
             # write_byte('?K')
