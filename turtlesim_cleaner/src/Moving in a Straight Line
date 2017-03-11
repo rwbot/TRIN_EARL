@@ -1,0 +1,533 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<meta name="google-site-verification" content="CjkdY6BqKWAVmQ78_iSq6J7ZZ9AoL7-CjFVBYGg9FU4" />
+<link rel="shortcut icon" href="/custom/favicon.ico" type="image/ico" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/custom/js/sorttable.js"></script>
+<script type="text/javascript" src="/custom/libraries/jquery.min.js"></script>                         
+<script type="text/javascript" src="/custom/js/seesaw.js"></script> 
+<script type="text/javascript" src="/custom/js/rosversion.js"></script> 
+<!--script type="text/javascript" src="/custom/libraries/RGraph.common.core.js" ></script Used for metrics only, should be conditional, not at the top-->
+<!--script type="text/javascript" src="/custom/libraries/RGraph.bar.js" ></script same as above -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17821189-2']);
+  _gaq.push(['_setDomainName', 'wiki.ros.org']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta name="robots" content="index,nofollow">
+
+<title>turtlesim/Tutorials/Moving in a Straight Line - ROS Wiki</title>
+<script type="text/javascript" src="/moin_static197/common/js/common.js"></script>
+
+<script type="text/javascript">
+<!--
+var search_hint = "Search";
+//-->
+</script>
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/moin_static197/rostheme/css/common.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="screen" href="/moin_static197/rostheme/css/screen.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="print" href="/moin_static197/rostheme/css/print.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="projection" href="/moin_static197/rostheme/css/projection.css">
+
+<!-- css only for MS IE6/IE7 browsers -->
+<!--[if lt IE 8]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/moin_static197/rostheme/css/msie.css">
+<![endif]-->
+
+
+
+
+<link rel="canonical" href="http://wiki.ros.org/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line" />
+
+<link rel="Start" href="/Documentation">
+<link rel="Alternate" title="Wiki Markup" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=raw">
+<link rel="Alternate" media="print" title="Print View" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=print">
+<link rel="Up" href="/turtlesim/Tutorials">
+<link rel="Appendix" title="rosmsgtwist.png" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=view&amp;target=rosmsgtwist.png">
+<link rel="Appendix" title="rostopicinfocmdvel.png" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=view&amp;target=rostopicinfocmdvel.png">
+<link rel="Appendix" title="turtle_moved.png" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=view&amp;target=turtle_moved.png">
+<link rel="Appendix" title="turtle_spawned.png" href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=view&amp;target=turtle_spawned.png">
+<link rel="Search" href="/FindPage">
+<link rel="Index" href="/TitleIndex">
+<link rel="Glossary" href="/WordIndex">
+<link rel="Help" href="/HelpOnFormatting">
+</head>
+
+<body  lang="en" dir="ltr">
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5950817-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+<script type="text/javascript">
+<!--// Initialize search form
+var f = document.getElementById('searchform');
+if(f) f.getElementsByTagName('label')[0].style.display = 'none';
+var e = document.getElementById('searchinput');
+if(e) {
+  searchChange(e);
+  searchBlur(e);
+}
+
+function handleSubmit() {
+  var f = document.getElementById('searchform');
+  var t = document.getElementById('searchinput');
+  var r = document.getElementById('real_searchinput');
+  
+  //alert("handleSubmit "+ t.value);
+  if(t.value.match(/review/)) {
+    r.value = t.value;
+  } else {
+    //r.value = t.value + " -PackageReviewCategory -StackReviewCategory -M3Review -DocReview -ApiReview -HelpOn -BadContent -LocalSpellingWords";
+    r.value = t.value + " -PackageReviewCategory -StackReviewCategory -DocReview -ApiReview";
+  }
+  //return validate(f);
+}
+//-->
+</script>
+
+<div id="dpage">
+  <div id="dpage-inner">
+    <div id="header"><div id="topnav">
+
+<!-- Alert box -->
+<!-- To enable the alert box uncomment the block below. Change the alert_box_name to a new name. Then update the content below the button. -->
+<!-- Disabling alert box
+    <div class="alert alert-info alert-dismissable" style="text-align: center;">
+<script>
+jQuery(function( $ ){
+    alert_box_name = 'roswiki_roscon2016_early_registration_last_day'
+    state = localStorage.getItem(alert_box_name);
+    if (!state) {
+      localStorage.setItem(alert_box_name, 'open');
+    }
+    state = localStorage.getItem(alert_box_name);
+    if (state == 'closed') {
+        $( '#topnav .alert' ).hide();
+    }
+    $( '.close' ).click(function () {
+	console.log('in .close.click');
+        localStorage.setItem(alert_box_name, 'closed');
+        $( '#topnav .alert' ).hide();
+  });
+});
+</script>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Early registration for <a href="http://roscon.ros.org/2016">ROSCon 2016</a> ends today, August 26th! <br><a href="https://events.osrfoundation.org/roscon-2016-registration/">Register now</a> to get the early registration discount. And <a href="http://conradhotels.hilton.com/en/ch/groups/personalized/S/SELCICI-GROSA-20161003/index.jhtml?WT.mc_id=POG">book you discounted hotel rooms</a> at our <a href="http://roscon.ros.org/2016/#location">discounted rates</a>.
+    </div>
+ End disabling alert box -->
+<!-- End Alert box -->
+
+      <table id="topnav-table">
+        <tr>
+          <td width="300" valign="top"><a href="/"><img border="0" src="/custom/images/ros_org.png" alt="ros.org" width="238" height="51"/></a></td>
+          <td valign="middle">
+            <a href="http://www.ros.org/about-ros">About</a>
+            |
+            <a href="/Support">Support</a>
+            |
+            <a href="http://status.ros.org/">Status</a>
+            |
+            <a href="http://answers.ros.org/">answers.ros.org</a>
+
+<!--<a href="http://roscon.ros.org/2016/"><img align="middle" style="padding-left: 15px;" src="http://ros.org/images/roscon_wiki_header.jpg" width="133" height="65" alt="ROSCon 2016" /></a>
+-->
+
+<!-- <a href="https://events.osrfoundation.org/ros-kong-2014/"><img align="middle" style="padding-left: 15px;" src="http://ros.org/images/ros_kong_2014_badge.png" width="133" height="38" alt="roskong" /></a>
+-->
+<!--a href="https://events.osrfoundation.org/ros-kong-2014/"><img align="middle" style="padding-left: 15px;" src="http://imgur.com/eMzUJVe.png" width="133" height="38" alt="roskong" /></a-->
+          </td>
+
+          <td valign="middle" align="right">
+
+<script language="Javascript">
+
+function Searchy(theButton){
+
+theForm = theButton.form;
+newID = theForm.input.value;
+theForm.q.value = newID;
+theForm.input.value=theForm.input.value
+
+}
+</script>
+
+
+<form action="http://www.ros.org/search/index.html" id="cse">
+  <div>
+    <label>Search:</label>
+    <input type="hidden" name="cx" value="018259903093183594226:txvzw9fat6w" />
+    <input type="hidden" name="cof" value="FORID:11;NB:1" />
+    <input type="hidden" name="filter" value="0" />
+    <input type="hidden" name="num" value="10" />
+
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="input" id="input" autocomplete="on" style="width: 35%"/>
+    <input type="hidden" name="q" value="" />
+    <input type="submit" name="sa" value="Submit" onClick="Searchy(this)"/>
+
+  </div>
+</form>
+
+         </td>
+      </tr>
+      <tr>
+        <td colspan="3" height="53" width="1024"><nobr><img src="/custom/images/menu_left.png" width="17" height="53" alt=""/><a href="/"><img
+        border="0" src="/custom/images/menu_documentation.png" width="237" height="53" alt="Documentation" /></a><img
+        src="/custom/images/menu_spacer.png" width="69" height="53" /><a href="http://www.ros.org/browse/"><img border="0"
+        src="/custom/images/menu_browse_software.png" width="268" height="53" alt="Browse Software" /></a><img
+        src="/custom/images/menu_spacer.png" width="69" height="53" /><a href="http://www.ros.org/news"><img border="0"
+        src="/custom/images/menu_news.png" width="84" height="53" alt="News" /></a><img
+        src="/custom/images/menu_spacer.png" width="69" height="53" /><a href="/ROS/Installation"><img border="0"
+        src="/custom/images/menu_download.png" width="151" height="53" alt="Download" /></a><img
+        src="/custom/images/menu_right.png" width="60" height="53" /></nobr></td>
+
+      </tr>
+    </table> <!-- topnav-table -->
+
+    </div> <!-- /#topav -->
+  </div> <!-- /#header -->
+
+
+<div id="header2">
+
+<ul id="pagelocation">
+<li><a href="/turtlesim">turtlesim</a></li><li><a href="/turtlesim/Tutorials">Tutorials</a></li><li><a class="backlink" href="/action/fullsearch/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=fullsearch&amp;context=180&amp;value=linkto%3A%22turtlesim%2FTutorials%2FMoving+in+a+Straight+Line%22" rel="nofollow" title="Click to do a full-text search for this title">Moving in a Straight Line</a></li>
+</ul>
+
+<div id="locationline">
+</div>
+</div>
+
+<div id="sidebar">
+<div class="sidepanel">
+<h1>Wiki</h1>
+
+<ul id="navibar">
+<li class="wikilink"><a href="/Distributions">Distributions</a></li><li class="wikilink"><a href="/ROS/Installation">ROS/Installation</a></li><li class="wikilink"><a href="/ROS/Tutorials">ROS/Tutorials</a></li><li class="wikilink"><a href="/RecentChanges">RecentChanges</a></li><li class="current"><a href="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line">Moving in a Straight Line</a></li>
+</ul>
+
+</div>
+<div class="sidepanel">
+<h1>Page</h1>
+<ul class="editbar"><li><span class="disabled">Immutable Page</span></li><li class="toggleCommentsButton" style="display:none;"><a href="#" class="nbcomment" onClick="toggleComments();return false;">Comments</a></li><li><a class="nbinfo" href="/action/info/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=info" rel="nofollow">Info</a></li><li><a class="nbattachments" href="/action/AttachFile/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile" rel="nofollow">Attachments</a></li><li>
+<form class="actionsmenu" method="GET" action="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line">
+<div>
+    <label>More Actions:</label>
+    <select name="action"
+        onchange="if ((this.selectedIndex != 0) &&
+                      (this.options[this.selectedIndex].disabled == false)) {
+                this.form.submit();
+            }
+            this.selectedIndex = 0;">
+        <option value="raw">Raw Text</option>
+<option value="print">Print View</option>
+<option value="RenderAsDocbook">Render as Docbook</option>
+<option value="show" disabled class="disabled">Delete Cache</option>
+<option value="show" disabled class="disabled">------------------------</option>
+<option value="SpellCheck">Check Spelling</option>
+<option value="LikePages">Like Pages</option>
+<option value="LocalSiteMap">Local Site Map</option>
+<option value="show" disabled class="disabled">------------------------</option>
+<option value="RenamePage" disabled class="disabled">Rename Page</option>
+<option value="CopyPage">Copy Page</option>
+<option value="DeletePage" disabled class="disabled">Delete Page</option>
+<option value="show" disabled class="disabled">------------------------</option>
+<option value="MyPages">My Pages</option>
+<option value="show" disabled class="disabled">Subscribe User</option>
+<option value="show" disabled class="disabled">------------------------</option>
+<option value="show" disabled class="disabled">Remove Spam</option>
+<option value="show" disabled class="disabled">Revert to this revision</option>
+<option value="PackagePages">Package Pages</option>
+<option value="SyncPages">Sync Pages</option>
+<option value="show" disabled class="disabled">------------------------</option>
+<option value="CreatePdfDocument">CreatePdfDocument</option>
+<option value="Load">Load</option>
+<option value="RawFile">RawFile</option>
+<option value="Save">Save</option>
+<option value="SlideShow">SlideShow</option>
+    </select>
+    <input type="submit" value="Do">
+    
+</div>
+<script type="text/javascript">
+<!--// Init menu
+actionsMenuInit('More Actions:');
+//-->
+</script>
+</form>
+</li></ul>
+
+</div>
+<div class="sidepanel">
+<h1>User</h1>
+<ul id="username"><li><a href="/action/login/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=login" id="login" rel="nofollow">Login</a></li></ul>
+</div>
+</div>
+
+<div id="page" lang="en" dir="ltr">
+
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span><span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span><span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span><span class="anchor" id="line-8"></span><span class="anchor" id="line-9"></span><span class="anchor" id="line-10"></span><span class="anchor" id="line-11"></span><span class="anchor" id="line-12"></span><span class="anchor" id="line-13"></span><span class="anchor" id="line-14"></span><span class="anchor" id="line-15"></span><span class="anchor" id="line-16"></span><span class="anchor" id="line-17"></span><span class="anchor" id="line-18"></span><span class="anchor" id="line-19"></span><span class="anchor" id="line-20"></span><span class="anchor" id="line-21"></span><span class="anchor" id="line-22"></span><span class="anchor" id="line-23"></span><span class="anchor" id="line-24"></span><p class="line862">!<span class="anchor" id="line-1-1"></span><span class="anchor" id="line-2-1"></span><div><table><tbody><tr>  <td style="background-color: #cce0ff"><strong>Note:</strong> This tutorial assumes that you have completed the previous tutorials:   writing a simple publisher and subscriber <a href="/ROS/Tutorials/WritingPublisherSubscriber%28python%29">(python)</a>. </td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-3-1"></span><span class="anchor" id="line-4-1"></span><span class="anchor" id="line-5-1"></span><span class="anchor" id="line-6-1"></span><div><table><tbody><tr>  <td style="background-color: #bbceee"> <img alt="(!)" height="15" src="/moin_static197/rostheme/img/idea.png" title="(!)" width="15" /> Please ask about problems and questions regarding this tutorial on <a class="http" href="http://answers.ros.org">answers.ros.org</a>. Don't forget to include in your question the link to this page, the versions of your OS &amp; ROS, and also add appropriate tags.</td>
+</tr>
+</tbody></table></div><span class="anchor" id="line-7-1"></span><span class="anchor" id="line-8-1"></span><span class="anchor" id="line-9-1"></span>
+<h1 id="Moving_in_a_Straight_Line">Moving in a Straight Line</h1>
+<span class="anchor" id="line-10-1"></span><strong>Description:</strong> This tutorial is based on <a href="/turtlesim/Tutorials">Turtlesim Video Tutorials</a><br>
+<br>
+ <span class="anchor" id="line-11-1"></span><span class="anchor" id="line-12-1"></span><span class="anchor" id="line-13-1"></span><span class="anchor" id="line-14-1"></span><strong>Tutorial Level:</strong>  INTERMEDIATE <br>
+ <br>
+ <span class="anchor" id="line-15-1"></span><span class="anchor" id="line-16-1"></span><strong>Next Tutorial:</strong>   <a href="/turtlesim/Tutorials/Rotating%20Left%20and%20Right">Rotating Left/Right</a> <br>
+ <br>
+  <span class="anchor" id="line-17-1"></span><p class="line874"> <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span><p class="line867"><div class="table-of-contents"><p class="table-of-contents-heading">Contents<ol><li>
+<a href="#Preparing_for_work">Preparing for work</a></li><li>
+<a href="#Understanding_the_code">Understanding the code</a></li><li>
+<a href="#The_code">The code</a></li><li>
+<a href="#Testing_the_code">Testing the code</a></li></ol></li></ol></div><p class="line874"> <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span><p class="line874">In this tutorial series, we will create python scripts to move our turtle, in order to practice the ROS basics. <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span><p class="line862">You can find the complete package at: <a class="https" href="https://github.com/clebercoutof/turtlesim_cleaner">https://github.com/clebercoutof/turtlesim_cleaner</a> <span class="anchor" id="line-31"></span><span class="anchor" id="line-32"></span><p class="line867">
+<h2 id="Preparing_for_work">Preparing for work</h2>
+<span class="anchor" id="line-33"></span><p class="line874">First of all, we have to create a new package. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span><span class="anchor" id="line-36"></span><span class="anchor" id="line-37"></span><pre><span class="anchor" id="line-1-2"></span>$ cd ~/catkin_ws/src
+<span class="anchor" id="line-2-2"></span>$ catkin_create_pkg turtlesim_cleaner geometry_msgs rospy </pre><span class="anchor" id="line-38"></span><p class="line874">Now, build your workspace <span class="anchor" id="line-39"></span><span class="anchor" id="line-40"></span><span class="anchor" id="line-41"></span><span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><pre><span class="anchor" id="line-1-3"></span>#At your catkin workspace
+<span class="anchor" id="line-2-3"></span>$ cd ~/catkin_ws
+<span class="anchor" id="line-3-2"></span>$ catkin_make</pre><span class="anchor" id="line-44"></span><p class="line874">And now, create a a src folder for your scripts <span class="anchor" id="line-45"></span><span class="anchor" id="line-46"></span><span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><pre><span class="anchor" id="line-1-4"></span>$ cd ~/catkin_ws/src/turtlesim_cleaner
+<span class="anchor" id="line-2-4"></span>$ mkdir src
+<span class="anchor" id="line-3-3"></span>$ catkin_make</pre><span class="anchor" id="line-50"></span><span class="anchor" id="line-51"></span><p class="line867">
+<h2 id="Understanding_the_code">Understanding the code</h2>
+<span class="anchor" id="line-52"></span><p class="line874">Our code will receive as inputs the desired speed, distance and a variable which defines if the movement is forwards or backwards. <span class="anchor" id="line-53"></span>Since we can just publish a velocity to the topic <em><strong> /turtle1/cmd_vel</strong></em>, our logic will have to calculate the distance specified. <span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><p class="line867">
+<h2 id="The_code">The code</h2>
+<span class="anchor" id="line-56"></span><p class="line862">Create your move.py (or any name you want) file and save it in your <em><strong>~/catkin_ws/src/turtlesim_cleaner/src</strong></em>, our code will look like this: <span class="anchor" id="line-57"></span><span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span><span class="anchor" id="line-61"></span><span class="anchor" id="line-62"></span><span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><span class="anchor" id="line-66"></span><span class="anchor" id="line-67"></span><span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><span class="anchor" id="line-73"></span><span class="anchor" id="line-74"></span><span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><span class="anchor" id="line-78"></span><span class="anchor" id="line-79"></span><span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span><span class="anchor" id="line-83"></span><span class="anchor" id="line-84"></span><span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><span class="anchor" id="line-91"></span><span class="anchor" id="line-92"></span><span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><span class="anchor" id="line-97"></span><span class="anchor" id="line-98"></span><span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><span class="anchor" id="line-101"></span><span class="anchor" id="line-102"></span><span class="anchor" id="line-103"></span><span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span><span class="anchor" id="line-107"></span><span class="anchor" id="line-108"></span><span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><span class="anchor" id="line-111"></span><span class="anchor" id="line-112"></span><span class="anchor" id="line-1-5"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+function isnumbered(obj) {
+  return obj.childNodes.length && obj.firstChild.childNodes.length && obj.firstChild.firstChild.className == 'LineNumber';
+}
+function nformat(num,chrs,add) {
+  var nlen = Math.max(0,chrs-(''+num).length), res = '';
+  while (nlen>0) { res += ' '; nlen-- }
+  return res+num+add;
+}
+function addnumber(did, nstart, nstep) {
+  var c = document.getElementById(did), l = c.firstChild, n = 1;
+  if (!isnumbered(c)) {
+    if (typeof nstart == 'undefined') nstart = 1;
+    if (typeof nstep  == 'undefined') nstep = 1;
+    var n = nstart;
+    while (l != null) {
+      if (l.tagName == 'SPAN') {
+        var s = document.createElement('SPAN');
+        var a = document.createElement('A');
+        s.className = 'LineNumber';
+        a.appendChild(document.createTextNode(nformat(n,4,'')));
+        a.href = '#' + did + '_' + n;
+        s.appendChild(a);
+        s.appendChild(document.createTextNode(' '));
+        n += nstep;
+        if (l.childNodes.length) {
+          l.insertBefore(s, l.firstChild);
+        }
+        else {
+          l.appendChild(s);
+        }
+      }
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function remnumber(did) {
+  var c = document.getElementById(did), l = c.firstChild;
+  if (isnumbered(c)) {
+    while (l != null) {
+      if (l.tagName == 'SPAN' && l.firstChild.className == 'LineNumber') l.removeChild(l.firstChild);
+      l = l.nextSibling;
+    }
+  }
+  return false;
+}
+function togglenumber(did, nstart, nstep) {
+  var c = document.getElementById(did);
+  if (isnumbered(c)) {
+    remnumber(did);
+  } else {
+    addnumber(did,nstart,nstep);
+  }
+  return false;
+}
+</script>
+
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54\', 1, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_1">   1</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_1"></span><span class="anchor" id="line-1-6"></span><span class="Comment">#!/usr/bin/env python</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_2">   2</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_2"></span><span class="anchor" id="line-2-5"></span><span class="ResWord">import</span> <span class="ID">rospy</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_3">   3</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_3"></span><span class="anchor" id="line-3-4"></span><span class="ResWord">from</span> <span class="ID">geometry_msgs.msg</span> <span class="ResWord">import</span> <span class="ID">Twist</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_4">   4</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_4"></span><span class="anchor" id="line-4-2"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_5">   5</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_5"></span><span class="anchor" id="line-5-2"></span><span class="ResWord">def</span> <span class="ID">move</span>():</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_6">   6</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_6"></span><span class="anchor" id="line-6-2"></span>    <span class="Comment"># Starts a new node</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_7">   7</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_7"></span><span class="anchor" id="line-7-2"></span>    <span class="ID">rospy</span>.<span class="ID">init_node</span>(<span class="String">'</span><span class="String">robot_cleaner</span><span class="String">'</span>, <span class="ID">anonymous</span>=<span class="ResWord">True</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_8">   8</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_8"></span><span class="anchor" id="line-8-2"></span>    <span class="ID">velocity_publisher</span> = <span class="ID">rospy</span>.<span class="ID">Publisher</span>(<span class="String">'</span><span class="String">/turtle1/cmd_vel</span><span class="String">'</span>, <span class="ID">Twist</span>, <span class="ID">queue_size</span>=<span class="Number">10</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_9">   9</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_9"></span><span class="anchor" id="line-9-2"></span>    <span class="ID">vel_msg</span> = <span class="ID">Twist</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_10">  10</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_10"></span><span class="anchor" id="line-10-2"></span>    </span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_11">  11</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_11"></span><span class="anchor" id="line-11-2"></span>    <span class="Comment">#Receiveing the user's input</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_12">  12</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_12"></span><span class="anchor" id="line-12-2"></span>    <span class="ResWord">print</span>(<span class="String">"</span><span class="String">Let</span><span class="String">'</span><span class="String">s move your robot</span><span class="String">"</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_13">  13</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_13"></span><span class="anchor" id="line-13-2"></span>    <span class="ID">speed</span> = <span class="ResWord">input</span>(<span class="String">"</span><span class="String">Input your speed:</span><span class="String">"</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_14">  14</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_14"></span><span class="anchor" id="line-14-2"></span>    <span class="ID">distance</span> = <span class="ResWord">input</span>(<span class="String">"</span><span class="String">Type your distance:</span><span class="String">"</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_15">  15</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_15"></span><span class="anchor" id="line-15-2"></span>    <span class="ID">isForward</span> = <span class="ResWord">input</span>(<span class="String">"</span><span class="String">Foward?: </span><span class="String">"</span>)<span class="Comment">#True or False</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_16">  16</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_16"></span><span class="anchor" id="line-16-2"></span>    </span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_17">  17</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_17"></span><span class="anchor" id="line-17-2"></span>    <span class="Comment">#Checking if the movement is forward or backwards</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_18">  18</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_18"></span><span class="anchor" id="line-18-1"></span>    <span class="ResWord">if</span>(<span class="ID">isForward</span>):</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_19">  19</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_19"></span><span class="anchor" id="line-19-1"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = <span class="ResWord">abs</span>(<span class="ID">speed</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_20">  20</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_20"></span><span class="anchor" id="line-20-1"></span>    <span class="ResWord">else</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_21">  21</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_21"></span><span class="anchor" id="line-21-1"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = -<span class="ResWord">abs</span>(<span class="ID">speed</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_22">  22</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_22"></span><span class="anchor" id="line-22-1"></span>    <span class="Comment">#Since we are moving just in x-axis</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_23">  23</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_23"></span><span class="anchor" id="line-23-1"></span>    <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">y</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_24">  24</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_24"></span><span class="anchor" id="line-24-1"></span>    <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">z</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_25">  25</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_25"></span><span class="anchor" id="line-25-1"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">x</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_26">  26</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_26"></span><span class="anchor" id="line-26-1"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">y</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_27">  27</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_27"></span><span class="anchor" id="line-27-1"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">z</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_28">  28</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_28"></span><span class="anchor" id="line-28-1"></span>    </span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_29">  29</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_29"></span><span class="anchor" id="line-29-1"></span>    <span class="ResWord">while</span> <span class="ResWord">not</span> <span class="ID">rospy</span>.<span class="ID">is_shutdown</span>():</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_30">  30</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_30"></span><span class="anchor" id="line-30-1"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_31">  31</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_31"></span><span class="anchor" id="line-31-1"></span>        <span class="Comment">#Setting the current time for distance calculus</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_32">  32</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_32"></span><span class="anchor" id="line-32-1"></span>        <span class="ID">t0</span> = <span class="ID">rospy</span>.<span class="ID">Time</span>.<span class="ID">now</span>().<span class="ID">to_sec</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_33">  33</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_33"></span><span class="anchor" id="line-33-1"></span>        <span class="ID">current_distance</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_34">  34</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_34"></span><span class="anchor" id="line-34-1"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_35">  35</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_35"></span><span class="anchor" id="line-35-1"></span>        <span class="Comment">#Loop to move the turtle in an specified distance</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_36">  36</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_36"></span><span class="anchor" id="line-36-1"></span>        <span class="ResWord">while</span>(<span class="ID">current_distance</span> &lt; <span class="ID">distance</span>):</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_37">  37</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_37"></span><span class="anchor" id="line-37-1"></span>            <span class="Comment">#Publish the velocity</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_38">  38</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_38"></span><span class="anchor" id="line-38-1"></span>            <span class="ID">velocity_publisher</span>.<span class="ID">publish</span>(<span class="ID">vel_msg</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_39">  39</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_39"></span><span class="anchor" id="line-39-1"></span>            <span class="Comment">#Takes actual time to velocity calculus</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_40">  40</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_40"></span><span class="anchor" id="line-40-1"></span>            <span class="ID">t1</span>=<span class="ID">rospy</span>.<span class="ID">Time</span>.<span class="ID">now</span>().<span class="ID">to_sec</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_41">  41</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_41"></span><span class="anchor" id="line-41-1"></span>            <span class="Comment">#Calculates distancePoseStamped</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_42">  42</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_42"></span><span class="anchor" id="line-42-1"></span>            <span class="ID">current_distance</span>= <span class="ID">speed</span>*(<span class="ID">t1</span>-<span class="ID">t0</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_43">  43</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_43"></span><span class="anchor" id="line-43-1"></span>        <span class="Comment">#After the loop, stops the robot</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_44">  44</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_44"></span><span class="anchor" id="line-44-1"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_45">  45</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_45"></span><span class="anchor" id="line-45-1"></span>        <span class="Comment">#Force the robot to stop</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_46">  46</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_46"></span><span class="anchor" id="line-46-1"></span>        <span class="ID">velocity_publisher</span>.<span class="ID">publish</span>(<span class="ID">vel_msg</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_47">  47</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_47"></span><span class="anchor" id="line-47-1"></span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_48">  48</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_48"></span><span class="anchor" id="line-48-1"></span><span class="ResWord">if</span> <span class="ID">__name__</span> == <span class="String">'</span><span class="String">__main__</span><span class="String">'</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_49">  49</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_49"></span><span class="anchor" id="line-49-1"></span>    <span class="ResWord">try</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_50">  50</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_50"></span><span class="anchor" id="line-50-1"></span>        <span class="Comment">#Testing our function</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_51">  51</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_51"></span><span class="anchor" id="line-51-1"></span>        <span class="ID">move</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_52">  52</a> </span><span class="LineAnchor" id="CA-e22c413483c3a71f8104cdebb87bfe28a08bcf54_52"></span><span class="anchor" id="line-52-1"></span>    <span class="ResWord">except</span> <span class="ID">rospy</span>.<span class="ID">ROSInterruptException</span>: <span class="ResWord">pass</span></span>
+</pre></div></div><span class="anchor" id="line-113"></span><span class="anchor" id="line-114"></span><p class="line874">Don't forget to make your node executable: <span class="anchor" id="line-115"></span><span class="anchor" id="line-116"></span><span class="anchor" id="line-117"></span><pre><span class="anchor" id="line-1-7"></span>$ chmod u+x ~/catkin_ws/src/turtlesim_cleaner/src/move.py</pre><span class="anchor" id="line-118"></span><p class="line862">First we need to import the packages used on our script.The rospy library is the ros python library, it contains the basic functions, like creating a node, getting time and creating a publisher.The geometry_msgs contains the variable type <strong>Twist</strong> that will be used: <span class="anchor" id="line-119"></span><span class="anchor" id="line-1-8"></span><span class="anchor" id="line-2-6"></span><span class="anchor" id="line-3-5"></span><span class="anchor" id="line-4-3"></span><span class="anchor" id="line-5-3"></span><span class="anchor" id="line-1-9"></span><span class="anchor" id="line-2-7"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25\', 2, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25_2">   2</a> </span><span class="LineAnchor" id="CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25_2"></span><span class="anchor" id="line-1-10"></span><span class="ResWord">import</span> <span class="ID">rospy</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25_3">   3</a> </span><span class="LineAnchor" id="CA-2a8238c42b7b3dd50cc2d46af00ecec95717ec25_3"></span><span class="anchor" id="line-2-8"></span><span class="ResWord">from</span> <span class="ID">geometry_msgs.msg</span> <span class="ResWord">import</span> <span class="ID">Twist</span></span>
+</pre></div></div><span class="anchor" id="line-6-3"></span><p class="line874"> <span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span><p class="line862">Now we declare our function, initiate our node, our publisher and create the <strong>Twist</strong> variable. <span class="anchor" id="line-122"></span><span class="anchor" id="line-1-11"></span><span class="anchor" id="line-2-9"></span><span class="anchor" id="line-3-6"></span><span class="anchor" id="line-4-4"></span><span class="anchor" id="line-5-4"></span><span class="anchor" id="line-6-4"></span><span class="anchor" id="line-7-3"></span><span class="anchor" id="line-8-3"></span><span class="anchor" id="line-1-12"></span><span class="anchor" id="line-2-10"></span><span class="anchor" id="line-3-7"></span><span class="anchor" id="line-4-5"></span><span class="anchor" id="line-5-5"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc\', 5, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_5">   5</a> </span><span class="LineAnchor" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_5"></span><span class="anchor" id="line-1-13"></span><span class="ResWord">def</span> <span class="ID">move</span>():</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_6">   6</a> </span><span class="LineAnchor" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_6"></span><span class="anchor" id="line-2-11"></span>    <span class="Comment"># Starts a new node</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_7">   7</a> </span><span class="LineAnchor" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_7"></span><span class="anchor" id="line-3-8"></span>    <span class="ID">rospy</span>.<span class="ID">init_node</span>(<span class="String">'</span><span class="String">robot_cleaner</span><span class="String">'</span>, <span class="ID">anonymous</span>=<span class="ResWord">True</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_8">   8</a> </span><span class="LineAnchor" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_8"></span><span class="anchor" id="line-4-6"></span>    <span class="ID">velocity_publisher</span> = <span class="ID">rospy</span>.<span class="ID">Publisher</span>(<span class="String">'</span><span class="String">/turtle1/cmd_vel</span><span class="String">'</span>, <span class="ID">Twist</span>, <span class="ID">queue_size</span>=<span class="Number">10</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_9">   9</a> </span><span class="LineAnchor" id="CA-e59ebb6937b26bcc93dfea815fb0cc06988dc1cc_9"></span><span class="anchor" id="line-5-6"></span>    <span class="ID">vel_msg</span> = <span class="ID">Twist</span>()</span>
+</pre></div></div><span class="anchor" id="line-9-3"></span><p class="line874"> <span class="anchor" id="line-123"></span><span class="anchor" id="line-124"></span><p class="line862">The <strong>Twist</strong> is necessary because our topic <strong> '/turtle1/cmd_vel' </strong> uses the Twist message, you can check with the following command: <span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span><pre><span class="anchor" id="line-1-14"></span>$ rostopic info /turtle1/cmd_vel</pre><span class="anchor" id="line-128"></span><p class="line874">You should see the following screen: <span class="anchor" id="line-129"></span><ul><li style="list-style-type:none"><p class="line891"><img alt="rostopicinfocmdvel.png" class="attachment" src="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=get&amp;target=rostopicinfocmdvel.png" title="rostopicinfocmdvel.png" /> <span class="anchor" id="line-130"></span><span class="anchor" id="line-131"></span></li></ul><p class="line874">The Twist message is composed by 3 linear components and 3 angular components,you can see the message description with the following command: <span class="anchor" id="line-132"></span><span class="anchor" id="line-133"></span><span class="anchor" id="line-134"></span><pre><span class="anchor" id="line-1-15"></span>$ rosmsg show geometry_msgs/Twist</pre><p class="line874"> <span class="anchor" id="line-135"></span><span class="anchor" id="line-136"></span><p class="line874">You should see the following screen: <span class="anchor" id="line-137"></span><ul><li style="list-style-type:none"><p class="line891"><img alt="rosmsgtwist.png" class="attachment" src="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=get&amp;target=rosmsgtwist.png" title="rosmsgtwist.png" /> <span class="anchor" id="line-138"></span><span class="anchor" id="line-139"></span></li></ul><p class="line874">Since we are moving the turtle in a straight line, we just need the x component, and, depending on the user's input we decide if the movement is forwards or backwards. <span class="anchor" id="line-140"></span><span class="anchor" id="line-1-16"></span><span class="anchor" id="line-2-12"></span><span class="anchor" id="line-3-9"></span><span class="anchor" id="line-4-7"></span><span class="anchor" id="line-5-7"></span><span class="anchor" id="line-6-5"></span><span class="anchor" id="line-7-4"></span><span class="anchor" id="line-8-4"></span><span class="anchor" id="line-9-4"></span><span class="anchor" id="line-10-3"></span><span class="anchor" id="line-11-3"></span><span class="anchor" id="line-12-3"></span><span class="anchor" id="line-13-3"></span><span class="anchor" id="line-1-17"></span><span class="anchor" id="line-2-13"></span><span class="anchor" id="line-3-10"></span><span class="anchor" id="line-4-8"></span><span class="anchor" id="line-5-8"></span><span class="anchor" id="line-6-6"></span><span class="anchor" id="line-7-5"></span><span class="anchor" id="line-8-5"></span><span class="anchor" id="line-9-5"></span><span class="anchor" id="line-10-4"></span><span class="anchor" id="line-11-4"></span><span class="anchor" id="line-12-4"></span><span class="anchor" id="line-13-4"></span><span class="anchor" id="line-14-3"></span><span class="anchor" id="line-15-3"></span><span class="anchor" id="line-16-3"></span><span class="anchor" id="line-17-3"></span><span class="anchor" id="line-18-2"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-a5697ba2d0d4242db6a6222d53de631dd07419ea\', 18, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_18">  18</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_18"></span><span class="anchor" id="line-1-18"></span>    <span class="ResWord">if</span>(<span class="ID">isForward</span>):</span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_19">  19</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_19"></span><span class="anchor" id="line-2-14"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = <span class="ResWord">abs</span>(<span class="ID">speed</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_20">  20</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_20"></span><span class="anchor" id="line-3-11"></span>    <span class="ResWord">else</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_21">  21</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_21"></span><span class="anchor" id="line-4-9"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = -<span class="ResWord">abs</span>(<span class="ID">speed</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_22">  22</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_22"></span><span class="anchor" id="line-5-9"></span>    <span class="Comment">#Since we are moving just in x-axis</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_23">  23</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_23"></span><span class="anchor" id="line-6-7"></span>    <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">y</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_24">  24</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_24"></span><span class="anchor" id="line-7-6"></span>    <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">z</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_25">  25</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_25"></span><span class="anchor" id="line-8-6"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">x</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_26">  26</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_26"></span><span class="anchor" id="line-9-6"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">y</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_27">  27</a> </span><span class="LineAnchor" id="CA-a5697ba2d0d4242db6a6222d53de631dd07419ea_27"></span><span class="anchor" id="line-10-5"></span>    <span class="ID">vel_msg</span>.<span class="ID">angular</span>.<span class="ID">z</span> = <span class="Number">0</span></span>
+</pre></div></div><span class="anchor" id="line-14-4"></span><p class="line874"> <span class="anchor" id="line-141"></span><span class="anchor" id="line-142"></span><p class="line862">The following statement guarentee that if we press <strong>crtl + c </strong> our code will stops <span class="anchor" id="line-143"></span><span class="anchor" id="line-1-19"></span><span class="anchor" id="line-2-15"></span><span class="anchor" id="line-3-12"></span><span class="anchor" id="line-4-10"></span><span class="anchor" id="line-1-20"></span><span class="anchor" id="line-2-16"></span><span class="anchor" id="line-3-13"></span><span class="anchor" id="line-4-11"></span><span class="anchor" id="line-5-10"></span><span class="anchor" id="line-6-8"></span><span class="anchor" id="line-7-7"></span><span class="anchor" id="line-8-7"></span><span class="anchor" id="line-9-7"></span><span class="anchor" id="line-10-6"></span><span class="anchor" id="line-11-5"></span><span class="anchor" id="line-12-5"></span><span class="anchor" id="line-13-5"></span><span class="anchor" id="line-14-5"></span><span class="anchor" id="line-15-4"></span><span class="anchor" id="line-16-4"></span><span class="anchor" id="line-17-4"></span><span class="anchor" id="line-18-3"></span><span class="anchor" id="line-19-2"></span><span class="anchor" id="line-20-2"></span><span class="anchor" id="line-21-2"></span><span class="anchor" id="line-22-2"></span><span class="anchor" id="line-23-2"></span><span class="anchor" id="line-24-2"></span><span class="anchor" id="line-25-2"></span><span class="anchor" id="line-26-2"></span><span class="anchor" id="line-27-2"></span><span class="anchor" id="line-28-2"></span><span class="anchor" id="line-29-2"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-d8a1d46a648ee2fe15e28998398b0b8d5e594529\', 29, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-d8a1d46a648ee2fe15e28998398b0b8d5e594529" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-d8a1d46a648ee2fe15e28998398b0b8d5e594529_29">  29</a> </span><span class="LineAnchor" id="CA-d8a1d46a648ee2fe15e28998398b0b8d5e594529_29"></span><span class="anchor" id="line-1-21"></span>    <span class="ResWord">while</span> <span class="ResWord">not</span> <span class="ID">rospy</span>.<span class="ID">is_shutdown</span>():</span>
+</pre></div></div><span class="anchor" id="line-5-11"></span><p class="line874"> <span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><p class="line862">Now , with the <strong>rospy.Time.now().to_sec()</strong>. we get the starting time <strong>t0</strong>, and the time <strong>t1</strong> to calculate the distance and while the actual distance is less than the user's input, it will keep publishing: <span class="anchor" id="line-146"></span><span class="anchor" id="line-1-22"></span><span class="anchor" id="line-2-17"></span><span class="anchor" id="line-3-14"></span><span class="anchor" id="line-4-12"></span><span class="anchor" id="line-5-12"></span><span class="anchor" id="line-6-9"></span><span class="anchor" id="line-7-8"></span><span class="anchor" id="line-8-8"></span><span class="anchor" id="line-9-8"></span><span class="anchor" id="line-10-7"></span><span class="anchor" id="line-1-23"></span><span class="anchor" id="line-2-18"></span><span class="anchor" id="line-3-15"></span><span class="anchor" id="line-4-13"></span><span class="anchor" id="line-5-13"></span><span class="anchor" id="line-6-10"></span><span class="anchor" id="line-7-9"></span><span class="anchor" id="line-8-9"></span><span class="anchor" id="line-9-9"></span><span class="anchor" id="line-10-8"></span><span class="anchor" id="line-11-6"></span><span class="anchor" id="line-12-6"></span><span class="anchor" id="line-13-6"></span><span class="anchor" id="line-14-6"></span><span class="anchor" id="line-15-5"></span><span class="anchor" id="line-16-5"></span><span class="anchor" id="line-17-5"></span><span class="anchor" id="line-18-4"></span><span class="anchor" id="line-19-3"></span><span class="anchor" id="line-20-3"></span><span class="anchor" id="line-21-3"></span><span class="anchor" id="line-22-3"></span><span class="anchor" id="line-23-3"></span><span class="anchor" id="line-24-3"></span><span class="anchor" id="line-25-3"></span><span class="anchor" id="line-26-3"></span><span class="anchor" id="line-27-3"></span><span class="anchor" id="line-28-3"></span><span class="anchor" id="line-29-3"></span><span class="anchor" id="line-30-2"></span><span class="anchor" id="line-31-2"></span><span class="anchor" id="line-32-2"></span><span class="anchor" id="line-33-2"></span><span class="anchor" id="line-34-2"></span><span class="anchor" id="line-35-2"></span><span class="anchor" id="line-36-2"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-1cc1c7971556aca5fc7db71363886541e422d52b\', 36, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_36">  36</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_36"></span><span class="anchor" id="line-1-24"></span>        <span class="ResWord">while</span>(<span class="ID">current_distance</span> &lt; <span class="ID">distance</span>):</span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_37">  37</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_37"></span><span class="anchor" id="line-2-19"></span>            <span class="Comment">#Publish the velocity</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_38">  38</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_38"></span><span class="anchor" id="line-3-16"></span>            <span class="ID">velocity_publisher</span>.<span class="ID">publish</span>(<span class="ID">vel_msg</span>)</span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_39">  39</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_39"></span><span class="anchor" id="line-4-14"></span>            <span class="Comment">#Takes actual time to velocity calculus</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_40">  40</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_40"></span><span class="anchor" id="line-5-14"></span>            <span class="ID">t1</span>=<span class="ID">rospy</span>.<span class="ID">Time</span>.<span class="ID">now</span>().<span class="ID">to_sec</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_41">  41</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_41"></span><span class="anchor" id="line-6-11"></span>            <span class="Comment">#Calculates distancePoseStamped</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-1cc1c7971556aca5fc7db71363886541e422d52b_42">  42</a> </span><span class="LineAnchor" id="CA-1cc1c7971556aca5fc7db71363886541e422d52b_42"></span><span class="anchor" id="line-7-10"></span>            <span class="ID">current_distance</span>= <span class="ID">speed</span>*(<span class="ID">t1</span>-<span class="ID">t0</span>)</span>
+</pre></div></div><span class="anchor" id="line-11-7"></span><p class="line874"> <span class="anchor" id="line-147"></span><span class="anchor" id="line-148"></span><p class="line874">After we get to the specified distance , we order our robot to stop: <span class="anchor" id="line-149"></span><span class="anchor" id="line-1-25"></span><span class="anchor" id="line-2-20"></span><span class="anchor" id="line-3-17"></span><span class="anchor" id="line-4-15"></span><span class="anchor" id="line-5-15"></span><span class="anchor" id="line-6-12"></span><span class="anchor" id="line-1-26"></span><span class="anchor" id="line-2-21"></span><span class="anchor" id="line-3-18"></span><span class="anchor" id="line-4-16"></span><span class="anchor" id="line-5-16"></span><span class="anchor" id="line-6-13"></span><span class="anchor" id="line-7-11"></span><span class="anchor" id="line-8-10"></span><span class="anchor" id="line-9-10"></span><span class="anchor" id="line-10-9"></span><span class="anchor" id="line-11-8"></span><span class="anchor" id="line-12-7"></span><span class="anchor" id="line-13-7"></span><span class="anchor" id="line-14-7"></span><span class="anchor" id="line-15-6"></span><span class="anchor" id="line-16-6"></span><span class="anchor" id="line-17-6"></span><span class="anchor" id="line-18-5"></span><span class="anchor" id="line-19-4"></span><span class="anchor" id="line-20-4"></span><span class="anchor" id="line-21-4"></span><span class="anchor" id="line-22-4"></span><span class="anchor" id="line-23-4"></span><span class="anchor" id="line-24-4"></span><span class="anchor" id="line-25-4"></span><span class="anchor" id="line-26-4"></span><span class="anchor" id="line-27-4"></span><span class="anchor" id="line-28-4"></span><span class="anchor" id="line-29-4"></span><span class="anchor" id="line-30-3"></span><span class="anchor" id="line-31-3"></span><span class="anchor" id="line-32-3"></span><span class="anchor" id="line-33-3"></span><span class="anchor" id="line-34-3"></span><span class="anchor" id="line-35-3"></span><span class="anchor" id="line-36-3"></span><span class="anchor" id="line-37-2"></span><span class="anchor" id="line-38-2"></span><span class="anchor" id="line-39-2"></span><span class="anchor" id="line-40-2"></span><span class="anchor" id="line-41-2"></span><span class="anchor" id="line-42-2"></span><span class="anchor" id="line-43-2"></span><span class="anchor" id="line-44-2"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-d72162034513d4c7f7fdfbd63219808ef605afe1\', 44, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-d72162034513d4c7f7fdfbd63219808ef605afe1" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-d72162034513d4c7f7fdfbd63219808ef605afe1_44">  44</a> </span><span class="LineAnchor" id="CA-d72162034513d4c7f7fdfbd63219808ef605afe1_44"></span><span class="anchor" id="line-1-27"></span>        <span class="ID">vel_msg</span>.<span class="ID">linear</span>.<span class="ID">x</span> = <span class="Number">0</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d72162034513d4c7f7fdfbd63219808ef605afe1_45">  45</a> </span><span class="LineAnchor" id="CA-d72162034513d4c7f7fdfbd63219808ef605afe1_45"></span><span class="anchor" id="line-2-22"></span>        <span class="Comment">#Force the robot to stop</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-d72162034513d4c7f7fdfbd63219808ef605afe1_46">  46</a> </span><span class="LineAnchor" id="CA-d72162034513d4c7f7fdfbd63219808ef605afe1_46"></span><span class="anchor" id="line-3-19"></span>        <span class="ID">velocity_publisher</span>.<span class="ID">publish</span>(<span class="ID">vel_msg</span>)</span>
+</pre></div></div><span class="anchor" id="line-7-12"></span><p class="line874"> <span class="anchor" id="line-150"></span><span class="anchor" id="line-151"></span><p class="line874">And then, we have our main loop which calls our function: <span class="anchor" id="line-152"></span><span class="anchor" id="line-1-28"></span><span class="anchor" id="line-2-23"></span><span class="anchor" id="line-3-20"></span><span class="anchor" id="line-4-17"></span><span class="anchor" id="line-5-17"></span><span class="anchor" id="line-6-14"></span><span class="anchor" id="line-7-13"></span><span class="anchor" id="line-8-11"></span><span class="anchor" id="line-1-29"></span><span class="anchor" id="line-2-24"></span><span class="anchor" id="line-3-21"></span><span class="anchor" id="line-4-18"></span><span class="anchor" id="line-5-18"></span><span class="anchor" id="line-6-15"></span><span class="anchor" id="line-7-14"></span><span class="anchor" id="line-8-12"></span><span class="anchor" id="line-9-11"></span><span class="anchor" id="line-10-10"></span><span class="anchor" id="line-11-9"></span><span class="anchor" id="line-12-8"></span><span class="anchor" id="line-13-8"></span><span class="anchor" id="line-14-8"></span><span class="anchor" id="line-15-7"></span><span class="anchor" id="line-16-7"></span><span class="anchor" id="line-17-7"></span><span class="anchor" id="line-18-6"></span><span class="anchor" id="line-19-5"></span><span class="anchor" id="line-20-5"></span><span class="anchor" id="line-21-5"></span><span class="anchor" id="line-22-5"></span><span class="anchor" id="line-23-5"></span><span class="anchor" id="line-24-5"></span><span class="anchor" id="line-25-5"></span><span class="anchor" id="line-26-5"></span><span class="anchor" id="line-27-5"></span><span class="anchor" id="line-28-5"></span><span class="anchor" id="line-29-5"></span><span class="anchor" id="line-30-4"></span><span class="anchor" id="line-31-4"></span><span class="anchor" id="line-32-4"></span><span class="anchor" id="line-33-4"></span><span class="anchor" id="line-34-4"></span><span class="anchor" id="line-35-4"></span><span class="anchor" id="line-36-4"></span><span class="anchor" id="line-37-3"></span><span class="anchor" id="line-38-3"></span><span class="anchor" id="line-39-3"></span><span class="anchor" id="line-40-3"></span><span class="anchor" id="line-41-3"></span><span class="anchor" id="line-42-3"></span><span class="anchor" id="line-43-3"></span><span class="anchor" id="line-44-3"></span><span class="anchor" id="line-45-2"></span><span class="anchor" id="line-46-2"></span><span class="anchor" id="line-47-2"></span><span class="anchor" id="line-48-2"></span><div class="highlight python"><div class="codearea" dir="ltr" lang="en">
+<script type="text/javascript">
+document.write('<a href="#" onclick="return togglenumber(\'CA-b6b446f9612804e2d3da4fd50cc89150d56d2404\', 48, 1);" \
+                class="codenumbers">Toggle line numbers<\/a>');
+</script>
+<pre dir="ltr" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404" lang="en"><span class="line"><span class="LineNumber"><a href="#CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_48">  48</a> </span><span class="LineAnchor" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_48"></span><span class="anchor" id="line-1-30"></span><span class="ResWord">if</span> <span class="ID">__name__</span> == <span class="String">'</span><span class="String">__main__</span><span class="String">'</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_49">  49</a> </span><span class="LineAnchor" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_49"></span><span class="anchor" id="line-2-25"></span>    <span class="ResWord">try</span>:</span>
+<span class="line"><span class="LineNumber"><a href="#CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_50">  50</a> </span><span class="LineAnchor" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_50"></span><span class="anchor" id="line-3-22"></span>        <span class="Comment">#Testing our function</span></span>
+<span class="line"><span class="LineNumber"><a href="#CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_51">  51</a> </span><span class="LineAnchor" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_51"></span><span class="anchor" id="line-4-19"></span>        <span class="ID">move</span>()</span>
+<span class="line"><span class="LineNumber"><a href="#CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_52">  52</a> </span><span class="LineAnchor" id="CA-b6b446f9612804e2d3da4fd50cc89150d56d2404_52"></span><span class="anchor" id="line-5-19"></span>    <span class="ResWord">except</span> <span class="ID">rospy</span>.<span class="ID">ROSInterruptException</span>: <span class="ResWord">pass</span></span>
+</pre></div></div><span class="anchor" id="line-9-12"></span><p class="line874"> <span class="anchor" id="line-153"></span><span class="anchor" id="line-154"></span><p class="line874">Now , you can test and move your robot! <span class="anchor" id="line-155"></span><span class="anchor" id="line-156"></span><p class="line867">
+<h2 id="Testing_the_code">Testing the code</h2>
+<span class="anchor" id="line-157"></span><p class="line862">In a <strong>new terminal</strong>, run: <span class="anchor" id="line-158"></span><span class="anchor" id="line-159"></span><span class="anchor" id="line-160"></span><pre><span class="anchor" id="line-1-31"></span>$ roscore </pre><span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span><p class="line862">In a <strong>new terminal</strong>, run: <span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span><span class="anchor" id="line-165"></span><pre><span class="anchor" id="line-1-32"></span>$ rosrun turtlesim turtlesim_node </pre><span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><p class="line874">The turtlesim window will open: <span class="anchor" id="line-168"></span><span class="anchor" id="line-169"></span><ul><li style="list-style-type:none"><p class="line891"><img alt="turtle_spawned.png" class="attachment" src="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=get&amp;target=turtle_spawned.png" title="turtle_spawned.png" /> <span class="anchor" id="line-170"></span><span class="anchor" id="line-171"></span></li></ul><p class="line862">Now, in a <strong>new terminal</strong>, run our code: <span class="anchor" id="line-172"></span><span class="anchor" id="line-173"></span><span class="anchor" id="line-174"></span><pre><span class="anchor" id="line-1-33"></span>$ rosrun turtlesim_cleaner move.py</pre><span class="anchor" id="line-175"></span><span class="anchor" id="line-176"></span><p class="line874">Just type your inputs and the turtle will move! Here we have an example: <span class="anchor" id="line-177"></span><span class="anchor" id="line-178"></span><span class="anchor" id="line-179"></span><span class="anchor" id="line-180"></span><span class="anchor" id="line-181"></span><span class="anchor" id="line-182"></span><pre><span class="anchor" id="line-1-34"></span>Let's move your robot
+<span class="anchor" id="line-2-26"></span>Input your speed:1
+<span class="anchor" id="line-3-23"></span>Type your distance:3
+<span class="anchor" id="line-4-20"></span>Foward?: 0</pre><span class="anchor" id="line-183"></span><span class="anchor" id="line-184"></span><p class="line874">The turtle will move like this: <span class="anchor" id="line-185"></span><span class="anchor" id="line-186"></span><ul><li style="list-style-type:none"><p class="line891"><img alt="turtle_moved.png" class="attachment" src="/turtlesim/Tutorials/Moving%20in%20a%20Straight%20Line?action=AttachFile&amp;do=get&amp;target=turtle_moved.png" title="turtle_moved.png" /> <span class="anchor" id="line-187"></span><span class="anchor" id="line-188"></span></li></ul><p class="line862">Now you can go to the next tutorial! Learn how to <a href="/turtlesim/Tutorials/Rotating%20Left%20and%20Right">rotate</a> your turtle. <span class="anchor" id="line-189"></span><span class="anchor" id="line-190"></span><p class="line867"><span class="anchor" id="line-191"></span><p class="line867"><span class="anchor" id="line-192"></span><p class="line867"><span class="anchor" id="line-193"></span><span class="anchor" id="bottom"></span></div></div>
+<div id="pagebottom"></div>
+</div>
+
+<p id="pageinfo" class="info" lang="en" dir="ltr">Wiki: turtlesim/Tutorials/Moving in a Straight Line  (last edited 2016-10-25 21:12:02 by <span title="CleberCoutoFilho @ 200.128.7.70[200.128.7.70]"><a href="/CleberCoutoFilho" title="CleberCoutoFilho @ 200.128.7.70[200.128.7.70]">CleberCoutoFilho</a></span>)</p>
+
+
+
+
+<div style="margin-top: 9px;" class="footer">
+Except where otherwise noted, the ROS wiki is licensed under the <br /><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> | <a href="https://plus.google.com/113789706402978299308" rel="publisher">Find us on Google+</a>
+<hr style="margin-top: 10px;">
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+<a href="http://www.osrfoundation.org"><img style="margin-top: -1px;" src="/custom/images/brought_by_horiz.png"></p></a>
+  </div>
+</div>
+</div>
+
+  </div></div> <!-- /#dpage-inner, /#dpage -->
+
+
+</body>
+</html>
+

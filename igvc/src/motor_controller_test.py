@@ -6,7 +6,7 @@ import std_msgs.msg as msg
 import serial
 from collections import namedtuple
 
-MAX_SPEED_EFFORT = 60
+MAX_SPEED_EFFORT = 40
 MAX_TURN_EFFORT = 15
 
 # Add more commands
@@ -21,13 +21,22 @@ commands = MotorControlCommands(
         '!B', '!b',
         '?K', '?E','?V')
 
+ser = serial.Serial(
+    port='/dev/ttyUSB0',
+    baudrate=9600,
+    timeout=1,
+    parity=serial.PARITY_EVEN,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.SEVENBITS,
+)
+
 def speed_callback(speed):
-    rospy.loginfo('Speed received: ' + str(int(speed.data)))
+    #rospy.loginfo('Speed received: ' + str(int(speed.data)))
     change_speed(int(speed.data))
     pass
 
 def turn_callback(turn):
-    rospy.loginfo('Turn received: ' + str(int(turn.data)))
+    #rospy.loginfo('Turn received: ' + str(int(turn.data)))
     change_turn(int(turn.data))
     pass
 
@@ -39,15 +48,17 @@ def change_speed(speed_effort):
     else:
         message = commands.COM_BACKW_CH2
 
-    if (abs(speed_effort) > MAX_SPEED_EFFORT):
+    speed_effort = abs(speed_effort)
+
+    if (speed_effort > MAX_SPEED_EFFORT):
         rospy.loginfo('Over max speed effort')
-        effort_str = '7F'
-    else:
-        effort_str = hex(speed_effort)[2:]
+        speed_effort = MAX_SPEED_EFFORT
 
-    rospy.loginfo('Speed command: ' + message + effort_str)
+    effort_str = "{0:#0{1}x}".format(speed_effort,4)[2:]
 
-    #ser.write(message + effort_str)
+    #rospy.loginfo('Speed command: ' + message + effort_str)
+
+    write_byte(message + effort_str)
 
 
 def change_turn(turn_effort):
@@ -58,15 +69,24 @@ def change_turn(turn_effort):
     else:
         message = commands.COM_RIGHT_CH1
 
-    if (abs(turn_effort) > MAX_TURN_EFFORT):
-        rospy.loginfo('Over max speed effort')
-        effort_str = '7F'
-    else:
-        effort_str = hex(turn_effort)[2:]
+    turn_effort = abs(turn_effort)
 
-    rospy.loginfo('Turn command: ' + message + effort_str)
+    if (turn_effort > MAX_TURN_EFFORT):
+        rospy.loginfo('Over max turn effort')
+        turn_effort = MAX_TURN_EFFORT
 
-    #ser.write(message + effort_str)
+    effort_str = "{0:#0{1}x}".format(abs(turn_effort),4)[2:]
+
+    #rospy.loginfo('Turn command: ' + message + effort_str)
+
+    write_byte(message + effort_str)
+
+def init_serial_mode():
+    for i in range(0, 10):
+        ser.write('\r')
+
+def write_byte(string):
+    ser.write((string + '\r').encode())
 
 def main():
     rospy.init_node('motor_controller_test')
@@ -84,4 +104,5 @@ def main():
 
 
 if __name__ == '__main__':
+    init_serial_mode()
     main()

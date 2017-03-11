@@ -52,8 +52,11 @@ def get_response(self):
         resp += ser.read(1)
     return resp
 
+def write_byte(string):
+    ser.write((string + '\r').encode())
+
 def get_speed(self, wheel_side):
-    ser.write(commands.QUE_SPEED)
+    write_byte(commands.QUE_SPEED)
     effort = int(resp, 16)
     speed = Vehicle.WHEEL_CIRCUM * Vehicle.MAX_RPM * 
             (effort * 1.0 / Vehicle.MAX_EFFORT) 
@@ -77,7 +80,17 @@ def change_speed(self, wheel_side, speed):
     else:
         effort_str = hex(round(needed_effort))[2:]
 
-    ser.write(message + effort_str) # TODO: Make a wrapper for serial write?
+    write_byte(message + effort_str) 
+
+def vel_callback(msg):
+    linear_vel = msg.linear.x
+    angular_vel = msg.angular.x
+
+    left_speed = linear_vel + angular_vel * Vehicle.wheel_separation / 2 
+    right_speed = linear_Vel - angular_vel * Vehicle.wheel_separation / 2
+
+    change_speed(left_speed)
+    change_speed(right_speed)
 
 def main():
     rospy.init_node('motor_controller')
@@ -86,14 +99,31 @@ def main():
     left_whl_pub = rospy.Publisher('lwheel', Float32, queue_size=10)
     right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
     
+    prev_time = rospy.Time.from_sec(time.time())
     current_time = rospy.Time.from_sec(time.time())
     while not rospy.is_shudown():
-        prev_time = current_time
 
-        left_whele
+        # TODO: Calculate speed using time differential
+        left_wheel_speed = get_speed(Vehicle.LEFT);
+        right_wheel_speed = get_speed(Vehicle.RIGHT);
+        
+        current_time = rospy.Time.from_sec(time.time())
+        
+        left_wheel_vel = left_wheel_speed / (current_time - prev_time)
+        right_wheel_vel = right_wheel_speed / (current_time - prev_time)
+        
+        prev_time = current_time
+        
+        left_whl_pub.publish(left_wheel_vel)
+        right_whl_pub.publish(right_wheel_vel)
 
         rospy.spin()
 
 
+def init_serial_mode():
+    for i in range(0, 10):
+        ser.write('\r')
+
 if __name__ == '__main__':
+    init_serial_mode()
     main()

@@ -1,5 +1,5 @@
-Current developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu)
-Previous developers: Mike Castellana, Basileal Imana, Barok Imana
+Current developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu), Basileal Imana (basileal.imana@trincoll.edu), Barok Imana (Barok.imana@trincoll.edu)
+Previous developers: Mike Castellana
 
 Note that this file is formatted as Github flavored markdown.
 
