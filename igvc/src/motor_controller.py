@@ -95,7 +95,7 @@ def vel_callback(msg):
 def main():
     rospy.init_node('motor_controller')
 
-    cmd_vel_sub = rospy.Subscriber('cmd_vel_sub', cmd_vel, vel_callback)
+    cmd_vel_sub = rospy.Subscriber('mux_cmdvel', cmd_vel, vel_callback)
     left_whl_pub = rospy.Publisher('lwheel', Float32, queue_size=10)
     right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
     
