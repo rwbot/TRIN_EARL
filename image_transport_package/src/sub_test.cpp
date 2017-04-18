@@ -76,9 +76,10 @@ cv::namedWindow("FINAL");
 
   
   image_transport::Subscriber sub_j1 = it.subscribe("videoJ1", 1, imageCallbackJ1);
-  cout<<"TEST"<<endl;
+  cout<<"Subscribing to topic videoJ1"<<endl;
+  
   image_transport::Subscriber sub_j2 = it.subscribe("videoJ2", 1, imageCallbackJ2);
-  cout<<"TEST2"<<endl;
+  cout<<"Subscribing to topic videoJ2"<<endl;
 
 
 vector<Mat> imgs;

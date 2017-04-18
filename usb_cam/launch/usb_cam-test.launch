@@ -4,7 +4,7 @@
       <param name="video_device" value="/dev/video0" />
       <param name="image_width" value="640" />
       <param name="image_height" value="480" />
-      <param name="pixel_format" value="mjpeg" />
+      <param name="pixel_format" value="yuyv" />
       <param name="camera_frame_id" value="right" />
       <param name="io_method" value="mmap"/>
       <param name="camera_name" value="right" />
@@ -14,7 +14,7 @@
       <param name="video_device" value="/dev/video1" />
       <param name="image_width" value="640" />
       <param name="image_height" value="480" />
-      <param name="pixel_format" value="mjpeg" />
+      <param name="pixel_format" value="yuyv" />
       <param name="camera_frame_id" value="left" />
       <param name="io_method" value="mmap"/>
       <param name="camera_name" value="left" />

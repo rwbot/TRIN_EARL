@@ -155,8 +155,10 @@ Setting up the Jetsons and Connecting to Camera
 4. The USB-serial cable that we have need a 'gender changer' or adapter
 
 ######If connected via network
-1. ssh -X ubuntu@Jetson1
-2. ssh -X ubuntu@Jetson2
+1. ssh -X ubuntu@Jetson1 (or Jetson IP address)
+2. ssh -X ubuntu@Jetson2 
+
+Modify the /etc/hosts to properly point the IP address of Jetsons to their name
 
 3. Run *source devel/setup.bash* on each (or, better, put those commands in ~/.bashrc if not already)
 

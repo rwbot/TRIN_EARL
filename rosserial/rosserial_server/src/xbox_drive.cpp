@@ -38,7 +38,7 @@ int sgn(float x) {
  * Call back for topics recived from joy node
  * 
  * calculated speed is in range -55 to 55
- * calculated speed is in range -11 to 11
+ * calculated turn is in range -11 to 11
  *
  */
 void callback(const sensor_msgs::Joy::ConstPtr& msg) {
