@@ -70,13 +70,13 @@ int main(int argc, char **argv) {
     NodeHandle out;
 
     // initialize publishers
-    Publisher speed_pub = out.advertise<std_msgs::Int8>("motor_speed", 1000);
-    Publisher turn_pub = out.advertise<std_msgs::Int8>("motor_turn", 1000);
+    Publisher speed_pub = out.advertise<std_msgs::Int8>("motor_speed", 1);
+    Publisher turn_pub = out.advertise<std_msgs::Int8>("motor_turn", 1);
 
     // initialize subscriber and register callback
     ros::Subscriber sub = n.subscribe("joy", 1000, callback);
 
-    Rate loop_rate(100);
+    Rate loop_rate(10);
     while (ros::ok()) {
         // create messages
         std_msgs::Int8 msg_speed, msg_turn;
