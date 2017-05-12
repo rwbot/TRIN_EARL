@@ -25,7 +25,7 @@ class Vehicle:
     WHEEL_DIA = 0.42                    # all measurements are in meters
     WHEEL_CIRCUM = math.pi * WHEEL_DIA
     WHEEL_SEPARTION = 0.69
-    MAX_RPM = 2188.0 
+    MAX_RPM = 2188.0
     MAX_EFFORT = 127
 
 ser = serial.Serial(

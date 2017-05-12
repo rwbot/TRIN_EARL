@@ -9,6 +9,7 @@
 
 	<!-- ************* Sensors *************** -->
 
+	<!--
 	<node pkg="igvc" type="fake_scan" name="laser_scan">
 		<param name="frame_id" value="laser_frame"/>
 		<param name="calibrate_time" type="bool" value="true"/>  
@@ -17,6 +18,7 @@
 		<param name="max_ang" value="3.14"/>    
 		<param name="cluster" value="1"/>
 	</node>
+	--> 
 
 	<node name="rplidarNode" pkg="rplidar_ros"  type="rplidarNode">
 		<param name="serial_port"         type="string" value="/dev/ttyUSB0"/>  
@@ -30,6 +32,7 @@
 
 	<!-- include file="$(find usb_cam)/launch/usb_cam-test.launch" respawn="true" / -->
 	
+	<!-- 
 	<include file="$(find phidgets_imu)/launch/imu2.launch" />
 
 	<node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
@@ -42,6 +45,8 @@
 		<param name="rot_covariance" value="99999" />
 		<param name="frame_id" value="base_link" />
 	</node>
+
+	-->
 
 
 	<!-- ********** Mapping and Odometry **************** -->
@@ -166,6 +171,7 @@
 
 	<node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" />
 
+	<node pkg="igvc" type="diff_ty.py" name="diff_ty" />
 	<!-- ******** Transforms *********** -->
 
 	<!--node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0.1 0 0.75 0 0 0 /base_link /camera 50" / -->

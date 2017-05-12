@@ -37,7 +37,7 @@ Download the stack from our repository into your catkin workspace (e.g.,
 
 Install any dependencies using [rosdep](http://www.ros.org/wiki/rosdep).
 
-    rosdep install imu_tools
+ 	rosdep install imu_tools
 
 Compile the stack:
 

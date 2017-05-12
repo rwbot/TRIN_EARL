@@ -74,22 +74,24 @@ Fovis_ros consists of fovis_ros and libfovis ROS package
 * Install libuvc here : https://int80k.com/libuvc/doc/
 * Install libgps = sudo apt-get install libgps-dev
 
-Warnings
+
+###Running things with Xbox controller
+--------
+    roslaunch rosserial_server man_drive.launch
+    sudo xboxdrv --silent 
+    (if the command fails) sudo rmmod xpad
+    password: Contact jinpyojeon@trincoll.edu / Jin
+
+Warnings for xboxdrv
 ----------
 * Dont install ubuntu-xboxdrv (install just xboxdrv)
 
 
-Optional
-------------
-* sudo apt-get install ros-jade-imu-tools
-* source devel/setup.bash
-1. git clone (git directory)
-2. rosdep imu_tools 
-
-* in .bashrc, put:
+In bashrc
+---------
 	* source /opt/ros/jade/setup.bash
 	* source /catkin_ws/install/setup.bash
-* Run /catkin_ws/devel/setup.bash for good measure
+    * source /catkin_ws/devel/setup.bash
 
 General guidelines
 ------------------
@@ -122,12 +124,6 @@ catkin_make --pkg rosserial_server
 
 Man_drive location: ~/catkin_ws/src/rosserial/rosserial_server/src/man_drive_update.cpp
 
-Run commands 
-------------
-roslaunch rosserial_server man_drive.launch
-sudo xboxdrv --silent 
--== sudo rmmod xpad
-password: Contact jinpyojeon@trincoll.edu / Jin
 
 Arduino
 -----------
@@ -158,13 +154,13 @@ Setting up the Jetsons and Connecting to Camera
 1. ssh -X ubuntu@Jetson1 (or Jetson IP address)
 2. ssh -X ubuntu@Jetson2 
 
-Modify the /etc/hosts to properly point the IP address of Jetsons to their name
+Modify the /etc/hosts to properly point the IP address of Jetsons to their name - refer to ROS on multiple networks page
 
 3. Run *source devel/setup.bash* on each (or, better, put those commands in ~/.bashrc if not already)
 
 4. roslaunch image_transport_package steam.launch
 
-Emergency Lights
+###Emergency Lights
 -----------------
 The lights will be attached to the arduino, 
 with its cables attached to port 13 (signal), power 3.3v, and ground.
@@ -228,12 +224,4 @@ Working in Gazebo
 * Sending commands (through topic): Use rosrun rqt_gui rqt_gui 
 	- See http://gazebosim.org/tutorials?tut=ros_control&cat=connect_ros
 * The Gazebo plugin directory is ~/gazebo_plugins
-
-
-TODOS
------------------
-* https://www.youtube.com/watch?v=LzyMQVSJvzY
-	* =Forbot?? point distance?? 
-	* =Seam time
-* Look into dynamic reconfigure for simulation variable setting
 

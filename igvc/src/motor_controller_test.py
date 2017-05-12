@@ -12,6 +12,9 @@ import numpy
 MAX_SPEED_EFFORT = 60
 MAX_TURN_EFFORT = 15
 
+left_speed_pub = rospy.Publisher('lwheel', msg.Float32, queue_size=10)
+right_speed_pub = rospy.Publisher('rwheel', msg.Float32, queue_size=10)
+
 # 0.317
 # Add more commands
 MotorControlCommands = namedtuple(
@@ -150,11 +153,17 @@ def calculate_speed():
 
     # 0.0141 taken from effort vs speed data collected using
     # arduino and a photosensor
+
+
     left_speed = 0.0141 * left_effort
     right_speed = 0.0141 * right_effort
 
     print "Left velocity: " + str(left_speed) + "m/s"
     print "Right velocity: " + str(right_speed) + "m/s"
+
+    left_speed_pub.publish(left_speed)
+    right_speed_pub.publish(right_speed)
+
 
 
 def main():
@@ -163,6 +172,8 @@ def main():
 
     motor_speed_sub = rospy.Subscriber('motor_speed', msg.Int8, speed_callback)
     motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)
+
+    
 
     #rate = rospy.Rate(1)  # 10hz
 
