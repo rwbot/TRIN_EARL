@@ -1,47 +1,47 @@
 #!/usr/bin/env python
 
-# Utilizes mux to multiplex the cmd_vel on the prompt of some controller
-# so that the robot could be controlled manually and autonomously 
+# Disable and enable autonomous control by redirecting the odometry
 
 import rospy
 from std_msgs.msg import Bool
-from sensor_msgs.msg import Joy
+from nav_msgs.msg import Odometry
+from std_srvs.srv import SetBool
 
-is_autonomous = True
+is_autonomous = False
 
-def control_callback(button):
-    global is_autonomous
-    if (button[7]):
-        is_autonomous = !(is_autonomous)
+def set_autonomous(req):
+    is_autonomous = req.data
+    rospy.loginfo("is_autonomous is set to %r" % is_autonomous)
+    resp = SetBool()
+    resp.success = True
+    return resp
 
-def blink(cond):
-    rospy.wait_for_service('blink')
-    try:
-       blink = rospy.ServiceProxy('blink', Bool)
-       resp = blink(cond)
-       return resp.Sucess
-    except rospy.ServiceException e:
-        print 'Service call failed %s' % e
+def odom_callback(msg, odom_pub):
+    if is_autonomous:
+        odom_pub.publish(msg)
 
 def multiplexer():
     global autonomous 
     rospy.init_node('multiplexer')
-    rospy.Subscriber('joy_start', Joy, control_callback)
+    
+    pub = rospy.Publisher('is_autonomous', Bool, queue_size=10)
+    odom_pub = rospy.Publisher('odom', Odometry, queue_size=10)
+
+    rospy.Subscriber('nav_odom', Odometry, odom_callback, odom_pub)
+    
+    s = rospy.Service('redirect_odom', SetBool, set_autonomous)
+
     rate = rospy.Rate(10)
     
     while not rospy.is_shutdown():
-        try:
-           select_mux = rospy.ServiceProxy('mux/select', MuxSelect)
-            if is_autonomous:
-                select_mux('cmd_vel')
-                blink(True)
-            else: 
-                select_mux('joystick_cmdvel')
-                blink(False)
-        except rospy.ServiceException e:
-            print('Service call failed: %s' % e)
+        if is_autonomous:
+            pub.publish(True)
+        else:
+            pub.publish(False)
 
+        rospy.spin()
         rate.sleep()
+
 
 if __name__ == '__main__':
     multiplexer() 

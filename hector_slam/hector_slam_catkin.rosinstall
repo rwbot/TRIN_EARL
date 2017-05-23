@@ -1,4 +1,0 @@
-- git:
-    uri: https://github.com/tu-darmstadt-ros-pkg/hector_slam.git
-    local-name: src/hector_slam
-    version: catkin

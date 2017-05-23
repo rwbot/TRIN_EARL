@@ -3,17 +3,26 @@
 import time
 import rospy
 import std_msgs.msg as msg
+from sensor_msgs.msg import Joy
 import serial
 from collections import namedtuple
 import threading
 import time
 import numpy
+from std_srvs.srv import SetBool
 
-MAX_SPEED_EFFORT = 60
+
+MAX_SPEED_EFFORT = 130
 MAX_TURN_EFFORT = 15
+
+is_autonomous = False
 
 left_speed_pub = rospy.Publisher('lwheel', msg.Float32, queue_size=10)
 right_speed_pub = rospy.Publisher('rwheel', msg.Float32, queue_size=10)
+
+
+# TODO: Implement Subscriber to Joy that listens to start key 
+# and enable/disable motor output from this node 
 
 # 0.317
 # Add more commands
@@ -28,8 +37,10 @@ commands = MotorControlCommands(
         '!B', '!b',
         '?k', '?E','?V')
 
+
 ser = serial.Serial(
-    port='/dev/ttyUSB1',
+    # port='/dev/ttyUSB1',
+    port=rospy.get_param('~port', '/dev/ttyUSB0'),
     baudrate=9600,
     timeout=1,
     parity=serial.PARITY_EVEN,
@@ -37,18 +48,34 @@ ser = serial.Serial(
     bytesize=serial.SEVENBITS,
 )
 
+
 cur_speed_effort = 0
 cur_turn_effort = 0
-
+is_autonomous = False
 sem = threading.Semaphore()
 
+def joy_callback(msg):
+    global is_autonomous
+    if (msg.buttons[7]):
+        is_autonomous = not is_autonomous
+        rospy.loginfo("Autonomous mode is set to %r" % is_autonomous)
+        rospy.wait_for_service('redirect_odom')
+        redirect_odom = rospy.ServiceProxy('redirect_odom', SetBool)
+        try:
+            resp = redirect_odom(is_autonomous)
+        except rospy.ServiceException:
+            rospy.logerr("Redirect odom service call failed") 
+
+
 def speed_callback(speed):
-    #change_speed(65)
-    change_speed(int(speed.data))
+    if not is_autonomous:
+        # change_speed(60)
+        change_speed(int(speed.data))
 
 def turn_callback(turn):
-    #change_turn(-30)
-    change_turn(int(turn.data))
+    if not is_autonomous:
+        #change_turn(-30)
+        change_turn(int(turn.data))
 
 def change_speed(speed_effort):
     global cur_speed_effort
@@ -95,25 +122,27 @@ def change_turn(turn_effort):
 
     #rospy.loginfo('Turn command: ' + message + effort_str)
 
-    write_byte(message + effort_str)
-    
-
-    
+    write_byte(message + effort_str)    
 
 def init_serial_mode():
     for i in range(0, 10):
         ser.write('\r')
-    get_response()
-    get_response()
+
+    write_byte('^FF') # Restart controller to apply params
+    #print(get_response())
+
+    #get_response() # To clear out initial non-numerial response
+    #get_response()
 
 def write_byte(string, get_speed=False):
     sem.acquire()
     ser.write((string + '\r').encode())
     
+    print string
+
     resp = get_response().strip()[2:5]
-    if get_speed:
-       print resp
-    # print resp
+    #if get_speed:
+       # print resp
     if get_speed and resp:
         try: 
             print int(resp, 16)
@@ -154,7 +183,6 @@ def calculate_speed():
     # 0.0141 taken from effort vs speed data collected using
     # arduino and a photosensor
 
-
     left_speed = 0.0141 * left_effort
     right_speed = 0.0141 * right_effort
 
@@ -171,9 +199,9 @@ def main():
     rospy.init_node('motor_controller_test')
 
     motor_speed_sub = rospy.Subscriber('motor_speed', msg.Int8, speed_callback)
-    motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)
+    motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  
 
-    
+    joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
 
     #rate = rospy.Rate(1)  # 10hz
 
@@ -187,9 +215,7 @@ def main():
     while not rospy.is_shutdown():
         prev_time = current_time
         print "in loop"
-
         rospy.spin()
-        #
 
     #t.join()
 
@@ -197,5 +223,4 @@ def main():
 
 if __name__ == '__main__':
     init_serial_mode()
-
     main()

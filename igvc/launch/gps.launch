@@ -1,0 +1,12 @@
+<launch>	
+	<node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
+		<param name="port" value="/dev/ttyUSB1" />
+	</node>
+
+	<node pkg="gps_common" type="utm_odometry_node" name="gps_conv">
+		<remap from="odom" to="vo" />
+		<remap from="fix" to="/gps/fix" />
+		<param name="rot_covariance" value="99999" />
+		<param name="frame_id" value="base_link" />
+	</node>
+</launch>

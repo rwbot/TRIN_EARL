@@ -75,11 +75,12 @@ Fovis_ros consists of fovis_ros and libfovis ROS package
 * Install libgps = sudo apt-get install libgps-dev
 
 
-###Running things with Xbox controller
---------
+#Running things with Xbox controller
+--------------------
     roslaunch rosserial_server man_drive.launch
+    rosrun joy joy_node
+    rosrun rosserial_server xbox_drive
     sudo xboxdrv --silent 
-    (if the command fails) sudo rmmod xpad
     password: Contact jinpyojeon@trincoll.edu / Jin
 
 Warnings for xboxdrv
@@ -123,11 +124,6 @@ catkin_make --pkg rosserial_server
 
 
 Man_drive location: ~/catkin_ws/src/rosserial/rosserial_server/src/man_drive_update.cpp
-
-
-Arduino
------------
-The Arduino code is in the catkin_ws as well.
 
 ROS Commands
 ----------------
@@ -201,27 +197,4 @@ Square refers to the size of the squares in meters
 Image view
 -------------
 rosrun image_view stereo_view stereo:=stereo image:=image_rect _queue_size:=1000 _approximate_sync:=True
-
-Things tested (to be) with Gazebo Sim
------------------------------------
-* motor_controller.cpp & odom transform (diff_tf.py)
-* integration of sensors (EKF) and its transform of odometry
-* path planning variables in launch (nav stack)
-* transforms (also in launch)
-* speed and acceleration restrictions (i.e. motor controller options)
-* line detection (with camera feed) 
-  * OpenCV test
-* Turn & obstacles (e.g. if line is exited)
-
-#### What is not tested
-* Actual, physical sensors
-* Motor controller functions
-
-Working in Gazebo 
---------------------
-
-* Go to here for the shortcuts: http://gazebosim.org/hotkeys
-* Sending commands (through topic): Use rosrun rqt_gui rqt_gui 
-	- See http://gazebosim.org/tutorials?tut=ros_control&cat=connect_ros
-* The Gazebo plugin directory is ~/gazebo_plugins
 

@@ -151,8 +151,8 @@ class DiffTf:
                 d_left = 0
                 d_right = 0 
             else:
-                d_left = self.left / elapsed
-                d_right = self.right / elapsed
+                d_left = self.left / (elapsed * 1000) # distance in seconds
+                d_right = self.right / (elapsed * 1000) 
                 #rospy.loginfo("Speed is not empty  elapsed: %f d_left: %f  d_right: %f" % (elapsed, d_left, d_right))
            
             # distance traveled is the average of the two wheels 

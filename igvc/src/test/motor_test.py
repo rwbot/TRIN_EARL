@@ -61,11 +61,11 @@ def main():
             # For modes refer to page 148
             
         elif input == 'command':
-            write_byte("!A10")
+            write_byte("!A20")
             print(get_response())
 
-            # write_byte("!B10")
-            # print(get_response())
+            write_byte("!B20")
+            print(get_response())
             # time.sleep(0.10)
             # print(get_response())
 
