@@ -25,9 +25,9 @@ def multiplexer():
     rospy.init_node('multiplexer')
     
     pub = rospy.Publisher('is_autonomous', Bool, queue_size=10)
-    odom_pub = rospy.Publisher('odom', Odometry, queue_size=10)
+    odom_pub = rospy.Publisher('cmd_vel', Odometry, queue_size=10)
 
-    rospy.Subscriber('nav_odom', Odometry, odom_callback, odom_pub)
+    rospy.Subscriber('nav_cmd_vel', Odometry, odom_callback, odom_pub)
     
     s = rospy.Service('redirect_odom', SetBool, set_autonomous)
 

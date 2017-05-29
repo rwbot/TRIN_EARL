@@ -1,0 +1,27 @@
+<launch>
+
+	<!-- Arguments -->
+  <arg name="camera" default="/stereo"/>
+  <!--   <param name="/use_sim_time" value="true"/> -->
+ 
+  <!-- Run the stereo image proc -->
+  <node ns="$(arg camera)" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true">
+  	<param name="approximate_sync" value="true" />
+	<param name="queue_size" value="10" />
+	<remap from="image" to="image_rect" />
+  </node>
+
+<!-- 
+  <node pkg="viso2_ros" type="stereo_odometer" name="stereo_odometer" respawn="true">
+    <remap from="image" to="image_rect"/>
+    <param name="base_link_frame_id" value="$(arg camera)"/>
+    <param name="approximate_sync" value="true" />
+  </node>
+-->
+
+  <node pkg="tf" type="static_transform_publisher" name="base_to_stereo_tf"  args="0 0 1 -1.570796 0 -1.570796 /base /stereo 10" respawn="true" />
+  <node pkg="tf" type="static_transform_publisher" name="stereo_to_right_tf"  args="0.05 0 0 0 0 0 /stereo /right 10" respawn="true" />
+  <node pkg="tf" type="static_transform_publisher" name="stereo_to_left_tf"  args="-0.05 0 0 0 0 0 /stereo /left 10" respawn="true" />
+
+
+</launch>

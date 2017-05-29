@@ -187,14 +187,22 @@ Refer: http://wiki.ros.org/camera_calibration
 
 The camera calibration file is stored in /.ros/camera_info <=required for rectification
  
-rosrun camera_calibration cameracalibrat.py --size 7x6 --square 0.0121 right:=/stereo/right/image_raw left:=/stereo/left/image_raw right_camera:=/stereo/right left_camera:=/stereo/left --approximate=0.1
+rosrun camera_calibration cameracalibrator.py --size 7x6 --square 0.0121 right:=/stereo/right/image_raw left:=/stereo/left/image_raw right_camera:=/stereo/right left_camera:=/stereo/left --approximate=0.1
 
 Size (8x6) refers to the corners where four corners meet
 Square refers to the size of the squares in meters
 
 -Test image calibration routinely using the checkerboard and looking at the disparity image 
 
-Image view
+Running stereo (two) cameras
 -------------
-rosrun image_view stereo_view stereo:=stereo image:=image_rect _queue_size:=1000 _approximate_sync:=True
+roslaunch usb_cam usb_cam-test.launch
+rosrun image_view stereo_view stereo:=stereo image:=image_raw _queue_size:=1000 _approximate_sync:=True
 
+Running stereo odometry / point cloud 
+---------------
+Calibrate properly first!
+http://wiki.ros.org/camera_calibration/Tutorials/StereoCalibration
+(epipolar error below 0.1)
+Use stereo_image_proc or viso2_ros
+roslaunch viso2_ros stereo

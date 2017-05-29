@@ -29,7 +29,7 @@
     --> 
 
     <node name="rplidarNode" pkg="rplidar_ros"  type="rplidarNode">
-        <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>  
+        <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>  
         <param name="serial_baudrate"     type="int"    value="115200"/>
         <param name="frame_id"            type="string" value="laser_frame"/>
         <param name="inverted"            type="bool"   value="false"/>
@@ -227,7 +227,7 @@
     <node pkg="tf" type="static_transform_publisher" name="base_to_odom_tf" args="0 0 0 0 0 0 /odom /base_link 50" />`
 <!--     <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 67.5 0 0 /base_link /laser_frame 50" />
         -->
-    <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 0 0 0 /base_link /laser_frame 50" />
+    <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 180 0 0 /base_link /laser_frame 50" />
     <!-- node pkg="tf" type="static_transform_publisher" name="base_to_gps_tf"  args="0 1 0 0 0 0 /base_link /gps 50" / -->
 
 </launch>

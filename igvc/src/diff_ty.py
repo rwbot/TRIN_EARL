@@ -80,7 +80,7 @@ class DiffTf:
         # TODO: Change ticks meter
         # self.ticks_meter = float(rospy.get_param('ticks_meter', 50))  # The number of wheel encoder ticks per meter of travel
         # TODO: Modify the base width
-        self.base_width = float(rospy.get_param('~base_width', 0.69)) # The wheel base width in meters
+        self.base_width = float(rospy.get_param('~base_width', 0.465)) # The wheel base width in meters
         
         self.base_frame_id = rospy.get_param('~base_frame_id','base_link') # the name of the base frame of the robot
         self.odom_frame_id = rospy.get_param('~odom_frame_id', 'odom') # the name of the odometry reference frame
@@ -151,8 +151,8 @@ class DiffTf:
                 d_left = 0
                 d_right = 0 
             else:
-                d_left = self.left / (elapsed * 1000) # distance in seconds
-                d_right = self.right / (elapsed * 1000) 
+                d_left = self.left * elapsed  # distance in seconds
+                d_right = self.right * elapsed 
                 #rospy.loginfo("Speed is not empty  elapsed: %f d_left: %f  d_right: %f" % (elapsed, d_left, d_right))
            
             # distance traveled is the average of the two wheels 

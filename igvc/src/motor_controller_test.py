@@ -12,7 +12,7 @@ import numpy
 from std_srvs.srv import SetBool
 
 
-MAX_SPEED_EFFORT = 130
+MAX_SPEED_EFFORT = 80
 MAX_TURN_EFFORT = 15
 
 is_autonomous = False
@@ -64,7 +64,12 @@ def joy_callback(msg):
         try:
             resp = redirect_odom(is_autonomous)
         except rospy.ServiceException:
-            rospy.logerr("Redirect odom service call failed") 
+            pass 
+            
+            # Find way to ensure service call doesn't fail 
+            # The service call works despite the exception
+
+            # rospy.logerr("Redirect odom service call failed") 
 
 
 def speed_callback(speed):

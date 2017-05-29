@@ -9,6 +9,7 @@ import rospy
 import sys
 from gps_common import GPSFix
 from gps_common import GPSStatus
+from geographic_msgs.msg import WayPoint
 
 def main():
 	longitude = rospy.get_param('longitude', 0)
@@ -17,12 +18,10 @@ def main():
 	rospy.init_node('publish_goal_fix')
 	r = rospy.Rate(10)
 	while not rospy.is_shutdown():
-		msg = GPSFix()
-		status = GPSStatus()
-		msg.status = 
-		msg.time = rospy.Time.now()
+		msg = WayPoint()
 		msg.latitude = latitude
 		msg.longitude = longitude
+		msg.altitude = 0
 		pub.publish(msg)	
 
 if __name__ == "__main__":
