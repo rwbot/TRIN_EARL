@@ -1,0 +1,120 @@
+<launch>
+
+    <!-- map visualizer -->
+    <node pkg="rviz" name="rviz" type="rviz" />
+    
+    <!-- listens to joystick -->
+    <node pkg="joy" name="joy" type="joy_node" />
+
+    <!-- takes data from joy node and converst to motor effort -->
+    <node pkg="igvc" name="igvc" type="xbox_drive.py" />
+    
+     <!-- takes motor effort from either xbox_drive or motor controller and sends to motors-->
+    <node pkg="igvc" name="motor_command"  type="motor_commander.py" />
+
+    <!-- takes left and right speed and publishes odom. Gives base link to odom transfrom -->
+    <node pkg="igvc" name="diff_ty" type="diff_ty.py" />
+
+    <!-- multiplexer for switching autonomous on and off -->
+    <node pkg="igvc" name="multiplexer" type="multiplexer.py" />
+
+    <node pkg="igvc" name="odometry" type="ard_odom_translator.py" />
+
+    <arg name="port" default="/dev/ttyACM0" />
+    <node pkg="rosserial_python" name="serial_python" type="serial_node.py" args="$(arg port)" />
+
+    <!-- node reads from lidar sensor -->
+    <node name="rplidarNode" pkg="rplidar_ros"  type="rplidarNode">
+        <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>  
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="laser_frame"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+        <param name="angle_min"           value="3.14159/4"/>
+        <param name="angle_max"           value="-3.14159/4"/>
+    </node>
+
+    <!-- node reads from gps sensor -->
+    <!-- <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
+        <param name="port" value="/dev/ttyUSB2" />
+    </node> -->
+
+    <!-- publishes longtiude and latitude of a single waypoint -->
+<!--     <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> -->
+
+
+    <include file="$(find igvc)/launch/hector_slam.launch" />
+    <!-- gets waypoint from publish_goal_fix, translates to local waypoint and commands move base to move -->
+  <!--   
+    <node pkg="igvc" name="gps_goals" type="gps_goals.py" />
+ -->
+    <!-- Param was updated as to the suggestions of http://geduino.blogspot.it/2015/04/gmapping-and-rplidar.html -->
+    <!-- takes lidar and odom data and makes generates map. Gives map to odom transform. -->
+
+ <!--    
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+            <rosparam>
+              map_frame: map
+              odom_frame: odom
+              map_update_interval: 0.5
+              maxUrange: 5.5
+              maxRange: 5.5
+              sigma: 0.05
+              kernelSize: 1
+              lstep: 0.01
+              astep: 0.02
+              iterations: 5
+              lsigma: 0.075
+              ogain: 3.0
+              lskip: 0
+              minimumScore: 50
+              linearUpdate: 0.2
+              angularUpdate: 0.25
+              temporalUpdate: 5
+              resampleThreshold: 0.5
+              particles: 30
+              xmin: -100.0
+              ymin: -100.0
+              xmax: 100.0
+              ymax: 100.0
+              delta: 0.025
+              llsamplerange: 0.01
+              llsamplestep: 0.01
+              lasamplerange: 0.05
+              lasamplestep: 0.05
+              tf_delay: 0.01
+              base_frame: base_link
+          </rosparam>
+        <remap from="scan" to="lidar_scan" />
+    </node>
+ -->
+
+    <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 135 0 0 /base_link /laser_frame 50" />
+
+
+    <!-- navigation stack -->
+<!--      
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+        <rosparam file="$(find igvc)/param/local_costmap_params.yaml" command="load" />   
+        <rosparam file="$(find igvc)/param/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find igvc)/param/dwa_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find igvc)/param/move_base_params.yaml" command="load" />
+        <rosparam file="$(find igvc)/param/global_planner_params.yaml" command="load" />
+        <rosparam file="$(find igvc)/param/navfn_global_planner_params.yaml" command="load" />
+        <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="local_costmap/global_frame" value="$(arg global_frame_id)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/>
+    </node> 
+-->
+
+
+    <!-- fake map, used only for testing without lidar. Tranform for fake map: map to odom -->
+   <!--  <node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
+        <param name="frame_id" value="map" />
+    </node>
+    <node pkg="tf" type="static_transform_publisher" name="odom_test_tf"  args="0 0 0 0 0 0 /map /odom 100" /> -->
+</launch>

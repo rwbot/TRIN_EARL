@@ -17,27 +17,9 @@ class Vehicle:
     MAX_EFFORT = 127
 
 # Constrains
-MAX_SPEED_EFFORT = 80 
+MAX_SPEED_EFFORT = 45 
 MAX_TURN_EFFORT = 15
 
-ser = serial.Serial(
-    port=rospy.get_param('~port', '/dev/ttyUSB0')
-    baudrate=9600,
-    timeout=1,
-    parity=serial.PARITY_EVEN,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.SEVENBITS)
-
-MotorControlCommands = namedtuple(
-        'MotorControlCommands', 
-        ['COM_LEFT_CH1','COM_RIGHT_CH1',
-         'COM_FOR_CH2','COM_BAC_CH2',
-         'QUE_SPEED','QUE_BATTERY','QUE_VOLT'])
-
-commands = MotorControlCommands(
-        '!A', '!a',
-        '!B', '!b',
-        '?k', '?E','?V')
 
 def get_response():
     resp = ''
@@ -85,52 +67,27 @@ def calculate_motor_effort(left_speed, right_speed):
         return 
     
     if left_speed > 0 and right_speed > 0: # Forward with possibilty of turn
-        write_effort = (max(right_speed, left_speed) - turn_speed ) / 0.0141 
+        speed_effort = (max(right_speed, left_speed) - turn_speed ) / 0.0141 
     else: # Backward with possibility of turn
-        write_effort = (min(right_speed, left_speed) + turn_speed) / 0.0141
+        speed_effort = (min(right_speed, left_speed) + turn_speed) / 0.0141
 
-    change_speed(write_effort)
-    change_turn(turn_effort)
+    return (speed_effort, turn_effort)
 
-
-def change_speed(speed_effort):
-    message = ''
-    if (speed_effort < 0):
-        message = commands.COM_FORW_CH2
-    else:
-        message = commands.COM_BACKW_CH2
-    speed_effort = abs(speed_effort)
-    if (speed_effort > MAX_SPEED_EFFORT):
-        speed_effort = MAX_SPEED_EFFORT
-
-    effort_str = "{0:#0{1}x}".format(speed_effort,4)[2:]
-    write_byte(message + effort_str)
-
-
-# Change turn by effort - called from change_speed 
-def change_turn(turn_effort):
-    message = '' 
-    if (turn_effort < 0):
-        message = commands.COM_LEFT_CH1
-    else:
-        message = commands.COM_RIGHT_CH1
-
-    turn_effort = abs(turn_effort)
-    if (turn_effort > MAX_TURN_EFFORT):
-        turn_effort = MAX_TURN_EFFORT
-
-    effort_str = "{0:#0{1}x}".format(turn_effort, 4)[2:]
-    write_byte(message + effort_str)
 
 # Callback for cmd_vel from navigation stack
-def cmd_vel_callback(msg):
+def cmd_vel_callback(msg, speed_pub, turn_pub):
+    # calculate left and right speed
     linear_vel = msg.linear.x
     angular_vel = msg.angular.x
-
     left_speed = linear_vel + angular_vel * Vehicle.wheel_separation / 2 
     right_speed = linear_Vel - angular_vel * Vehicle.wheel_separation / 2
 
-    calculate_motor_effort(left_speed, right_speed)
+    # calculate motor effort from left and right speed
+    speed_effort, turn_effort = calculate_motor_effort(left_speed, right_speed)
+
+    # publish motor effort
+    speed_pub.publish(speed_effort)
+    turn_pub.publish(turn_effort)
 
 # TODO: Change every calculations to differential drive mode calculations
 #       Refer to closed-loop, differential drive
@@ -138,7 +95,12 @@ def main():
     global left_wheel_speed, right_wheel_speed
     rospy.init_node('motor_controller')
 
-    cmd_vel_sub = rospy.Subscriber('cmd_vel', cmd_vel, cmd_vel_callback)
+    speed_pub = rospy.Publisher('motor_speed', Bool, queue_size=10)
+    turn_pub = rospy.Publisher('motor_turn', Bool, queue_size=10)
+
+    cmd_vel_sub = rospy.Subscriber('cmd_vel', cmd_vel, cmd_vel_callback, speed_pub, turn_pub)
+
+    
     
    while not rospy.is_shudown():
         rospy.spin()

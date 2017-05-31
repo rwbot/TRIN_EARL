@@ -12,7 +12,7 @@ import numpy
 from std_srvs.srv import SetBool
 
 
-MAX_SPEED_EFFORT = 80
+MAX_SPEED_EFFORT = 45
 MAX_TURN_EFFORT = 15
 
 is_autonomous = False
@@ -54,33 +54,28 @@ cur_turn_effort = 0
 is_autonomous = False
 sem = threading.Semaphore()
 
-def joy_callback(msg):
-    global is_autonomous
-    if (msg.buttons[7]):
-        is_autonomous = not is_autonomous
-        rospy.loginfo("Autonomous mode is set to %r" % is_autonomous)
-        rospy.wait_for_service('redirect_odom')
-        redirect_odom = rospy.ServiceProxy('redirect_odom', SetBool)
-        try:
-            resp = redirect_odom(is_autonomous)
-        except rospy.ServiceException:
-            pass 
+# def joy_callback(msg):
+#     global is_autonomous
+#     if (msg.buttons[7]):
+#         is_autonomous = not is_autonomous
+#         rospy.loginfo("Autonomous mode is set to %r" % is_autonomous)
+#         rospy.wait_for_service('redirect_odom')
+#         redirect_odom = rospy.ServiceProxy('redirect_odom', SetBool)
+#         try:
+#             resp = redirect_odom(is_autonomous)
+#         except rospy.ServiceException:
+#             pass 
             
             # Find way to ensure service call doesn't fail 
             # The service call works despite the exception
 
             # rospy.logerr("Redirect odom service call failed") 
 
-
 def speed_callback(speed):
-    if not is_autonomous:
-        # change_speed(60)
-        change_speed(int(speed.data))
+    change_speed(int(speed.data))
 
 def turn_callback(turn):
-    if not is_autonomous:
-        #change_turn(-30)
-        change_turn(int(turn.data))
+    change_turn(int(turn.data))
 
 def change_speed(speed_effort):
     global cur_speed_effort
@@ -100,11 +95,11 @@ def change_speed(speed_effort):
 
     effort_str = "{0:#0{1}x}".format(speed_effort,4)[2:]
 
-    #rospy.loginfo('Speed command: ' + message + effort_str)
+    #rospy.logerr('Speed command: ' + message + effort_str)
 
     write_byte(message + effort_str)
+    #get_response()
     
-
     calculate_speed()
 
 def change_turn(turn_effort):
@@ -125,9 +120,10 @@ def change_turn(turn_effort):
 
     effort_str = "{0:#0{1}x}".format(abs(turn_effort),4)[2:]
 
-    #rospy.loginfo('Turn command: ' + message + effort_str)
+    #rospy.logerr('Turn command: ' + message + effort_str)
 
-    write_byte(message + effort_str)    
+    write_byte(message + effort_str)  
+    #get_response()  
 
 def init_serial_mode():
     for i in range(0, 10):
@@ -140,23 +136,23 @@ def init_serial_mode():
     #get_response()
 
 def write_byte(string, get_speed=False):
-    sem.acquire()
+    #sem.acquire()
     ser.write((string + '\r').encode())
     
-    print string
+    #print string
 
-    resp = get_response().strip()[2:5]
-    #if get_speed:
-       # print resp
-    if get_speed and resp:
-        try: 
-            print int(resp, 16)
-            print ("%d m/s \n" % (((int(resp, 16) / 127.0) * (2188.0 / 60) * 1.2))) # 1.2 estimate of circum
-        except ValueError:
-            sem.release()
-            pass
+    # resp = get_response().strip()[2:5]
+    # #if get_speed:
+    #    # print resp
+    # if get_speed and resp:
+    #     try: 
+    #         print int(resp, 16)
+    #         print ("%d m/s \n" % (((int(resp, 16) / 127.0) * (2188.0 / 60) * 1.2))) # 1.2 estimate of circum
+    #     except ValueError:
+    #         sem.release()
+    #         pass
 
-    sem.release()
+    #sem.release()
 
 def get_speed():
     while True:
@@ -168,8 +164,9 @@ def get_response():
     resp = ''
     while ser.inWaiting() > 0:
         resp += ser.read(1)
-        #print(resp)
+        
     #sem.release()
+    rospy.logerr('Response: ' + resp)
     return resp
 
 t = None
@@ -194,8 +191,8 @@ def calculate_speed():
     print "Left velocity: " + str(left_speed) + "m/s"
     print "Right velocity: " + str(right_speed) + "m/s"
 
-    left_speed_pub.publish(left_speed)
-    right_speed_pub.publish(right_speed)
+    #left_speed_pub.publish(left_speed)
+    #right_speed_pub.publish(right_speed)
 
 
 
@@ -206,11 +203,11 @@ def main():
     motor_speed_sub = rospy.Subscriber('motor_speed', msg.Int8, speed_callback)
     motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  
 
-    joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
+    #joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
 
     #rate = rospy.Rate(1)  # 10hz
 
-    t = threading.Thread(target=get_speed)
+    #t = threading.Thread(target=get_speed)
     #t.start()
 
     rospy.on_shutdown(kill_thread)

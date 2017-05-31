@@ -9,11 +9,11 @@
 
     <node pkg="rviz" type="rviz" name="rviz" />
     
-    <node name="motor_test" pkg="igvc" type="motor_controller_test.py">
+    <node name="motor_test" pkg="igvc" type="motor_commander.py">
         <param name="port"  type="string" value="/dev/ttyUSB0" />
     </node>
     <node name="joy" pkg="joy" type="joy_node" />
-    <node name="xbox_drv" pkg="rosserial_server" type="xbox_drive" />
+    <node name="xbox_drv" pkg="igvc" type="xbox_drive" />
 
     <!-- ************* Sensors *************** -->
 

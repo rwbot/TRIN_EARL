@@ -1,19 +1,22 @@
-#include <stdlib.h> 
 
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
+// IGNORE this file. Refer to xbox_drive.py
 
-#include "std_msgs/String.h"
-#include "std_msgs/Int8.h"
-#include <sstream>
-#include <termios.h>
+# include <stdlib.h> 
 
-#include <sensor_msgs/Joy.h>
+# include <boost/asio.hpp>
+# include <boost/bind.hpp>
+# include <boost/thread.hpp>
 
-#include <ros/ros.h>
+# include "std_msgs/String.h"
+# include "std_msgs/Int8.h"
+# include <sstream>
+# include <termios.h>
 
-#include "rosserial_server/serial_session.h"
+# include <sensor_msgs/Joy.h>
+
+# include <ros/ros.h>
+
+# include "rosserial_server/serial_session.h"
 
 
 using namespace ros;
