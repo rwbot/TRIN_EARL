@@ -187,7 +187,7 @@ Refer: http://wiki.ros.org/camera_calibration
 
 The camera calibration file is stored in /.ros/camera_info <=required for rectification
  
-rosrun camera_calibration cameracalibrator.py --size 7x6 --square 0.0121 right:=/stereo/right/image_raw left:=/stereo/left/image_raw right_camera:=/stereo/right left_camera:=/stereo/left --approximate=0.1
+rosrun camera_calibration cameracalibrator.py --size 7x6 --square 0.0121 right:=/stereo/right/image_raw left:=/stereo/left/image_raw right_camera:=/stereo/right left_camera:=/stereo/left --approximate=0.01
 
 Size (8x6) refers to the corners where four corners meet
 Square refers to the size of the squares in meters

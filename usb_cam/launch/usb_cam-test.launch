@@ -24,7 +24,7 @@
       <param name="camera_info_url" value="file:///home/trin_igvc/.ros/camera_info/left.yaml" />
     </node>  
   </group>
-
+  <!--
   <node name="image_view1" pkg="image_view" type="image_view" respawn="false" output="screen">
     <remap from="image" to="/stereo/left/image_raw"/>
     <param name="autosize" value="true" />
@@ -34,4 +34,5 @@
     <remap from="image" to="/stereo/right/image_raw"/>
     <param name="autosize" value="true" />
   </node>
+-->
 </launch>

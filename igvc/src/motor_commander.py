@@ -125,15 +125,19 @@ def change_turn(turn_effort):
     write_byte(message + effort_str)  
     #get_response()  
 
+# Consider also resetting the motor controller if the motor controller does not work
 def init_serial_mode():
     for i in range(0, 10):
         ser.write('\r')
 
+
+def reset_controller():
     write_byte('^FF') # Restart controller to apply params
     #print(get_response())
 
-    #get_response() # To clear out initial non-numerial response
-    #get_response()
+def set_differential_mode():
+    write_byte('^01 5') # Mixed mode, closed loop
+ 
 
 def write_byte(string, get_speed=False):
     #sem.acquire()
@@ -225,4 +229,6 @@ def main():
 
 if __name__ == '__main__':
     init_serial_mode()
+    reset_controller()
+    set_differential_mode()
     main()

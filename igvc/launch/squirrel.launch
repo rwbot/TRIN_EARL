@@ -34,24 +34,25 @@
         <param name="angle_max"           value="-3.14159/4"/>
     </node>
 
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" /> 
+
     <!-- node reads from gps sensor -->
     <!-- <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
         <param name="port" value="/dev/ttyUSB2" />
     </node> -->
 
     <!-- publishes longtiude and latitude of a single waypoint -->
-<!--     <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> -->
-
-
-    <include file="$(find igvc)/launch/hector_slam.launch" />
+    <!-- <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> -->
+    
     <!-- gets waypoint from publish_goal_fix, translates to local waypoint and commands move base to move -->
-  <!--   
-    <node pkg="igvc" name="gps_goals" type="gps_goals.py" />
- -->
+    <!-- <node pkg="igvc" name="gps_goals" type="gps_goals.py" /> -->
+
+    <!-- <include file="$(find igvc)/launch/hector_slam.launch" /> -->
+
     <!-- Param was updated as to the suggestions of http://geduino.blogspot.it/2015/04/gmapping-and-rplidar.html -->
     <!-- takes lidar and odom data and makes generates map. Gives map to odom transform. -->
 
- <!--    
+    <!-- Make sure to remap the scans to /scan for costmap generation -->
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
             <rosparam>
               map_frame: map
@@ -87,13 +88,16 @@
           </rosparam>
         <remap from="scan" to="lidar_scan" />
     </node>
- -->
+
 
     <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 135 0 0 /base_link /laser_frame 50" />
 
+    <arg name="global_frame_id" value="map" />
+    <arg name="base_frame_id" value="base_link" />
 
     <!-- navigation stack -->
-<!--      
+    <!-- Local planner used is DWA local planner and global is navfn global planner -->
+
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
         <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
@@ -109,8 +113,8 @@
         <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
         <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/>
     </node> 
--->
 
+    <remap from="cmd_vel" to="nav_cmd_vel" />
 
     <!-- fake map, used only for testing without lidar. Tranform for fake map: map to odom -->
    <!--  <node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
