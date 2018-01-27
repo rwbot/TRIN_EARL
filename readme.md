@@ -77,24 +77,30 @@ Fovis_ros consists of fovis_ros and libfovis ROS package
 
 #Running things with Xbox controller
 --------------------
-1 Set up the drivers
-    `sudo xboxdrv --silent`
-2
-    `rosrun joy joy_node
-    rosrun igvc xbox_drive.py`
-3
-    `rosrun igvc motor_controller.py `
-    -Take note of the serial port listed in motor_controller.py 
+1. Set up the drivers for Xbox Controller
+
+`sudo xboxdrv --silent`
+
+2. Run scripts that translate joystick input
+
+`rosrun joy joy_node`
+`rosrun igvc xbox_drive.py`
+
+3. Run motor controller
+    
+`rosrun igvc motor_controller.py `
+
+  1. Take note of the serial port listed in motor_controller.py 
      and make sure it is the serial port of the motor controller
 
 The pipeline goes as follows for manual control 
 joystick input (joy_node) --> motor_speed / motor_turn (xbox_drive.py) --> motor commands (motor_controller)
 
-* Current issue: The motor control via Xbox controller stops every second due to safety lock on controller - 
+Current issue: The motor control via Xbox controller stops every second due to safety lock on controller - 
 		 the solution would be to have a thread that sends out constant char AND update joy node to 
 		 publish regardless of the command (it publishes only if the input changes).
 
-    password: Contact jinpyojeon@trincoll.edu / Jin
+password: Contact jinpyojeon@trincoll.edu / Jin
 
 Warnings for xboxdrv
 ----------
