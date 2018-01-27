@@ -77,10 +77,17 @@ Fovis_ros consists of fovis_ros and libfovis ROS package
 
 #Running things with Xbox controller
 --------------------
-    roslaunch rosserial_server man_drive.launch
-    rosrun joy joy_node
-    rosrun rosserial_server xbox_drive
+1. Set up the drivers
     sudo xboxdrv --silent 
+2. 
+    rosrun joy joy_node
+    rosrun igvc xbox_drive.py
+3. 
+    rosrun igvc motor_controller.py 
+
+The pipeline goes as follows for manual control 
+joystick input (joy_node) --> motor_speed / motor_turn (xbox_drive.py) --> motor commands (motor_controller)
+
     password: Contact jinpyojeon@trincoll.edu / Jin
 
 Warnings for xboxdrv
