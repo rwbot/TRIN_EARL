@@ -20,10 +20,9 @@ def main():
 
 	rospy.init_node('publish_goal_fix')
 
-	with open('config/gps_waypoints.txt') as f:
-		latitude = float(f.readlines())
-		longitude = float(f.readlines())
-		queue.push((latitude, longitude))
+	for line in open('config/gps_waypoints.txt').xreadlines():
+		latitude, longitude = [float(f) for f in line.split(",")]
+		queue.append((latitude, longitude))
 
 	pub = rospy.Publisher('goal_fix', WayPoint, queue_size=10)
 	
