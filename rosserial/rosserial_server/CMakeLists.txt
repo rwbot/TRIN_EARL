@@ -60,20 +60,20 @@ add_dependencies(test_drive rosserial_msgs_gencpp)
 
 
 ## Declare a C++ executable
- add_executable(man_drive2 src/man_drive2.cpp)
+# add_executable(man_drive2 src/man_drive2.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(man_drive2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(man_drive2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
-target_link_libraries(man_drive2 ${catkin_LIBRARIES})
+# target_link_libraries(man_drive2 ${catkin_LIBRARIES})
 
 
-add_executable(xbox_drive src/xbox_drive.cpp)
+# add_executable(xbox_drive src/xbox_drive.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(xbox_drive ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(xbox_drive ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
-target_link_libraries(xbox_drive ${catkin_LIBRARIES})
+# target_link_libraries(xbox_drive ${catkin_LIBRARIES})
 
 install(
   TARGETS ${PROJECT_NAME}_socket_node ${PROJECT_NAME}_serial_node

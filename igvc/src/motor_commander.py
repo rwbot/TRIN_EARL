@@ -136,7 +136,7 @@ def reset_controller():
     #print(get_response())
 
 def set_differential_mode():
-    write_byte('^01 5') # Mixed mode, closed loop
+    write_byte('^01 05') # Mixed mode, closed loop
  
 
 def write_byte(string, get_speed=False):
