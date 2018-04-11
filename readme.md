@@ -213,6 +213,13 @@ Square refers to the size of the squares in meters
 
 -Test image calibration routinely using the checkerboard and looking at the disparity image 
 
+Troubleshooting motor controller
+---------------------
+1. First, try resetting the motor controller (using two hardware switch)
+2. Ensure that the encoder is connected
+3. Verify the connection to the motor controller with an onboard switch
+4. ... 
+
 Running stereo (two) cameras
 -------------
 roslaunch usb_cam usb_cam-test.launch
