@@ -17,6 +17,12 @@ class Vehicle:
     WHEEL_SEPARTION = 0.42
     MAX_EFFORT = 127
 
+ser = serial.Serial(
+    port='/dev/ttyUSB0',
+    baudrate=9600,
+    timeout=1,
+    bytesize=serial.SEVENBITS,
+)
 
 # Constrains
 MAX_SPEED_EFFORT = 45 

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Takes in /joy messages and publishes /motor_speed and /motor_turn
+# for motor_commander.py to use to send command to the motor_controller
+
 import rospy
 from std_msgs.msg import Int8
 from sensor_msgs.msg import Joy

@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# Subscribes to /motor_speed and /motor_turn to 
+# send commands to the motor controller
+
 import time
 import rospy
 import std_msgs.msg as msg
