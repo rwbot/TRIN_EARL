@@ -35,6 +35,28 @@ Other packages that may be required
 * Install dependencies for openslam-gmapping (sudo apt-get install ros-jade-openslam-gmapping)
 * Install popt.h (sudo apt-get install libpopt-dev)
 
+Description of the Programs/Files Used
+===============================
+* IGVC package
+  * __squirrel.launch__: Used to launch all the nodes necessary to run the robot
+  * xbox_drive.py: Translates joystick command to motor commands (/joy => /motor_speed, /motor_turn)
+  * motor_commander.py: Sends motor commands to motor controller (/motor_speed, /motor_turn => Serial write)
+  * multiplixer.py: Used to switch from autonomous and manual by redirecting cmd_vel from navigation package (/nav_cmd_vel => /cmd_vel)
+  * motor_controller.py: Translates /cmd_vel (only published when autonomous mode is enabled) to motor command (/cmd_vel => /motor_speed, /motor_turn)
+  * ard_odom_translator.py: Translates encoder reading from ROS Arduino node to left and right speed (/ard_cpsR, /ard_cpscL => /lwheel, /rwheel)
+  * gps_goals.py: Translates GPS waypoints as relative movement commands for navigation stack (through ROS Action - asynchronous ROS service) (/waypoint, /fix, /odom_combined => Commands move_base (navigation stack))
+  * publish_goal_fix.py: Opens up a textfile of waypoints and holds a queue of GPS waypoints; the queue goes onto next point when prompted by gps_goals.py (text_file, /next_waypoint_srv => /waypoint) 
+* Nodes from other packages (refer to the launch file)
+  * joy/joy_node: Publishes xbox controller messages
+  * rplidar_Ros/rplidarNode: Publishes LIDAR readings
+  * gmapping/slam_gmapping: Node that incorporates SLAM that use LIDAR and other sensor reading to generate odometry 
+    * Alternative is hector_slam, which only uses LIDAR data to generate odometry
+  * tf/static_transform_publisher: Nodes that specify how sensors/parts are located/rotated relative to the center of the robot
+  * move_base/move_base: THE NAVIGATION STACK - approach with awe
+  * rviz/rviz: Visualization software for ROS topics
+  * rosserial_python/serial_node.py: Allows ROS messages coming through serial communication to be published 
+  
+
 Running the Robot
 ==================
 
