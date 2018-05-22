@@ -27,6 +27,9 @@ class ImuRosI : public Imu
     bool calibrateService(std_srvs::Empty::Request  &req,
                           std_srvs::Empty::Response &res);
 
+    bool zeroOutService(std_srvs::Empty::Request  &req,
+                        std_srvs::Empty::Response &res);
+
   private:
 
     ros::NodeHandle nh_;
@@ -35,6 +38,10 @@ class ImuRosI : public Imu
     ros::Publisher  mag_publisher_;
     ros::Publisher  cal_publisher_;
     ros::ServiceServer cal_srv_;
+
+    // custom 
+
+    ros::ServiceServer zero_srv_;
 
     bool initialized_;
     boost::mutex mutex_;
@@ -66,6 +73,26 @@ class ImuRosI : public Imu
     double cc_T3_;
     double cc_T4_;
     double cc_T5_;
+
+    // added in
+
+    double currLinX;
+    double currLinY;
+    double currLinZ;
+
+    double currAngX;
+    double currAngY;
+    double currAngZ;
+
+    double linXZero;
+    double linYZero;
+    double linZZero;
+    
+    bool zeroedOut_ = false;
+    void zeroOut();
+    void negateAccel();
+
+    ///
 
     void calibrate();
     void initDevice();

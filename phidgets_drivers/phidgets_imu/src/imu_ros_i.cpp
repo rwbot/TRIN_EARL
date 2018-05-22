@@ -69,6 +69,9 @@ ImuRosI::ImuRosI(ros::NodeHandle nh, ros::NodeHandle nh_private):
   cal_srv_ = nh_.advertiseService(
     "imu/calibrate", &ImuRosI::calibrateService, this);
 
+  zero_srv_ = nh_.advertiseService(
+    "imu/zeroout", &ImuRosI::zeroOutService, this);
+
   // **** initialize variables and device
   
   imu_msg_.header.frame_id = frame_id_;
@@ -160,6 +163,53 @@ void ImuRosI::calibrate()
   cal_publisher_.publish(is_calibrated_msg);
 }
 
+bool ImuRosI::zeroOutService(std_srvs::Empty::Request  &req,
+                            std_srvs::Empty::Response &res)
+{
+  zeroOut();
+  return true;
+}
+
+void ImuRosI::zeroOut()
+{
+  ROS_INFO("Zeroing out accelerations");
+  negateAccel();
+  ROS_INFO("Zeroed out accelerations");
+
+  time_zero_ = ros::Time::now();
+
+  // publish message
+  std_msgs::Bool is_calibrated_msg;
+  is_calibrated_msg.data = true;
+  cal_publisher_.publish(is_calibrated_msg);
+}
+
+void ImuRosI::negateAccel(){
+
+  ros::Time start_time = ros::Time::now();
+  ros::Time end_time = ros::Time::now();
+  
+  double AccumLinX, AccumLinY, AccumLinZ;
+  AccumLinX = AccumLinY = AccumLinZ = 0; 
+
+  int counter = 0;
+
+  while ((end_time.toSec() - start_time.toSec()) < 5) {
+    AccumLinX += currLinX; 
+    AccumLinY += currLinY;
+    //AccumLinZ += currLinZ;
+
+    counter++;
+    end_time = ros::Time::now();
+  }
+
+  linXZero  = AccumLinX / counter;
+  linYZero  = AccumLinY / counter;
+  linZZero  = AccumLinZ / counter;
+
+  zeroedOut_ = true;
+}
+
 void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i)
 {
   // **** calculate time from timestamp
@@ -211,6 +261,18 @@ void ImuRosI::processImuData(CPhidgetSpatial_SpatialEventDataHandle* data, int i
   if (imu_msg->angular_velocity.x < 0.005 && imu_msg->angular_velocity.x > -0.005) imu_msg->angular_velocity.x = 0;
   if (imu_msg->angular_velocity.y < 0.005 && imu_msg->angular_velocity.y > -0.005) imu_msg->angular_velocity.y = 0;
   if (imu_msg->angular_velocity.z < 0.005 && imu_msg->angular_velocity.z > -0.005) imu_msg->angular_velocity.z = 0;
+
+  // Subtract out the variables for zeroing out
+
+  currLinX = imu_msg->linear_acceleration.x;
+  currLinY = imu_msg->linear_acceleration.y;
+  currLinZ = imu_msg->linear_acceleration.z;
+
+  if (zeroedOut_) { 
+    imu_msg->linear_acceleration.x = imu_msg->linear_acceleration.x - linXZero;
+    imu_msg->linear_acceleration.y = imu_msg->linear_acceleration.y - linYZero;
+    imu_msg->linear_acceleration.z = imu_msg->linear_acceleration.z - linZZero;
+  }
 
   imu_publisher_.publish(imu_msg);
 

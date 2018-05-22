@@ -4,34 +4,36 @@
 
   #### Nodelet manager ######################################################
 
-  <!-- node pkg="nodelet" type="nodelet" name="imu_manager" 
-    args="manager" output="screen" / -->
+  <node pkg="nodelet" type="nodelet" name="imu_manager" 
+    args="manager" output="screen" />
 
     #### IMU Driver ###########################################################
 
     ## Calibrate IMU after each run!!
+
+    ## To do it in command line, use "rosservice call /imu/calibrate"
 
     <node pkg="nodelet" type="nodelet" name="PhidgetsImuNodelet" 
       args="load phidgets_imu/PhidgetsImuNodelet imu_manager" 
       output="screen">
 
       # supported data rates: 4 8 16 24 32 40 ... 1000 (in ms)
-      <param name="period" value="8"/>
+      <param name="period" value="40"/>
 
       # compass correction params (see http://www.phidgets.com/docs/1044_User_Guide)
-      <param name="cc_mag_field" value="0.52859"/>
-      <param name="cc_offset0" value="0.03921"/>
-      <param name="cc_offset1" value="0.19441"/>
-      <param name="cc_offset2" value="-0.03493"/>
-      <param name="cc_gain0" value="1.81704"/>
-      <param name="cc_gain1" value="1.81028"/>
-      <param name="cc_gain2" value="2.04819"/>
-      <param name="cc_t0" value="0.00142"/>
-      <param name="cc_t1" value="-0.03591"/>
-      <param name="cc_t2" value="0.00160 "/>
-      <param name="cc_t3" value="-0.05038"/>
-      <param name="cc_t4" value="-0.03942"/>
-      <param name="cc_t5" value="-0.05673"/>
+      <param name="cc_mag_field" value="0.319367"/>
+      <param name="cc_offset0" value="0.091752"/>
+      <param name="cc_offset1" value="0.119337"/>
+      <param name="cc_offset2" value="-0.041238"/>
+      <param name="cc_gain0" value="3.170836"/>
+      <param name="cc_gain1" value="2.928615"/>
+      <param name="cc_gain2" value="3.294120"/>
+      <param name="cc_t0" value="-0.013217"/>
+      <param name="cc_t1" value="-0.129417"/>
+      <param name="cc_t2" value="-0.008283"/>
+      <param name="cc_t3" value="-0.050580"/>
+      <param name="cc_t4" value="-0.104999"/>
+      <param name="cc_t5" value="-0.055947"/>
     </node>
 
     #### IMU Orientation Filter ###############################################
@@ -40,7 +42,7 @@
       args="load imu_filter_madgwick/ImuFilterNodelet imu_manager" 
       output="screen">
 
-      <param name="use_magnetic_field_msg" value="false"/>
+      <param name="use_magnetic_field_msg" value="true"/>
 
     </node>
 
