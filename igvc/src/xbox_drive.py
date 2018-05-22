@@ -68,8 +68,13 @@ def joy_callback(msg, pub):
         # The service call works despite the exception
         # rospy.logerr("Redirect odom service call failed")
 
-  # publish xbox commands only if not autonomous
-  if not is_autonomous and right_trigger == -1:
+  # publish xbox commands only if not autonomous and toggled 
+  TOGGLED = -1
+  
+  if right_trigger != TOGGLED:
+    speed_pub.publish(0)
+    turn_pub.publish(0)
+  elif not is_autonomous:
     speed_pub.publish(speed)
     turn_pub.publish(turn)
 

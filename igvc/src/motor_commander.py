@@ -13,6 +13,7 @@ import threading
 import time
 import numpy
 from std_srvs.srv import SetBool
+from std_srvs.srv import Empty
 
 
 MAX_SPEED_EFFORT = 45
@@ -195,8 +196,9 @@ def calculate_speed():
     left_speed = 0.0141 * left_effort
     right_speed = 0.0141 * right_effort
 
-    print "Left velocity: " + str(left_speed) + "m/s"
-    print "Right velocity: " + str(right_speed) + "m/s"
+    # NOTE: only enable for debugging purposes
+    # print "Left velocity: " + str(left_speed) + "m/s"
+    # print "Right velocity: " + str(right_speed) + "m/s"
 
     #left_speed_pub.publish(left_speed)
     #right_speed_pub.publish(right_speed)
@@ -211,6 +213,17 @@ def main():
     motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  
 
     #joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
+    services_available = [x[0] for x in rospy.get_services()]
+    if '/imu/zeroout' in services_available:
+        rospy.loginfo('Discovered IMU service - Now trying to remove IMU drift')
+        rospy.wait_for_service('/imu/zeroout')
+        try:
+            zeroout_imu = rospy.ServiceProxy('/imu/zeroout', Empty)
+            resp = zeroout_imu()
+            rospy.loginfo('Zeroed out IMU drift')
+        except rospy.ServiceException, e: 
+            rospy.logerr('Failed the service call to zeroout IMU')
+
 
     #rate = rospy.Rate(1)  # 10hz
 
@@ -223,7 +236,7 @@ def main():
     
     while not rospy.is_shutdown():
         prev_time = current_time
-        print "in loop"
+        print "Running motor commander"
         rospy.spin()
 
     #t.join()

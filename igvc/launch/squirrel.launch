@@ -112,9 +112,8 @@
         <param name="local_costmap/global_frame" value="$(arg global_frame_id)"/>
         <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
         <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/>
+        <remap from="cmd_vel" to="nav_cmd_vel" />
     </node> 
-
-    <remap from="cmd_vel" to="nav_cmd_vel" />
 
     <!-- fake map, used only for testing without lidar. Tranform for fake map: map to odom -->
    <!--  <node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
