@@ -24,7 +24,7 @@ def main():
 		latitude, longitude = [float(f) for f in line.split(",")]
 		queue.append((latitude, longitude))
 
-	pub = rospy.Publisher('goal_fix', WayPoint, queue_size=10)
+	pub = rospy.Publisher('waypoint', WayPoint, queue_size=10)
 	
 	s  = rospy.Service('next_waypoint_srv', Trigger, next_waypoint)
 
