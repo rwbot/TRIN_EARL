@@ -21,10 +21,6 @@ MAX_TURN_EFFORT = 15
 
 is_autonomous = False
 
-left_speed_pub = rospy.Publisher('lwheel', msg.Float32, queue_size=10)
-right_speed_pub = rospy.Publisher('rwheel', msg.Float32, queue_size=10)
-
-
 # TODO: Implement Subscriber to Joy that listens to start key 
 # and enable/disable motor output from this node 
 
@@ -142,30 +138,9 @@ def reset_controller():
 def set_differential_mode():
     write_byte('^01 05') # Mixed mode, closed loop
  
-
 def write_byte(string, get_speed=False):
     #sem.acquire()
     ser.write((string + '\r').encode())
-    
-    #print string
-
-    # resp = get_response().strip()[2:5]
-    # #if get_speed:
-    #    # print resp
-    # if get_speed and resp:
-    #     try: 
-    #         print int(resp, 16)
-    #         print ("%d m/s \n" % (((int(resp, 16) / 127.0) * (2188.0 / 60) * 1.2))) # 1.2 estimate of circum
-    #     except ValueError:
-    #         sem.release()
-    #         pass
-
-    #sem.release()
-
-def get_speed():
-    while True:
-        write_byte('?k', get_speed=True)        
-        time.sleep(0.5)
 
 def get_response():
     #sem.acquire()
@@ -224,22 +199,12 @@ def main():
         except rospy.ServiceException, e: 
             rospy.logerr('Failed the service call to zeroout IMU')
 
-
-    #rate = rospy.Rate(1)  # 10hz
-
-    #t = threading.Thread(target=get_speed)
-    #t.start()
-
-    rospy.on_shutdown(kill_thread)
-
     current_time = rospy.Time.from_sec(time.time())
     
     while not rospy.is_shutdown():
         prev_time = current_time
         print "Running motor commander"
         rospy.spin()
-
-    #t.join()
 
 
 
