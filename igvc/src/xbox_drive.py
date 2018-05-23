@@ -69,6 +69,7 @@ def joy_callback(msg, pub):
         # rospy.logerr("Redirect odom service call failed")
 
   # publish xbox commands only if not autonomous and toggled 
+  # TOGGLED means pressed
   TOGGLED = -1
   
   if right_trigger != TOGGLED:
