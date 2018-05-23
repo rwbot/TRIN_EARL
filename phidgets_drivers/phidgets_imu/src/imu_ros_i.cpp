@@ -362,7 +362,7 @@ double ImuRosI::calculateCompassBearing(double accel[3], double magField[3]) {
 
   //double[] angles = { rollAngle, pitchAngle, yawAngle };
 
-  double compassBearing = yawAngle * (180.0 / PI);
+  double compassBearing = ((int) (yawAngle * (180.0 / PI) + 360)) % 360;
 
   return compassBearing;
 

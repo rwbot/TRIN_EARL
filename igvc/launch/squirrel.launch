@@ -37,9 +37,21 @@
     <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" /> 
 
     <!-- node reads from gps sensor -->
+
     <!-- <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
         <param name="port" value="/dev/ttyUSB2" />
+
     </node> -->
+
+    <!-- Refer to:  http://www.ngdc.noaa.gov/geomag-web for magnetic declination (make sure to convert to radians) -->
+    <!-- Yaw offset should be 0 when IMU is facing east --> 
+    <!--
+    <node pkg="robot_localization" name="navsat_transform_node" type="navsat_transform_node">
+        <param name="use_odometry_yaw" value="true"/>
+        <param name="magnetic_declination_radians" value="" /> 
+        <param name="yaw_offset" value="0" /> 
+    </node>
+    -->
 
     <!-- publishes longtiude and latitude of a single waypoint -->
     <!-- <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> -->
