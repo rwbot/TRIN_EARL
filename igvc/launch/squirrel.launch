@@ -45,26 +45,28 @@
 
     <!-- Refer to:  http://www.ngdc.noaa.gov/geomag-web for magnetic declination (make sure to convert to radians) -->
     <!-- Yaw offset should be 0 when IMU is facing east --> 
- 
+    <!-- Transforms absolute orientation (GPS, compass) into local orientation (robot's world frame -> /map) --> 
     <node pkg="robot_localization" name="navsat_transform_node" type="navsat_transform_node">
         <param name="use_odometry_yaw" value="true"/>
-        <param name="magnetic_declination_radians" value="" /> 
+        <param name="magnetic_declination_radians" value="-0.240218566" /> 
         <param name="yaw_offset" value="0" /> 
     </node>
    
 
-    <!-- publishes longtiude and latitude of a single waypoint -->
+    <!-- reads from text file and publishes longtiude and latitude of the waypoint -->
     <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> 
     
     <!-- gets waypoint from publish_goal_fix, translates to local waypoint and commands move base to move -->
      <node pkg="igvc" name="gps_goals" type="gps_goals.py" /> 
 
+    <!-- Alternative to gmapping - use if you only want to use LIDAR data for SLAM odometry --> 
     <!-- <include file="$(find igvc)/launch/hector_slam.launch" /> -->
 
     <!-- Param was updated as to the suggestions of http://geduino.blogspot.it/2015/04/gmapping-and-rplidar.html -->
     <!-- takes lidar and odom data and makes generates map. Gives map to odom transform. -->
 
     <!-- Make sure to remap the scans to /scan for costmap generation -->
+    <!-- SLAM algorithm that fuses lidar data with odometry (encoder, IMU, GPS, etc..) --> 
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
             <rosparam>
               map_frame: map
@@ -98,10 +100,11 @@
               tf_delay: 0.01
               base_frame: base_link
           </rosparam>
+        <!-- Gmapping expects message from scan topic, telling it to read from lidar_scan instead --> 
         <remap from="scan" to="lidar_scan" />
     </node>
-
-
+    
+    <!-- Specifying that the laser is rotated 135 degrees by x relative to the center of the robot --> 
     <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 135 0 0 /base_link /laser_frame 50" />
 
     <arg name="global_frame_id" value="map" />
@@ -127,6 +130,7 @@
         <remap from="cmd_vel" to="nav_cmd_vel" />
     </node> 
 
+    <!-- Below is testing purposes --> 
     <!-- fake map, used only for testing without lidar. Tranform for fake map: map to odom -->
    <!--  <node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
         <param name="frame_id" value="map" />
