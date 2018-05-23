@@ -8,8 +8,10 @@
 #include <sensor_msgs/Imu.h>
 #include <std_srvs/Empty.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <phidgets_api/imu.h>
+#include <cmath>
 
 namespace phidgets {
 
@@ -37,6 +39,7 @@ class ImuRosI : public Imu
     ros::Publisher  imu_publisher_;
     ros::Publisher  mag_publisher_;
     ros::Publisher  cal_publisher_;
+    ros::Publisher  bearing_publisher_;
     ros::ServiceServer cal_srv_;
 
     // custom 
@@ -87,10 +90,12 @@ class ImuRosI : public Imu
     double linXZero;
     double linYZero;
     double linZZero;
-    
+
     bool zeroedOut_ = false;
     void zeroOut();
     void negateAccel();
+
+    double calculateCompassBearing(double accel[3], double magField[3]);
 
     ///
 
