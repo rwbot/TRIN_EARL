@@ -122,7 +122,7 @@ def posePublisher(): #Convert absolute waypoint to vector relative to robot, the
     bearingToWP = bearing(latCur, lonCur, latWP, lonWP)
     
     # TODO: Use the correct margin of error
-    if (distToWP < 3): # If there is less than 5 meters left
+    if (distToWP < 3): # If there is less than 3 meters left
         rospy.wait_for_service('next_waypoint_srv')
         next_waypoint = rospy.ServiceProxy('next_waypoint_srv', Trigger)
         try:
