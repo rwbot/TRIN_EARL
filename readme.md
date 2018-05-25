@@ -139,3 +139,7 @@ Modify the /etc/hosts to properly point the IP address of Jetsons to their name 
 3. Run *source devel/setup.bash* on each (or, better, put those commands in ~/.bashrc if not already)
 
 4. roslaunch image_transport_package steam.launch
+
+Troubleshooting 
+-------------------
+* If the robot is accelerating instead of maintaining a speed, set the motor controller mode to speed mode rather than position mode!
