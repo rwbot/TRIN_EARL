@@ -55,13 +55,13 @@ def main():
             exit()
         
         elif input == 'change_mode':
-            write_byte('^01 05') # Mixed mode, closed loop
+            write_byte('^01 01') # Mixed mode, closed loop
             print(get_response())
 
-            write_byte('^80 05') # Closed loop, speed mode, encoder feedback channel 1
+            write_byte('^80 00') # Closed loop, speed mode, encoder feedback channel 1
             print(get_response())
 
-            write_byte('^81 05') # Closed loop, speed mode, encoder feedback channel 2
+            write_byte('^81 00') # Closed loop, speed mode, encoder feedback channel 2
             print(get_response())
 
         elif input == 'reset': 
@@ -72,7 +72,7 @@ def main():
             
         elif input == 'command': 
             # if watchdog, wrap this in a loop
-            write_byte("!b10")
+            write_byte("!b05")
             print(get_response())
 
             # write_byte("!b50")
