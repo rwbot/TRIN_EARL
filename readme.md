@@ -46,6 +46,7 @@ Description of the Programs/Files Used
   * ard_odom_translator.py: Translates encoder reading from ROS Arduino node to left and right speed (/ard_cpsR, /ard_cpscL => /lwheel, /rwheel)
   * gps_goals.py: Translates GPS waypoints as relative movement commands for navigation stack (through ROS Action - asynchronous ROS service) (/waypoint, /fix, /odom_combined => Commands move_base (navigation stack))
   * publish_goal_fix.py: Opens up a textfile of waypoints and holds a queue of GPS waypoints; the queue goes onto next point when prompted by gps_goals.py (text_file, /next_waypoint_srv => /waypoint) 
+  * diff_ty.py: Generates odometry (robot state) calculated using differential drive formula with information published by ard_odom_translator.py (/lwheel, /rwheel => /odom) 
 * Nodes from other packages (refer to the launch file)
   * joy/joy_node: Publishes xbox controller messages
   * rplidar_Ros/rplidarNode: Publishes LIDAR readings
@@ -55,6 +56,9 @@ Description of the Programs/Files Used
   * move_base/move_base: THE NAVIGATION STACK - approach with awe
   * rviz/rviz: Visualization software for ROS topics
   * rosserial_python/serial_node.py: Allows ROS messages coming through serial communication to be published 
+  * nmea_navsat_driver: Driver for the GPS
+  * navsat_transform_node: Transforms the absolute orientation (GPS, compass) to local map of the robot
+  * 
   
 
 Running the Robot
