@@ -23,6 +23,9 @@ is_autonomous = False
 
 # signum function
 
+last_speed = 0
+last_turn = 0
+last_right_trigger = False
 
 def sgn(x):
   return x / abs(x)
@@ -30,9 +33,22 @@ def sgn(x):
 # Call back for topics recived from joy node. calculated speed is in range
 # -55 to 55. calculated turn is in range -11 to 11
 
+speed_pub = None
+turn_pub = None
+TOGGLED = -1
+
+# Used to maintain identical velocity despite the joy_node not publishing when 
+# same joystick command is issue - this callback runs every 0.75 seconds
+def repeat_call(ev):
+  global last_speed, last_turn, last_right_trigger, TOGGLED, speed_pub, turn_pub
+  if last_right_trigger == TOGGLED:
+    speed_pub.publish(last_speed)
+    turn_pub.publish(last_turn)
+
+
 
 def joy_callback(msg, pub):
-  global is_autonomous
+  global is_autonomous, last_turn, last_speed, last_right_trigger, TOGGLED
   speed_pub = pub[0]
   turn_pub = pub[1]
 
@@ -54,6 +70,10 @@ def joy_callback(msg, pub):
     turn = (x_axis_rotation - (turn_deadzone *
             sgn(x_axis_rotation))) / turn_scale
 
+  last_turn = turn
+  last_speed = speed
+  last_right_trigger = right_trigger
+
   # check if autonomous switch is pressed
   if (switch_autonomous):
     is_autonomous = not is_autonomous;
@@ -70,7 +90,6 @@ def joy_callback(msg, pub):
 
   # publish xbox commands only if not autonomous and toggled 
   # TOGGLED means pressed
-  TOGGLED = -1
   
   if right_trigger != TOGGLED:
     speed_pub.publish(0)
@@ -81,11 +100,14 @@ def joy_callback(msg, pub):
 
 
 def main():
+    global speed_pub, turn_pub
     # initialize node and handles
     rospy.init_node("xbox_drive")
 
     speed_pub = rospy.Publisher('motor_speed', Int8, queue_size=10)
     turn_pub = rospy.Publisher('motor_turn', Int8, queue_size=10)
+
+    rospy.Timer(rospy.Duration(0.75), repeat_call)
 
     # initialize subscriber and register callback
     joy_sub = rospy.Subscriber('joy', Joy, joy_callback, (speed_pub, turn_pub))
