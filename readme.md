@@ -143,3 +143,4 @@ Modify the /etc/hosts to properly point the IP address of Jetsons to their name 
 Troubleshooting 
 -------------------
 * If the robot is accelerating instead of maintaining a speed, set the motor controller mode to speed mode rather than position mode!
+* Network: Set environmental variables ROS_IP and ROS_HOSTNAME to the IP address of the computer running the node, and ROS_MASTER_URI to typically http:://<IP_ADDRESS of the computer running roscore>:11311
