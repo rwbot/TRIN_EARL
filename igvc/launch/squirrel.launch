@@ -40,7 +40,6 @@
 
     <!-- <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
         <param name="port" value="/dev/ttyUSB2" />
-
     </node> -->
 
     <!-- Refer to:  http://www.ngdc.noaa.gov/geomag-web for magnetic declination (make sure to convert to radians) -->
@@ -50,6 +49,9 @@
         <param name="use_odometry_yaw" value="true"/>
         <param name="magnetic_declination_radians" value="" /> 
         <param name="yaw_offset" value="0" /> 
+        <param name="zero_altitude" value="true" />
+        <param name="publish_filtered_gps" value="true" />
+        <param name="broadcast_utm_transform" value="true" />
     </node>
     -->
 

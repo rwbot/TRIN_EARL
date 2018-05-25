@@ -46,13 +46,14 @@ right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
 
 # TODO: Calculate speed based on absolute encoder data 
 # TODO: Do not touch otherwise
-def get_speed():
-    while True:
-        write_byte('?k')
-        effort = int(get_response(), 16)
-        left_wheel_speed = effort / 0.0141 # TODO: Get commands
-        right_wheel_speed = effort / 0.0141
-        time.sleep(1)
+# Currently reading data from Arduino
+# def get_speed():
+#     while True:
+#         write_byte('?k')
+#         effort = int(get_response(), 16)
+#         left_wheel_speed = effort / 0.0141 # TODO: Get commands
+#         right_wheel_speed = effort / 0.0141
+#         time.sleep(1)
 
 # TODO: Differetnial drive
 # Translates speed to motor controller command 

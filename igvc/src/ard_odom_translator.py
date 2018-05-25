@@ -77,8 +77,12 @@ def right_callback(msg, pub):
 
 # translates count per second received from arduino to speed
 def translate(cps):
-    speed = cps * (effort_to_speed_factor/effort_to_count_factor)
-    return speed
+    # speed = cps * (effort_to_speed_factor/effort_to_count_factor)
+    gear_ratio = 25.8
+    spokes_per_rotation = 8 * 200 # 1 encoder spoke => 8 Arduino count (quad encoder, interrupt by level change)
+    wheel_circumference = 1.34 # meters
+    meters_per_second = cps * (wheel_circumference / (gear_ratio * spokes_per_rotation))
+    return meters_per_second
 
 def main():
     global autonomous 

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
-# Disable and enable autonomous control by redirecting the odometry
+# Disable and enable autonomous control by redirecting the odometry from the 
+# navigation stack
+
+# The navigation stack cmd_vel (in launch file) is remapped to nav_cmd_vel
+# , then this node republishes nav_cmd_vel to cmd_vel if the robot is autonomous
+
+# The topic cmd_vel is used by both autonomous and manual control 
 
 import rospy
 from std_msgs.msg import Bool

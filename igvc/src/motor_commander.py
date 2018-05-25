@@ -213,6 +213,7 @@ def main():
     motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  
 
     #joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
+    '''
     services_available = [x[0] for x in rospy.get_services()]
     if '/imu/zeroout' in services_available:
         rospy.loginfo('Discovered IMU service - Now trying to remove IMU drift')
@@ -223,7 +224,7 @@ def main():
             rospy.loginfo('Zeroed out IMU drift')
         except rospy.ServiceException, e: 
             rospy.logerr('Failed the service call to zeroout IMU')
-
+    '''
 
     #rate = rospy.Rate(1)  # 10hz
 
