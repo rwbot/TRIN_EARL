@@ -95,7 +95,7 @@ def change_speed(speed_effort):
 
     effort_str = "{0:#0{1}x}".format(speed_effort,4)[2:]
 
-    #rospy.logerr('Speed command: ' + message + effort_str)
+    rospy.logerr('Speed command: ' + message + effort_str)
 
     write_byte(message + effort_str)
     #get_response()
@@ -120,7 +120,7 @@ def change_turn(turn_effort):
 
     effort_str = "{0:#0{1}x}".format(abs(turn_effort),4)[2:]
 
-    #rospy.logerr('Turn command: ' + message + effort_str)
+    rospy.logerr('Turn command: ' + message + effort_str)
 
     write_byte(message + effort_str)  
     #get_response()  
@@ -137,7 +137,9 @@ def reset_controller():
 
 def set_differential_mode():
     write_byte('^01 05') # Mixed mode, closed loop
- 
+    write_byte('^80 05') # Closed loop, speed mode, encoder feedback channel 1
+    write_byte('^81 05') # Closed loop, speed mode, encoder feedback channel 2
+    
 def write_byte(string, get_speed=False):
     #sem.acquire()
     ser.write((string + '\r').encode())
@@ -183,6 +185,12 @@ def calculate_speed():
 def main():
     global t 
     rospy.init_node('motor_controller_test')
+
+    # NOTE: Ensure that the motor controller is in speed mode rather than position mode!!
+    # The motor controller should be in closed mixed speed mode
+    # Also, the input control mode should be 2 (RS232, half-duplex with watchdog (stops movement every second))
+
+    set_differential_mode()
 
     motor_speed_sub = rospy.Subscriber('motor_speed', msg.Int8, speed_callback)
     motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  

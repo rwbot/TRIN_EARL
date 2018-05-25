@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import time
 import serial
 
@@ -9,7 +11,7 @@ ser = serial.Serial(
     timeout=1,
     parity=serial.PARITY_EVEN,
     stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.SEVENBITS,
+    bytesize=serial.SEVENBITS
 )
 
 def get_response():
@@ -41,6 +43,7 @@ def main():
         command = test both wheels
         query = test if data can be retrieved from serial port
         exit = close port and terminate program
+        stop = stop motor
         change_mode
         """
         print(prompt)
@@ -55,17 +58,36 @@ def main():
             write_byte('^01 05') # Mixed mode, closed loop
             print(get_response())
 
+            write_byte('^80 05') # Closed loop, speed mode, encoder feedback channel 1
+            print(get_response())
+
+            write_byte('^81 05') # Closed loop, speed mode, encoder feedback channel 2
+            print(get_response())
+
+        elif input == 'reset': 
             write_byte('^FF') # Restart controller to apply params
             print(get_response())
 
             # For modes refer to page 148
             
-        elif input == 'command':
+        elif input == 'command': 
+            # if watchdog, wrap this in a loop
+            write_byte("!b10")
+            print(get_response())
+
+            # write_byte("!b50")
+            # print(get_response())
+
+        elif input == 'read':
+            print(get_response())
+
+        elif input == 'stop':
             write_byte("!A00")
             print(get_response())
 
             write_byte("!B00")
             print(get_response())
+
 
             # time.sleep(0.10)
             # print(get_response())
