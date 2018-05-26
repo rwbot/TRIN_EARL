@@ -7,7 +7,7 @@ const byte motorLeft = 2;
 const byte motorRight = 3;
 
 // reset
-int reset_at = 200;
+int reset_at = 100;
 
 // counters
 long countLeft = 0;
@@ -43,7 +43,7 @@ void setup() {
 
 void loop() {
   // reset left count every 200 millis
-  if (millis() - start > 200) {
+  if (millis() - start > reset_at) {
     cpsLeft = (countLeft/double(millis()-start) * 1000);
     cpsRight = (countRight/double(millis()-start) * 1000);
     

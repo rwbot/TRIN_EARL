@@ -1,0 +1,122 @@
+#!/usr/bin/python
+
+import time
+import serial
+
+# configure the serial connections (the parameters differs on the device you are connecting to
+
+ser = serial.Serial(
+    port='/dev/ttyUSB0',
+    baudrate=9600,
+    timeout=1,
+    parity=serial.PARITY_EVEN,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.SEVENBITS
+)
+
+def get_response():
+    resp = ''
+    while ser.inWaiting() > 0:
+        resp += ser.read(1)
+    return resp
+
+def init_serial_mode():
+    for i in range(0, 10):
+        ser.write('\r')
+
+def write_byte(string):
+    ser.write((string + '\r').encode())
+
+def main():
+   
+    ser.setRTS(False)
+    # ser.setDTR(False)
+
+    print(ser.getCTS())
+    print(ser.getDSR())
+
+    while True:
+        
+        prompt = """
+        Test Commands
+        -------------
+        command = test both wheels
+        query = test if data can be retrieved from serial port
+        exit = close port and terminate program
+        stop = stop motor
+        change_mode
+        """
+        print(prompt)
+    
+        input = raw_input('>> ')
+
+        if input == 'exit':
+            ser.close()
+            exit()
+        
+        elif input == 'change_mode':
+            write_byte('^01 01') # Mixed mode, closed loop
+            print(get_response())
+
+            write_byte('^80 00') # Closed loop, speed mode, encoder feedback channel 1
+            print(get_response())
+
+            write_byte('^81 00') # Closed loop, speed mode, encoder feedback channel 2
+            print(get_response())
+
+        elif input == 'reset': 
+            write_byte('^FF') # Restart controller to apply params
+            print(get_response())
+
+            # For modes refer to page 148
+            
+        elif input == 'command': 
+            # if watchdog, wrap this in a loop
+            write_byte("!b05")
+            print(get_response())
+
+            # write_byte("!b50")
+            # print(get_response())
+
+        elif input == 'read':
+            print(get_response())
+
+        elif input == 'stop':
+            write_byte("!A00")
+            print(get_response())
+
+            write_byte("!B00")
+            print(get_response())
+
+
+            # time.sleep(0.10)
+            # print(get_response())
+
+            # write_byte('?K')
+            # print ('Speed query %s' % get_response()) 
+            # time.sleep(0.10)
+            #write_byte("!A00")
+
+            #write_byte("!B10")
+                
+
+            #write_byte("!b10")
+            #print(get_response())
+
+            #write_byte("!B00")
+            #print(get_response())
+
+        elif input == 'query':
+            write_byte('?K')
+            print ("Speed query %s" % get_response())
+
+            write_byte('?E')
+            print ("Battery query %s" % get_response())
+
+        elif input == 'change_mode':
+            write_byte('2C04')
+            get_response()
+
+if __name__ == '__main__':
+    init_serial_mode()
+    main()
