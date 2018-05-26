@@ -17,12 +17,6 @@ class Vehicle:
     WHEEL_SEPARTION = 0.42
     MAX_EFFORT = 127
 
-ser = serial.Serial(
-    port='/dev/ttyUSB0',
-    baudrate=9600,
-    timeout=1,
-    bytesize=serial.SEVENBITS,
-)
 
 # Constrains
 MAX_SPEED_EFFORT = 45 
@@ -36,9 +30,9 @@ def get_response():
         #print(resp)
     return resp
 
-def write_byte(string):
-    ser.write((string + '\r').encode())
-    get_response()
+#def write_byte(string):
+#    ser.write((string + '\r').encode())
+#    get_response()
 
 left_wheel_speed = 0
 right_wheel_speed = 0
@@ -46,19 +40,20 @@ right_wheel_speed = 0
 prev_time = rospy.Time.from_sec(time.time())
 current_time = rospy.Time.from_sec(time.time())
 
-# Publishers for diff_ty to calculate odom 
+# Publishers for diff_ty to calculate odom
 left_whl_pub = rospy.Publisher('lwheel', Float32, queue_size=10)
 right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
 
 # TODO: Calculate speed based on absolute encoder data 
 # TODO: Do not touch otherwise
-def get_speed():
-    while True:
-        write_byte('?k')
-        effort = int(get_response(), 16)
-        left_wheel_speed = effort / 0.0141 # TODO: Get commands
-        right_wheel_speed = effort / 0.0141
-        time.sleep(1)
+# Currently reading data from Arduino
+# def get_speed():
+#     while True:
+#         write_byte('?k')
+#         effort = int(get_response(), 16)
+#         left_wheel_speed = effort / 0.0141 # TODO: Get commands
+#         right_wheel_speed = effort / 0.0141
+#         time.sleep(1)
 
 # TODO: Differetnial drive
 # Translates speed to motor controller command 
@@ -109,7 +104,7 @@ def main():
     cmd_vel_sub = rospy.Subscriber('cmd_vel', cmd_vel, cmd_vel_callback, speed_pub, turn_pub)
 
      
-    while not rospy.is_shudown():
+    while not rospy.is_shutdown():
         rospy.spin()
 
 def init_serial_mode():

@@ -40,7 +40,7 @@ right_wheel_speed = 0
 prev_time = rospy.Time.from_sec(time.time())
 current_time = rospy.Time.from_sec(time.time())
 
-# Publishers for diff_ty to calculate odom 
+# Publishers for diff_ty to calculate odom
 left_whl_pub = rospy.Publisher('lwheel', Float32, queue_size=10)
 right_whl_pub = rospy.Publisher('rwheel', Float32, queue_size=10)
 
@@ -104,7 +104,7 @@ def main():
     cmd_vel_sub = rospy.Subscriber('cmd_vel', cmd_vel, cmd_vel_callback, speed_pub, turn_pub)
 
      
-    while not rospy.is_shudown():
+    while not rospy.is_shutdown():
         rospy.spin()
 
 def init_serial_mode():
