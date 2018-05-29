@@ -81,12 +81,12 @@ Running motors with Xbox controller
 `rosrun joy joy_node`
 `rosrun igvc xbox_drive.py`
 
-3. Run motor controller
+3. Run motor COMMANDER (not controller)
     
-`rosrun igvc motor_controller.py `
+`rosrun igvc motor_commander.py (NOT motor_controller.py)
 
-  1. Take note of the serial port listed in motor_controller.py 
-     and make sure it is the serial port of the motor controller
+  1. Take note of the serial port listed in motor_commander.py 
+     and make sure it is the serial port of the motor commander
 
 The pipeline goes as follows for manual control 
 joystick input (joy_node) --> motor_speed / motor_turn (xbox_drive.py) --> motor commands (motor_controller)
