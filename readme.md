@@ -1,3 +1,15 @@
+TODO
+
+SLAM
+---
+* LIDAR
+https://husarion.com/tutorials/ros-tutorials/6-slam-navigation/#6-slam-navigation-running-the-laser-scanner
+https://www.youtube.com/channel/UCt6Lag-vv25fTX3e11mVY1Q/search?query=laser
+
+* Visual Odometry - ZED SDK
+
+* GPS Test
+
 Current developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu), Christopher Rowe (christopher.rowe@trincoll.edu)
 Previous developers: Basileal Imana (basileal.imana@trincoll.edu), Barok Imana (Barok.imana@trincoll.edu), Mike Castellana
 

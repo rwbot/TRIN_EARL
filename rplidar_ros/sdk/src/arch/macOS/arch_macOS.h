@@ -32,21 +32,35 @@
  *
  */
 
-#include "arch/linux/arch_linux.h"
+#pragma once
 
-namespace rp{ namespace arch{
-_u64 rp_getus()
-{
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000000LL + t.tv_nsec/1000;
+// libc dep
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <math.h>
+#include <time.h>
+#include <stdarg.h>
+
+// libc++ dep
+#include <iostream>
+#include <string>
+
+
+// POSIX specific
+extern "C" {
+#include <unistd.h>
+#include <errno.h>
+#include <pthread.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <time.h>
 }
-_u32 rp_getms()
-{
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000L + t.tv_nsec/1000000L;
-}
-}}
+
+#include "arch/macOS/timer.h"
+

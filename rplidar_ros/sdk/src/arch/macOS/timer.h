@@ -32,21 +32,26 @@
  *
  */
 
-#include "arch/linux/arch_linux.h"
+#pragma once
 
+#include "rptypes.h"
+
+#include <unistd.h>
+static inline void delay(_word_size_t ms){
+    while (ms>=1000){
+        usleep(1000*1000);
+        ms-=1000;
+    };
+    if (ms!=0)
+        usleep(ms*1000);
+}
+
+// TODO: the highest timer interface should be clock_gettime
 namespace rp{ namespace arch{
-_u64 rp_getus()
-{
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000000LL + t.tv_nsec/1000;
-}
-_u32 rp_getms()
-{
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000L + t.tv_nsec/1000000L;
-}
+
+_u64 rp_getus();
+_u32 rp_getms();
+
 }}
+
+#define getms() rp::arch::rp_getms()

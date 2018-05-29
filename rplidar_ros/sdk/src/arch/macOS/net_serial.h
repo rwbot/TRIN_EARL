@@ -32,21 +32,53 @@
  *
  */
 
-#include "arch/linux/arch_linux.h"
+#pragma once
 
-namespace rp{ namespace arch{
-_u64 rp_getus()
+#include "hal/abs_rxtx.h"
+
+namespace rp{ namespace arch{ namespace net{
+
+class raw_serial : public rp::hal::serial_rxtx
 {
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000000LL + t.tv_nsec/1000;
-}
-_u32 rp_getms()
-{
-    struct timespec t;
-    t.tv_sec = t.tv_nsec = 0;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return t.tv_sec*1000L + t.tv_nsec/1000000L;
-}
-}}
+public:
+    enum{
+        SERIAL_RX_BUFFER_SIZE = 512,
+        SERIAL_TX_BUFFER_SIZE = 128,
+    };
+
+    raw_serial();
+    virtual ~raw_serial();
+    virtual bool bind(const char * portname, uint32_t baudrate, uint32_t flags = 0);
+    virtual bool open();
+    virtual void close();
+    virtual void flush( _u32 flags);
+    
+    virtual int waitfordata(_word_size_t data_count,_u32 timeout = -1, _word_size_t * returned_size = NULL);
+
+    virtual int senddata(const unsigned char * data, _word_size_t size);
+    virtual int recvdata(unsigned char * data, _word_size_t size);
+
+    virtual int waitforsent(_u32 timeout = -1, _word_size_t * returned_size = NULL);
+    virtual int waitforrecv(_u32 timeout = -1, _word_size_t * returned_size = NULL);
+
+    virtual size_t rxqueue_count();
+
+    virtual void setDTR();
+    virtual void clearDTR();
+
+    _u32 getTermBaudBitmap(_u32 baud);
+protected:
+    bool open(const char * portname, uint32_t baudrate, uint32_t flags = 0);
+    void _init();
+
+    char _portName[200];
+    uint32_t _baudrate;
+    uint32_t _flags;
+
+    int serial_fd;
+
+    size_t required_tx_cnt;
+    size_t required_rx_cnt;
+};
+
+}}}
