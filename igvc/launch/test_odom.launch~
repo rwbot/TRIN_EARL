@@ -2,7 +2,6 @@
 
     <node pkg="rviz" type="rviz" name="rviz" />
     
-    <node name="run_xboxdrv" pkg="igvc" type="execute_xboxdrv.py" />
 	<node name="motor_test" pkg="igvc" type="motor_commander.py"/>
 	<node name="joy" pkg="joy" type="joy_node" />
     
@@ -14,7 +13,7 @@
 
     <node pkg="igvc" name="ard_odom_translator" type="ard_odom_translator.py" />
 
-    <arg name="port" default="/dev/ttyACM0" />
+    <arg name="port" default="/dev/ttyUSB0" />
     <node pkg="rosserial_python" name="serial_python" type="serial_node.py" args="$(arg port)" />
 
 	<node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
