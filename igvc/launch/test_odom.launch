@@ -1,19 +1,21 @@
 <launch>
 
     <node pkg="rviz" type="rviz" name="rviz" />
-    
+
 	<node name="motor_test" pkg="igvc" type="motor_commander.py"/>
-	<node name="joy" pkg="joy" type="joy_node" />
-    
+  <node name="joy" pkg="joy" type="joy_node" >
+    <param name="dev"  type="string" value="/dev/input/js1" />
+  </node>
+
     <!-- takes data from joy node and converst to motor effort -->
     <node pkg="igvc" name="igvc" type="xbox_drive.py" />
- 
+
        <!-- multiplexer for switching autonomous on and off -->
     <node pkg="igvc" name="multiplexer" type="multiplexer.py" />
 
     <node pkg="igvc" name="ard_odom_translator" type="ard_odom_translator.py" />
 
-    <arg name="port" default="/dev/ttyACM0" />
+    <arg name="port" default="/dev/ttyUSB0" />
     <node pkg="rosserial_python" name="serial_python" type="serial_node.py" args="$(arg port)" />
 
 	<node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
