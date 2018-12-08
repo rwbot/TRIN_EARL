@@ -2,13 +2,13 @@
 
     <!-- map visualizer -->
     <node pkg="rviz" name="rviz" type="rviz" />
-    
+
     <!-- listens to joystick -->
     <node pkg="joy" name="joy" type="joy_node" />
 
     <!-- takes data from joy node and converst to motor effort -->
     <node pkg="igvc" name="igvc" type="xbox_drive.py" />
-    
+
      <!-- takes motor effort from either xbox_drive or motor controller and sends to motors-->
     <node pkg="igvc" name="motor_command"  type="motor_commander.py" />
 
@@ -25,50 +25,52 @@
 
     <!-- node reads from lidar sensor -->
     <node name="rplidarNode" pkg="rplidar_ros"  type="rplidarNode">
-        <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>  
+        <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>
         <param name="serial_baudrate"     type="int"    value="115200"/>
         <param name="frame_id"            type="string" value="laser_frame"/>
         <param name="inverted"            type="bool"   value="false"/>
         <param name="angle_compensate"    type="bool"   value="true"/>
-        <param name="angle_min"           value="3.14159/4"/>
-        <param name="angle_max"           value="-3.14159/4"/>
+        <!-- <param name="angle_min"           value="3.14159/4"/>
+        <param name="angle_max"           value="-3.14159/4"/> -->
+        <param name="angle_min"           value="0"/>
+        <param name="angle_max"           value="0"/>
     </node>
 
-    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" /> 
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
 
     <!-- node reads from gps sensor -->
 
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver">
         <param name="port" value="/dev/ttyUSB2" />
-    </node> 
+    </node>
 
     <!-- Refer to:  http://www.ngdc.noaa.gov/geomag-web for magnetic declination (make sure to convert to radians) -->
-    <!-- Yaw offset should be 0 when IMU is facing east --> 
-    <!-- Transforms absolute orientation (GPS, compass) into local orientation (robot's world frame -> /map) --> 
+    <!-- Yaw offset should be 0 when IMU is facing east -->
+    <!-- Transforms absolute orientation (GPS, compass) into local orientation (robot's world frame -> /map) -->
     <node pkg="robot_localization" name="navsat_transform_node" type="navsat_transform_node">
         <param name="use_odometry_yaw" value="true"/>
-        <param name="magnetic_declination_radians" value="-0.240218566" /> 
-        <param name="yaw_offset" value="0" /> 
+        <param name="magnetic_declination_radians" value="-0.240218566" />
+        <param name="yaw_offset" value="0" />
         <param name="zero_altitude" value="true" />
         <param name="publish_filtered_gps" value="true" />
         <param name="broadcast_utm_transform" value="true" />
     </node>
-   
+
 
     <!-- reads from text file and publishes longtiude and latitude of the waypoint -->
-    <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" /> 
-    
-    <!-- gets waypoint from publish_goal_fix, translates to local waypoint and commands move base to move -->
-     <node pkg="igvc" name="gps_goals" type="gps_goals.py" /> 
+    <node pkg="igvc" name="fix_goal" type="publish_goal_fix.py" />
 
-    <!-- Alternative to gmapping - use if you only want to use LIDAR data for SLAM odometry --> 
+    <!-- gets waypoint from publish_goal_fix, translates to local waypoint and commands move base to move -->
+     <node pkg="igvc" name="gps_goals" type="gps_goals.py" />
+
+    <!-- Alternative to gmapping - use if you only want to use LIDAR data for SLAM odometry -->
     <!-- <include file="$(find igvc)/launch/hector_slam.launch" /> -->
 
     <!-- Param was updated as to the suggestions of http://geduino.blogspot.it/2015/04/gmapping-and-rplidar.html -->
     <!-- takes lidar and odom data and makes generates map. Gives map to odom transform. -->
 
     <!-- Make sure to remap the scans to /scan for costmap generation -->
-    <!-- SLAM algorithm that fuses lidar data with odometry (encoder, IMU, GPS, etc..) --> 
+    <!-- SLAM algorithm that fuses lidar data with odometry (encoder, IMU, GPS, etc..) -->
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
             <rosparam>
               map_frame: map
@@ -102,14 +104,14 @@
               tf_delay: 0.01
               base_frame: base_link
           </rosparam>
-        <!-- Gmapping expects message from scan topic, telling it to read from lidar_scan instead --> 
+        <!-- Gmapping expects message from scan topic, telling it to read from lidar_scan instead -->
         <remap from="scan" to="lidar_scan" />
     </node>
-    
-    <!-- Specifying that the laser is rotated 135 degrees by x relative to the center of the robot --> 
+
+    <!-- Specifying that the laser is rotated 135 degrees by x relative to the center of the robot -->
     <node pkg="tf" type="static_transform_publisher" name="base_to_laser_tf"  args="0 0 0 135 0 0 /base_link /laser_frame 50" />
 
-    <!-- To be changed in accordance to the actual camera placement --> 
+    <!-- To be changed in accordance to the actual camera placement -->
     <node pkg="tf" type="static_transform_publisher" name="base_to_camera_tf" args="0 0 0 0 0 0 /base_link /camera" />
 
     <arg name="global_frame_id" value="map" />
@@ -120,9 +122,11 @@
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
-        <rosparam file="$(find igvc)/param/local_costmap_params.yaml" command="load" />   
+        <rosparam file="$(find igvc)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+        <rosparam file="$(find igvc)/param/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find igvc)/param/global_costmap_params.yaml" command="load" />
+
         <rosparam file="$(find igvc)/param/dwa_local_planner_params.yaml" command="load" />
         <rosparam file="$(find igvc)/param/move_base_params.yaml" command="load" />
         <rosparam file="$(find igvc)/param/global_planner_params.yaml" command="load" />
@@ -133,9 +137,9 @@
         <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
         <param name="DWAPlannerROS/global_frame_id" value="$(arg global_frame_id)"/>
         <remap from="cmd_vel" to="nav_cmd_vel" />
-    </node> 
+    </node>
 
-    <!-- Below is testing purposes --> 
+    <!-- Below is testing purposes -->
     <!-- fake map, used only for testing without lidar. Tranform for fake map: map to odom -->
    <!--  <node pkg="map_server" type="map_server" name="map_server" args="$(find map_server)/test/map.yaml" >
         <param name="frame_id" value="map" />
