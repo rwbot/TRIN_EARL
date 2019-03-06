@@ -1,0 +1,15 @@
+<launch>
+	<!--
+	$$$ rosrun urg_node getID /dev/ttyACM0
+	Device at /dev/ttyACM0 has ID H0902915
+-->
+	<node name="urg_node"  pkg="urg_node"  type="urg_node" output="screen"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 laser lidar 1" />
+	<param name="map_frame" value="map" />
+	<param name="base_frame" value="laser" />
+
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find igvc)/config/urg.rviz" />
+
+
+</launch>
