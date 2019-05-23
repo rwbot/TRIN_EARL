@@ -3,7 +3,8 @@
 	<node name="motor_test" pkg="igvc" type="motor_commander.py"/>
 
     <!-- takes data from joy node and converst to motor effort -->
-    <node pkg="igvc" name="igvc" type="xbox_drive.py" />
+    <!-- <node pkg="igvc" name="igvc" type="xbox_drive.py" /> -->
+		<node pkg="igvc" name="igvc" type="logitech_drive.py" />
 
 
 		<node name="joy" pkg="joy" type="joy_node" >

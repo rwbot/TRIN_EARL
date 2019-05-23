@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Subscribes to /motor_speed and /motor_turn to 
+# Subscribes to /motor_speed and /motor_turn to
 # send commands to the motor controller
 
 import time
@@ -21,13 +21,13 @@ MAX_TURN_EFFORT = 15
 
 is_autonomous = False
 
-# TODO: Implement Subscriber to Joy that listens to start key 
-# and enable/disable motor output from this node 
+# TODO: Implement Subscriber to Joy that listens to start key
+# and enable/disable motor output from this node
 
 # 0.317
 # Add more commands
 MotorControlCommands = namedtuple(
-        'MotorControlCommands', 
+        'MotorControlCommands',
         ['COM_LEFT_CH1','COM_RIGHT_CH1',
          'COM_FORW_CH2','COM_BACKW_CH2',
          'QUE_SPEED','QUE_BATTERY','QUE_VOLT'])
@@ -64,12 +64,12 @@ sem = threading.Semaphore()
 #         try:
 #             resp = redirect_odom(is_autonomous)
 #         except rospy.ServiceException:
-#             pass 
-            
-            # Find way to ensure service call doesn't fail 
+#             pass
+
+            # Find way to ensure service call doesn't fail
             # The service call works despite the exception
 
-            # rospy.logerr("Redirect odom service call failed") 
+            # rospy.logerr("Redirect odom service call failed")
 
 def speed_callback(speed):
     change_speed(int(speed.data))
@@ -99,7 +99,7 @@ def change_speed(speed_effort):
 
     write_byte(message + effort_str)
     #get_response()
-    
+
     calculate_speed()
 
 def change_turn(turn_effort):
@@ -122,8 +122,8 @@ def change_turn(turn_effort):
 
     rospy.logerr('Turn command: ' + message + effort_str)
 
-    write_byte(message + effort_str)  
-    #get_response()  
+    write_byte(message + effort_str)
+    #get_response()
 
 # Consider also resetting the motor controller if the motor controller does not work
 def init_serial_mode():
@@ -141,7 +141,7 @@ def set_differential_mode():
     # write_byte('^01 01') # Mixed mode, closed loop
     # write_byte('^80 01') # Open loop, speed mode, encoder feedback channel 1
     # write_byte('^81 01') # Open loop, speed mode, encoder feedback channel 2
-  
+
 
 def write_byte(string, get_speed=False):
     ser.write((string + '\r').encode())
@@ -151,7 +151,7 @@ def get_response():
     resp = ''
     while ser.inWaiting() > 0:
         resp += ser.read(1)
-        
+
     #sem.release()
     rospy.logerr('Response: ' + resp)
     return resp
@@ -159,7 +159,7 @@ def get_response():
 t = None
 
 def kill_thread():
-    global t 
+    global t
     #t.join()
 
 def calculate_speed():
@@ -185,7 +185,7 @@ def calculate_speed():
 
 
 def main():
-    global t 
+    global t
     rospy.init_node('motor_controller_test')
 
     # NOTE: Ensure that the motor controller is in speed mode rather than position mode!!
@@ -193,9 +193,9 @@ def main():
     # Also, the input control mode should be 2 (RS232, half-duplex with watchdog (stops movement every second))
 
     motor_speed_sub = rospy.Subscriber('motor_speed', msg.Int8, speed_callback)
-    motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)  
+    motor_turn_sub = rospy.Subscriber('motor_turn', msg.Int8, turn_callback)
 
-    #joy_sub = rospy.Subscriber('joy', Joy, joy_callback)  
+    #joy_sub = rospy.Subscriber('joy', Joy, joy_callback)
     '''
     services_available = [x[0] for x in rospy.get_services()]
     if '/imu/zeroout' in services_available:
@@ -205,12 +205,12 @@ def main():
             zeroout_imu = rospy.ServiceProxy('/imu/zeroout', Empty)
             resp = zeroout_imu()
             rospy.loginfo('Zeroed out IMU drift')
-        except rospy.ServiceException, e: 
+        except rospy.ServiceException, e:
             rospy.logerr('Failed the service call to zeroout IMU')
     '''
 
     current_time = rospy.Time.from_sec(time.time())
-    
+
     while not rospy.is_shutdown():
         prev_time = current_time
         print "Running motor commander"

@@ -52,10 +52,16 @@ def joy_callback(msg, pub):
   speed_pub = pub[0]
   turn_pub = pub[1]
 
-  y_axis = msg.axes[1];
+
+  y_axis = msg.axes[5];
+  # print(y_axis)
   x_axis_rotation = msg.axes[2];
-  switch_autonomous = msg.buttons[7];
-  right_trigger = msg.axes[4];
+  # print(x_axis_rotation)
+  switch_autonomous = msg.buttons[9];
+  right_trigger = msg.buttons[7];
+  if(right_trigger):
+      TOGGLED = 1
+  # print(right_trigger)
 
   # calculate speed
   if (abs(y_axis) < speed_deadzone):
@@ -88,21 +94,22 @@ def joy_callback(msg, pub):
         # The service call works despite the exception
         # rospy.logerr("Redirect odom service call failed")
 
-  # publish xbox commands only if not autonomous and toggled
+  # publish logitech commands only if not autonomous and toggled
   # TOGGLED means pressed
-
   if right_trigger != TOGGLED:
-    speed_pub.publish(0)
-    turn_pub.publish(0)
+      print("!= TOGGLED")
+      speed_pub.publish(0)
+      turn_pub.publish(0)
   elif not is_autonomous:
-    speed_pub.publish(speed)
-    turn_pub.publish(turn)
+      print("DRIVE")
+      speed_pub.publish(speed)
+      turn_pub.publish(turn)
 
 
 def main():
     global speed_pub, turn_pub
     # initialize node and handles
-    rospy.init_node("xbox_drive")
+    rospy.init_node("logitech_drive")
 
     speed_pub = rospy.Publisher('motor_speed', Int8, queue_size=10)
     turn_pub = rospy.Publisher('motor_turn', Int8, queue_size=10)
@@ -117,6 +124,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
 
 
 

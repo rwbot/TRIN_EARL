@@ -67,7 +67,7 @@ Visualization Manager:
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: RPLidarLaserScan
+      Name: SickLaserScan
       Position Transformer: XYZ
       Queue Size: 1000
       Selectable: true
