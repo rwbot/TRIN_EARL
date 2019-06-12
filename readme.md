@@ -1,4 +1,12 @@
-TODO
+![SUNSET](https://img.shields.io/badge/status-SUNSET-red.svg)
+
+# This is a sunset repo that serves only as a reference on how the previous team implemented various functionalities. 
+
+The code in this repo **__WILL NOT WORK__** on the current hardware. See https://github.com/rwbot/sqrl for the new robot.
+
+---
+---
+---
 
 SLAM
 ---
@@ -10,8 +18,7 @@ https://www.youtube.com/channel/UCt6Lag-vv25fTX3e11mVY1Q/search?query=laser
 
 * GPS Test
 
-Current developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu), Christopher Rowe (christopher.rowe@trincoll.edu)
-Previous developers: Basileal Imana (basileal.imana@trincoll.edu), Barok Imana (Barok.imana@trincoll.edu), Mike Castellana
+Previous developers: Jin Pyo Jeon (jinpyojeon@trincoll.edu), Basileal Imana (basileal.imana@trincoll.edu), Barok Imana (Barok.imana@trincoll.edu), Mike Castellana
 
 Note that this file is formatted as Github flavored markdown.
 
